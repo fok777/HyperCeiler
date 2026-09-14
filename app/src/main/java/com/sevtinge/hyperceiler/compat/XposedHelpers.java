@@ -249,6 +249,12 @@ public final class XposedHelpers {
         return Methods.find(clazz).filterByName(methodName).filterByParamTypes(parameterTypes).firstOrNull();
     }
 
+    public static Method findMethodExactIfExists(String className, ClassLoader classLoader, String methodName, Object... parameterTypes) {
+        Class<?> clazz = loadClassOrNull(className, classLoader);
+        if (clazz == null) return null;
+        return findMethodExactIfExists(clazz, methodName, parameterTypes);
+    }
+
     public static Method findMethodExactIfExists(Class<?> clazz, String methodName, Object... parameterTypes) {
         return findMethodExactIfExists(clazz, methodName, resolveTypes(clazz, parameterTypes));
     }

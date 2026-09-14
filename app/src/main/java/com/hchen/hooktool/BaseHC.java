@@ -34,6 +34,9 @@ public abstract class BaseHC {
 
     public ClassLoader mClassLoader;
 
+    /** 兼容旧命名：指向 mClassLoader。 */
+    public ClassLoader classLoader;
+
     private static ClassLoader currentLoader() {
         ClassLoader loader = io.github.lingqiqi5211.ezhooktool.xposed.EzXposed.getSafeClassLoader();
         return loader != null ? loader : BaseHC.class.getClassLoader();
@@ -54,6 +57,7 @@ public abstract class BaseHC {
         ClassLoader loader = lpparam != null && lpparam.classLoader != null
             ? lpparam.classLoader : currentLoader();
         mClassLoader = loader;
+        classLoader = loader;
         load(loader);
         try {
             init();
@@ -110,6 +114,31 @@ public abstract class BaseHC {
 
     public Object getStaticField(Class<?> clazz, String fieldName) {
         return Fields.getStaticObjectField(clazz, fieldName);
+    }
+
+    public Object getStaticField(String className, ClassLoader classLoader, String fieldName) {
+        Class<?> clazz = io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassOrNull(className, classLoader);
+        return clazz == null ? null : Fields.getStaticObjectField(clazz, fieldName);
+    }
+
+    public void setStaticField(String className, ClassLoader classLoader, String fieldName, Object value) {
+        Class<?> clazz = io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassOrNull(className, classLoader);
+        if (clazz != null) Fields.setStaticObjectField(clazz, fieldName, value);
+    }
+
+    public Object getStaticField(Object obj, String fieldName) {
+        Class<?> clazz = (obj instanceof Class<?>) ? (Class<?>) obj : obj.getClass();
+        return Fields.getStaticObjectField(clazz, fieldName);
+    }
+
+    public void setStaticField(Object obj, String fieldName, Object value) {
+        Class<?> clazz = (obj instanceof Class<?>) ? (Class<?>) obj : obj.getClass();
+        Fields.setStaticObjectField(clazz, fieldName, value);
+    }
+
+    public Object newInstance(String className, Object... args) {
+        Class<?> clazz = io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassOrNull(className, currentLoader());
+        return clazz == null ? null : newInstance(clazz, args);
     }
 
     public void setField(Object obj, String fieldName, Object value) {
@@ -303,12 +332,39 @@ public abstract class BaseHC {
     }
 
     /** 子类可覆写：在 init 中满足条件后调用以启用 hook 分组。 */
-    protected void startHook() {
+    public void startHook() {
     }
 
     private static Object require(Object obj) {
         if (obj == null) throw new NullPointerException("BaseHC: target object is null.");
         return obj;
+    }
+
+    // ==================== 便捷 hook 回调 ====================
+
+    /** 直接返回常量。 */
+    public static IHook returnResult(final Object result) {
+        return new IHook() {
+            @Override
+            public void before() {
+                setResult(result);
+            }
+        };
+    }
+
+    /** 返回 null。 */
+    public static IHook returnNull() {
+        return returnResult(null);
+    }
+
+    /** 抛异常。 */
+    public static IHook returnThrowable(final Throwable throwable) {
+        return new IHook() {
+            @Override
+            public void before() {
+                setThrowable(throwable);
+            }
+        };
     }
 
     // ==================== 日志 ====================

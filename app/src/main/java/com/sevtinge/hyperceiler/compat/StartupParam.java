@@ -5,6 +5,10 @@ package com.sevtinge.hyperceiler.compat;
  */
 public class StartupParam {
     public String modulePath;
+    /** legacy：是否启动 SystemServer。 */
+    public boolean startsSystemServer = true;
+    /** legacy：是否允许其它模块 hook 自身。 */
+    public boolean isFirstApplication = true;
 
     public StartupParam() {
     }

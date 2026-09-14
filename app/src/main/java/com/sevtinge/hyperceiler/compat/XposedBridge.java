@@ -23,7 +23,7 @@ public final class XposedBridge {
     public static void log(String text) {
         XposedInterface xposed = HookRuntime.xposed();
         if (xposed != null) {
-            xposed.log(text);
+            xposed.log(Log.INFO, TAG, text);
         } else {
             Log.i(TAG, text);
         }

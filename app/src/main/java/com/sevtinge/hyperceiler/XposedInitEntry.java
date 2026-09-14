@@ -49,7 +49,7 @@ public class XposedInitEntry extends XposedModule {
     public void onSystemServerStarting(@NonNull XposedModuleInterface.SystemServerStartingParam param) {
         EzXposed.initOnSystemServerStarting(param);
         HookRuntime.setSystemServer(true);
-        dispatch("android", param.getClassLoader(), null, param.getProcessName());
+        dispatch("android", param.getClassLoader(), null, "android");
     }
 
     @Override

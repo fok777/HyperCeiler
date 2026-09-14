@@ -43,4 +43,67 @@ public final class CoreTool {
     public static Field findField(Class<?> clazz, String fieldName) {
         return Fields.find(clazz).filterByName(fieldName).first();
     }
+
+    public static Object getField(Object obj, String fieldName) {
+        return Fields.getObjectField(obj, fieldName);
+    }
+
+    /** 设置字段；成功返回 true。 */
+    public static boolean setField(Object obj, String fieldName, Object value) {
+        try {
+            Fields.setObjectField(obj, fieldName, value);
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+    public static Object getStaticField(String className, ClassLoader classLoader, String fieldName) {
+        Class<?> clazz = ClassUtils.loadClassOrNull(className, classLoader);
+        return clazz == null ? null : Fields.getStaticObjectField(clazz, fieldName);
+    }
+
+    public static boolean setStaticField(String className, ClassLoader classLoader, String fieldName, Object value) {
+        Class<?> clazz = ClassUtils.loadClassOrNull(className, classLoader);
+        if (clazz == null) return false;
+        try {
+            Fields.setStaticObjectField(clazz, fieldName, value);
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+    public static Object getStaticField(Object obj, String fieldName) {
+        Class<?> clazz = (obj instanceof Class<?>) ? (Class<?>) obj : obj.getClass();
+        return Fields.getStaticObjectField(clazz, fieldName);
+    }
+
+    public static boolean setStaticField(Object obj, String fieldName, Object value) {
+        Class<?> clazz = (obj instanceof Class<?>) ? (Class<?>) obj : obj.getClass();
+        try {
+            Fields.setStaticObjectField(clazz, fieldName, value);
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+    public static Object newInstance(String className, ClassLoader classLoader, Object... args) {
+        Class<?> clazz = ClassUtils.loadClassOrNull(className, classLoader);
+        if (clazz == null) return null;
+        return io.github.lingqiqi5211.ezhooktool.core.java.Constructors.newInstance(clazz, args);
+    }
+
+    public static Object newInstance(Class<?> clazz, Object... args) {
+        return io.github.lingqiqi5211.ezhooktool.core.java.Constructors.newInstance(clazz, args);
+    }
+
+    public static Class<?> findClass(String className) {
+        return ClassUtils.loadClassOrNull(className, io.github.lingqiqi5211.ezhooktool.core.EzClassLoader.current());
+    }
+
+    public static Object callMethod(String className, String methodName, Object... args) {
+        return Methods.callStaticMethod(findClass(className), methodName, args);
+    }
 }

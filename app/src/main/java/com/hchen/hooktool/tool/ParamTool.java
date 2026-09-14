@@ -40,6 +40,15 @@ public interface ParamTool {
         state().args[index] = value;
     }
 
+    /** 当前实例别名。 */
+    default Object thisObject() {
+        return state().thisObject;
+    }
+
+    default <T> T thisObjectAs() {
+        return (T) state().thisObject;
+    }
+
     default Object getThisObject() {
         return state().thisObject;
     }
@@ -79,6 +88,24 @@ public interface ParamTool {
     /** 读取指定对象的字段。 */
     default Object getField(Object obj, String fieldName) {
         return io.github.lingqiqi5211.ezhooktool.core.java.Fields.getObjectField(obj, fieldName);
+    }
+
+    /** 按 Field 对象读取。 */
+    default Object getField(Object obj, java.lang.reflect.Field field) {
+        try {
+            field.setAccessible(true);
+            return field.get(obj);
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    default void setField(Object obj, java.lang.reflect.Field field, Object value) {
+        try {
+            field.setAccessible(true);
+            field.set(obj, value);
+        } catch (Throwable ignored) {
+        }
     }
 
     /** 读取 this 对象字段并强制转型。 */
