@@ -70,7 +70,12 @@ public final class XposedBridge {
             try {
                 return m.invoke(thisObject, args);
             } catch (java.lang.reflect.InvocationTargetException e) {
-                throw e.getCause();
+                Throwable cause = e.getCause();
+                if (cause instanceof RuntimeException) throw (RuntimeException) cause;
+                if (cause instanceof Error) throw (Error) cause;
+                throw new RuntimeException(cause);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
             }
         }
         throw new IllegalArgumentException("Unsupported member: " + method);
