@@ -143,7 +143,7 @@ public interface ParamTool {
     }
 
     /** 空操作回调。 */
-    default IHook doNothing() {
+    default com.hchen.hooktool.hook.IHook doNothing() {
         return new com.hchen.hooktool.hook.IHook() {
         };
     }
