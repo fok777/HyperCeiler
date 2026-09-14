@@ -27,6 +27,7 @@ import com.sevtinge.hyperceiler.module.hook.home.HomeBaseHook;
 import java.util.ArrayList;
 
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 import com.sevtinge.hyperceiler.compat.XC_MethodReplacement;
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
 

@@ -30,6 +30,7 @@ import com.sevtinge.hyperceiler.utils.devicesdk.DisplayUtils.*
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
 import com.sevtinge.hyperceiler.compat.XposedBridge;
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
 
 object BatteryStyle : BaseHook() {

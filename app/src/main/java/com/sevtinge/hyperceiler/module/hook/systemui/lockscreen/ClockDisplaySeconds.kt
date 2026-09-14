@@ -32,6 +32,7 @@ import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinde
 import com.sevtinge.hyperceiler.module.base.BaseHook
 import com.sevtinge.hyperceiler.utils.getObjectFieldAs
 import com.sevtinge.hyperceiler.compat.XC_MethodHook
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam
 import java.lang.reflect.Method
 import java.text.SimpleDateFormat
 import java.util.Calendar

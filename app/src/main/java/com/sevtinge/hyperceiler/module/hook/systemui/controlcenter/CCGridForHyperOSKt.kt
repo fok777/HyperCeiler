@@ -24,6 +24,8 @@ import com.sevtinge.hyperceiler.utils.prefs.*
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
 import com.sevtinge.hyperceiler.compat.XposedBridge;
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
+import com.sevtinge.hyperceiler.compat.XC_MethodReplacement;
 import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
 
 // from YunZiA

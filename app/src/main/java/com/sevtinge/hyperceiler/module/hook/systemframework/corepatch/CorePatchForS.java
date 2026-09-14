@@ -25,6 +25,7 @@ import android.os.Build;
 import java.lang.reflect.InvocationTargetException;
 
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
 import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
 

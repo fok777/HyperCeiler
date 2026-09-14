@@ -19,6 +19,7 @@
 package com.sevtinge.hyperceiler.module.hook.systemframework.corepatch;
 
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 import com.sevtinge.hyperceiler.compat.XSharedPreferences;
 
 public class ReturnConstant extends XC_MethodHook {

@@ -20,6 +20,7 @@ package com.sevtinge.hyperceiler.module.hook.screenrecorder
 
 import com.sevtinge.hyperceiler.module.base.BaseHook
 import com.sevtinge.hyperceiler.compat.XC_MethodHook
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam
 import com.sevtinge.hyperceiler.compat.XposedHelpers
 import java.util.*
 

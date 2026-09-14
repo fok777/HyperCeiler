@@ -22,6 +22,7 @@ import android.graphics.Canvas
 import com.sevtinge.hyperceiler.utils.log.XposedLogUtils.logI
 import com.sevtinge.hyperceiler.compat.IXposedHookZygoteInit
 import com.sevtinge.hyperceiler.compat.XC_MethodHook
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam
 import com.sevtinge.hyperceiler.compat.XposedBridge
 import com.sevtinge.hyperceiler.compat.XposedHelpers
 

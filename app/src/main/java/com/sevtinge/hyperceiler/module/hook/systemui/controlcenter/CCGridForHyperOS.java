@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class CCGridForHyperOS {

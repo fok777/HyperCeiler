@@ -32,16 +32,16 @@ class MethodFinderSeq internal constructor(private val clazz: Class<*>) {
     fun filterByParamTypes(condition: (Array<Class<*>>) -> Boolean): MethodFinderSeq =
         filter { condition(parameterTypes) }
 
-    fun filterByParamTypes(vararg types: Class<*>): MethodFinderSeq =
+    fun filterByParamTypes(vararg types: Class<*>?): MethodFinderSeq =
         filter { parameterTypes.contentEquals(types) }
 
-    fun filterByAssignableParamTypes(vararg types: Class<*>): MethodFinderSeq =
+    fun filterByAssignableParamTypes(vararg types: Class<*>?): MethodFinderSeq =
         filter {
             if (parameterCount != types.size) return@filter false
             types.withIndex().all { (index, type) -> type.isAssignableFrom(parameterTypes[index]) }
         }
 
-    fun filterByReturnType(type: Class<*>): MethodFinderSeq = filter { returnType == type }
+    fun filterByReturnType(type: Class<*>?): MethodFinderSeq = filter { returnType == type }
 
     fun filterByReturnType(condition: (Class<*>) -> Boolean): MethodFinderSeq =
         filter { condition(returnType) }
@@ -155,7 +155,7 @@ class ConstructorFinderSeq internal constructor(private val clazz: Class<*>) {
     fun filterByParamTypes(condition: (Array<Class<*>>) -> Boolean): ConstructorFinderSeq =
         filter { condition(parameterTypes) }
 
-    fun filterByParamTypes(vararg types: Class<*>): ConstructorFinderSeq =
+    fun filterByParamTypes(vararg types: Class<*>?): ConstructorFinderSeq =
         filter { parameterTypes.contentEquals(types) }
 
     fun filterEmptyParam(): ConstructorFinderSeq = filter { parameterCount == 0 }
@@ -224,7 +224,7 @@ class ConstructorListFinder(private val source: List<Constructor<*>>) {
     fun filterByParamTypes(condition: (Array<Class<*>>) -> Boolean): ConstructorListFinder =
         filter { condition(parameterTypes) }
 
-    fun filterByParamTypes(vararg types: Class<*>): ConstructorListFinder =
+    fun filterByParamTypes(vararg types: Class<*>?): ConstructorListFinder =
         filter { parameterTypes.contentEquals(types) }
 
     fun filterEmptyParam(): ConstructorListFinder = filter { parameterCount == 0 }
@@ -264,9 +264,9 @@ class FieldFinderSeq internal constructor(private val clazz: Class<*>) {
 
     fun filterByName(value: String): FieldFinderSeq = filter { name == value }
 
-    fun filterByType(type: Class<*>): FieldFinderSeq = filter { this.type == type }
+    fun filterByType(type: Class<*>?): FieldFinderSeq = filter { this.type == type }
 
-    fun filterByAssignableType(type: Class<*>): FieldFinderSeq = filter { type.isAssignableFrom(this.type) }
+    fun filterByAssignableType(type: Class<*>?): FieldFinderSeq = filter { type.isAssignableFrom(this.type) }
 
     fun filterStatic(): FieldFinderSeq = filter { Modifier.isStatic(modifiers) }
 

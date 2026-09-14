@@ -22,6 +22,7 @@ import com.sevtinge.hyperceiler.module.base.tool.HookTool;
 
 import com.sevtinge.hyperceiler.compat.IXposedHookZygoteInit;
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class AllowManageAllNotifications implements IXposedHookZygoteInit  {

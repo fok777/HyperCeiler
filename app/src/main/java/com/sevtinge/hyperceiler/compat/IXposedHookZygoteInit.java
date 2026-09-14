@@ -5,4 +5,15 @@ package com.sevtinge.hyperceiler.compat;
  */
 public interface IXposedHookZygoteInit {
     void initZygote(StartupParam startupParam) throws Throwable;
+
+    /** 兼容 legacy 的嵌套命名。 */
+    class StartupParam extends com.sevtinge.hyperceiler.compat.StartupParam {
+        public StartupParam() {
+            super();
+        }
+
+        public StartupParam(String modulePath) {
+            super(modulePath);
+        }
+    }
 }

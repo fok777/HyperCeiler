@@ -49,6 +49,7 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.util.Set;
 
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class FlashLight extends TileUtils {

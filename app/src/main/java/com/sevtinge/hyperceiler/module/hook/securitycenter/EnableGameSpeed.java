@@ -34,6 +34,7 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 
 public class EnableGameSpeed extends BaseHook {
     @Override

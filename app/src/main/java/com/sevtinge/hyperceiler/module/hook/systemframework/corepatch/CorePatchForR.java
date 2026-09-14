@@ -49,6 +49,7 @@ import java.util.zip.ZipEntry;
 import com.sevtinge.hyperceiler.compat.IXposedHookLoadPackage;
 import com.sevtinge.hyperceiler.compat.IXposedHookZygoteInit;
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 import com.sevtinge.hyperceiler.compat.XC_MethodReplacement;
 import com.sevtinge.hyperceiler.compat.XSharedPreferences;
 import com.sevtinge.hyperceiler.compat.XposedBridge;

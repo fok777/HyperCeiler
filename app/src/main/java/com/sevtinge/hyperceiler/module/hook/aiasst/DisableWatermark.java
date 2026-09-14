@@ -31,6 +31,7 @@ import org.luckypray.dexkit.result.base.BaseData;
 import java.lang.reflect.Method;
 
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 
 public class DisableWatermark extends BaseHook {
     @Override

@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import java.util.List;
 
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
 import com.sevtinge.hyperceiler.compat.XCallback;
 

@@ -23,6 +23,7 @@ import android.view.MotionEvent;
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class ToastSlideAgain extends BaseHook {

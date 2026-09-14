@@ -21,6 +21,7 @@ package com.sevtinge.hyperceiler.module.hook.systemui
 import com.sevtinge.hyperceiler.module.base.BaseHook
 import com.sevtinge.hyperceiler.utils.getValueByField
 import com.sevtinge.hyperceiler.compat.XC_MethodHook
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam
 import com.sevtinge.hyperceiler.compat.XposedBridge
 import com.sevtinge.hyperceiler.compat.XposedHelpers
 

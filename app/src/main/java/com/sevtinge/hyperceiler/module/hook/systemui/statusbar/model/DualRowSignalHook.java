@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class DualRowSignalHook extends BaseHook {

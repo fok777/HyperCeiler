@@ -50,6 +50,12 @@ object EzXHelper {
         if (context != null) runCatching { EzXposed.initAppContext(context) }
     }
 
+    /** 兼容旧签名：第二参数原用于是否强制刷新，API 102 下忽略。 */
+    @JvmStatic
+    fun initAppContext(context: Context?, force: Boolean) {
+        initAppContext(context)
+    }
+
     /** API 102 下由模块入口统一初始化，保留空实现以兼容旧调用。 */
     @JvmStatic
     fun initZygote(startupParam: Any?) = Unit

@@ -13,6 +13,7 @@ import java.lang.reflect.Constructor
 import java.lang.reflect.Member
 import java.lang.reflect.Method
 import java.util.function.Consumer
+import com.sevtinge.hyperceiler.compat.XC_MethodHook
 
 /**
  * EzXHelper MethodHookParam 的 API 102 兼容实现。
@@ -32,8 +33,9 @@ class MethodHookParam internal constructor(internal val raw: HookParam) {
         get() = raw.thisObjectOrNull
 
     /** 当前调用参数。 */
-    val args: Array<Any?>
-        get() = raw.args
+    @Suppress("UNCHECKED_CAST")
+    val args: Array<Any>
+        get() = raw.args as Array<Any>
 
     /** 当前返回值，可读写。 */
     var result: Any?
@@ -177,63 +179,63 @@ object HookFactory {
     /** Kotlin DSL 扩展入口。 */
     object `-Static` {
 
-        fun Method.createHook(block: HookScope.() -> Unit = {}): XposedInterface.HookHandle =
+        fun Method.createHook(block: HookScope.() -> Unit = {}): XC_MethodHook.Unhook =
             install(this, HookScope().apply(block))
 
-        fun Method.createBeforeHook(block: MethodHookBlock): XposedInterface.HookHandle =
+        fun Method.createBeforeHook(block: MethodHookBlock): XC_MethodHook.Unhook =
             install(this, HookScope().apply { before(block) })
 
-        fun Method.createAfterHook(block: MethodHookBlock): XposedInterface.HookHandle =
+        fun Method.createAfterHook(block: MethodHookBlock): XC_MethodHook.Unhook =
             install(this, HookScope().apply { after(block) })
 
-        fun Method.createReplaceHook(block: (MethodHookParam) -> Any?): XposedInterface.HookHandle =
+        fun Method.createReplaceHook(block: (MethodHookParam) -> Any?): XC_MethodHook.Unhook =
             install(this, HookScope().apply { replace(block) })
 
-        fun Constructor<*>.createHook(block: HookScope.() -> Unit = {}): XposedInterface.HookHandle =
+        fun Constructor<*>.createHook(block: HookScope.() -> Unit = {}): XC_MethodHook.Unhook =
             install(this, HookScope().apply(block))
 
-        fun Constructor<*>.createBeforeHook(block: MethodHookBlock): XposedInterface.HookHandle =
+        fun Constructor<*>.createBeforeHook(block: MethodHookBlock): XC_MethodHook.Unhook =
             install(this, HookScope().apply { before(block) })
 
-        fun Constructor<*>.createAfterHook(block: MethodHookBlock): XposedInterface.HookHandle =
+        fun Constructor<*>.createAfterHook(block: MethodHookBlock): XC_MethodHook.Unhook =
             install(this, HookScope().apply { after(block) })
 
         fun Iterable<Method>.createHooks(
             block: HookScope.() -> Unit = {}
-        ): List<XposedInterface.HookHandle> {
+        ): List<XC_MethodHook.Unhook> {
             val scope = HookScope().apply(block)
             return map { install(it, scope) }
         }
 
         fun Array<Method>.createHooks(
             block: HookScope.() -> Unit = {}
-        ): List<XposedInterface.HookHandle> {
+        ): List<XC_MethodHook.Unhook> {
             val scope = HookScope().apply(block)
             return map { install(it, scope) }
         }
 
-        fun Iterable<Constructor<*>>.createConstructorHooks(
+        fun Iterable<Constructor<*>>.createHooks(
             block: HookScope.() -> Unit = {}
-        ): List<XposedInterface.HookHandle> {
+        ): List<XC_MethodHook.Unhook> {
             val scope = HookScope().apply(block)
             return map { install(it, scope) }
         }
 
         fun Array<Constructor<*>>.createHooks(
             block: HookScope.() -> Unit = {}
-        ): List<XposedInterface.HookHandle> {
+        ): List<XC_MethodHook.Unhook> {
             val scope = HookScope().apply(block)
             return map { install(it, scope) }
         }
     }
 
-    internal fun install(member: Member, scope: HookScope): XposedInterface.HookHandle {
+    internal fun install(member: Member, scope: HookScope): XC_MethodHook.Unhook {
         val replaceBlock = scope.replaceBlock
         if (replaceBlock != null) {
             val replaceHook = IReplaceHook { param -> replaceBlock.invoke(MethodHookParam(param)) }
             return when (member) {
-                is Method -> Hooks.createHook(member, replaceHook)
-                is Constructor<*> -> Hooks.createHook(member, replaceHook)
+                is Method -> XC_MethodHook.Unhook(Hooks.createHook(member, replaceHook))
+                is Constructor<*> -> XC_MethodHook.Unhook(Hooks.createHook(member, replaceHook))
                 else -> error("Unsupported member: $member")
             }
         }
@@ -255,8 +257,8 @@ object HookFactory {
         }
 
         return when (member) {
-            is Method -> Hooks.createHook(member, methodHook)
-            is Constructor<*> -> Hooks.createHook(member, methodHook)
+            is Method -> XC_MethodHook.Unhook(Hooks.createHook(member, methodHook))
+            is Constructor<*> -> XC_MethodHook.Unhook(Hooks.createHook(member, methodHook))
             else -> error("Unsupported member: $member")
         }
     }

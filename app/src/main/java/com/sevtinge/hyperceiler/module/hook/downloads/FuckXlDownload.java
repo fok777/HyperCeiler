@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class FuckXlDownload extends BaseHook {

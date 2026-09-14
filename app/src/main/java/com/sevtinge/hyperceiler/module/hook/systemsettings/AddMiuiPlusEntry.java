@@ -21,6 +21,7 @@ package com.sevtinge.hyperceiler.module.hook.systemsettings;
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 
 public class AddMiuiPlusEntry extends BaseHook {
     @Override

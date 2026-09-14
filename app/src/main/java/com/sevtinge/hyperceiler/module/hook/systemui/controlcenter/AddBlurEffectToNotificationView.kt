@@ -31,6 +31,7 @@ import com.sevtinge.hyperceiler.utils.blur.BlurUtils.createBlurDrawable
 import com.sevtinge.hyperceiler.utils.blur.BlurUtils.isBlurDrawable
 import com.sevtinge.hyperceiler.utils.devicesdk.isAndroidVersion
 import com.sevtinge.hyperceiler.compat.XC_MethodHook
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam
 import com.sevtinge.hyperceiler.compat.XposedBridge
 import com.sevtinge.hyperceiler.compat.XposedHelpers
 

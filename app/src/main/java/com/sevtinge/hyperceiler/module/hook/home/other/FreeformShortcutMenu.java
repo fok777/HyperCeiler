@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class FreeformShortcutMenu extends BaseHook {

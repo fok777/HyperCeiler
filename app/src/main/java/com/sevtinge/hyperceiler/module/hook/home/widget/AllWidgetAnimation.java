@@ -21,6 +21,7 @@ package com.sevtinge.hyperceiler.module.hook.home.widget;
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 
 public class AllWidgetAnimation extends BaseHook {
     @Override
