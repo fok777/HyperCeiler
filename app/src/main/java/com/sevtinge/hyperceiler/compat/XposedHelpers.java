@@ -245,6 +245,10 @@ public final class XposedHelpers {
         return BestMatchUtils.findMethodBestMatch(clazz, methodName, args);
     }
 
+    public static Class<?> loadClassOrNull(String className, ClassLoader classLoader) {
+        return ClassUtils.loadClassOrNull(className, classLoader != null ? classLoader : HookRuntime.classLoader());
+    }
+
     public static Method findMethodExactIfExistsTyped(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
         return Methods.find(clazz).filterByName(methodName).filterByParamTypes(parameterTypes).firstOrNull();
     }

@@ -389,6 +389,12 @@ public abstract class BaseHC {
         };
     }
 
+    /** 空操作回调。 */
+    public static IHook doNothing() {
+        return new IHook() {
+        };
+    }
+
     /** 返回 null。 */
     public static IHook returnNull() {
         return returnResult(null);

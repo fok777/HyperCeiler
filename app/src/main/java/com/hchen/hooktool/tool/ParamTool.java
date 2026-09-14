@@ -134,6 +134,20 @@ public interface ParamTool {
         return io.github.lingqiqi5211.ezhooktool.core.java.Methods.callStaticMethod(clazz, methodName, args);
     }
 
+    /** 按类名调用静态方法。 */
+    default Object callStaticMethod(String className, String methodName, Object... args) {
+        Class<?> clazz = io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassOrNull(
+            className, com.sevtinge.hyperceiler.compat.HookRuntime.classLoader());
+        return clazz == null ? null
+            : io.github.lingqiqi5211.ezhooktool.core.java.Methods.callStaticMethod(clazz, methodName, args);
+    }
+
+    /** 空操作回调。 */
+    default IHook doNothing() {
+        return new com.hchen.hooktool.hook.IHook() {
+        };
+    }
+
     default void setField(String fieldName, Object value) {
         io.github.lingqiqi5211.ezhooktool.core.java.Fields.setObjectField(getThisObject(), fieldName, value);
     }
