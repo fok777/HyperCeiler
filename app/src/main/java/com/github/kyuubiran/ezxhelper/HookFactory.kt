@@ -82,7 +82,7 @@ class MethodHookParam internal constructor(internal val raw: HookParam) {
     fun removeObjectExtra(key: String): Any? = ExtraFields.removeInstanceField(raw.thisObject, key)
 }
 
-typealias MethodHookBlock = MethodHookParam.() -> Unit
+typealias MethodHookBlock = (MethodHookParam) -> Unit
 
 /**
  * Kotlin DSL 作用域：对应 EzXHelper `createHook { }` 块内的接收者。
@@ -91,7 +91,7 @@ class HookScope {
 
     internal var beforeBlock: MethodHookBlock? = null
     internal var afterBlock: MethodHookBlock? = null
-    internal var replaceBlock: (MethodHookParam.() -> Any?)? = null
+    internal var replaceBlock: ((MethodHookParam) -> Any?)? = null
 
     var priority: Int = XposedInterface.PRIORITY_DEFAULT
 
@@ -103,7 +103,7 @@ class HookScope {
         afterBlock = block
     }
 
-    fun replace(block: MethodHookParam.() -> Any?) {
+    fun replace(block: (MethodHookParam) -> Any?) {
         replaceBlock = block
     }
 
@@ -186,7 +186,7 @@ object HookFactory {
         fun Method.createAfterHook(block: MethodHookBlock): XposedInterface.HookHandle =
             install(this, HookScope().apply { after(block) })
 
-        fun Method.createReplaceHook(block: MethodHookParam.() -> Any?): XposedInterface.HookHandle =
+        fun Method.createReplaceHook(block: (MethodHookParam) -> Any?): XposedInterface.HookHandle =
             install(this, HookScope().apply { replace(block) })
 
         fun Constructor<*>.createHook(block: HookScope.() -> Unit = {}): XposedInterface.HookHandle =
@@ -228,14 +228,14 @@ object HookFactory {
         val afterBlock = scope.afterBlock
         val methodHook = object : io.github.lingqiqi5211.ezhooktool.xposed.java.IMethodHook {
             override fun before(param: HookParam) {
-                beforeBlock ?: return
-                runCatching { MethodHookParam(param).beforeBlock!!() }
+                val block = beforeBlock ?: return
+                runCatching { block.invoke(MethodHookParam(param)) }
                     .onFailure { Log.e("HyperCeiler", "before hook failed", it) }
             }
 
             override fun after(param: HookParam) {
-                afterBlock ?: return
-                runCatching { MethodHookParam(param).afterBlock!!() }
+                val block = afterBlock ?: return
+                runCatching { block.invoke(MethodHookParam(param)) }
                     .onFailure { Log.e("HyperCeiler", "after hook failed", it) }
             }
         }
