@@ -38,7 +38,7 @@ class ThemeProvider : BaseHook() {
                     }
                 }
                 after {
-                    hook?.forEach { it.unhook() }
+                    hook?.forEach { it?.unhook() }
                 }
             }
         } catch (t: Throwable) {
