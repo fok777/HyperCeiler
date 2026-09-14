@@ -174,6 +174,7 @@ object HookFactory {
             return map { install(it, scope) }
         }
 
+        @JvmName("createConstructorHooks")
         fun Iterable<Constructor<*>>.createHooks(
             block: HookScope.() -> Unit = {}
         ): List<XC_MethodHook.Unhook> {

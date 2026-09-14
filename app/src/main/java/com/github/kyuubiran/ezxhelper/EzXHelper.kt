@@ -14,29 +14,25 @@ object EzXHelper {
 
     var toastTag: String = "HyperCeiler"
 
+    @get:JvmStatic
     val appContext: Context
         get() = EzXposed.appContext
 
+    @get:JvmStatic
     val classLoader: ClassLoader
         get() = EzXposed.safeClassLoader
 
-    val isHostPackageNameInited: Boolean
-        get() = EzXposed.packageName.isNotEmpty()
-
+    @get:JvmStatic
     val hostPackageName: String
         get() = EzXposed.packageName
 
+    @get:JvmStatic
     val processName: String
         get() = EzXposed.processName
 
-    @JvmStatic
-    fun getAppContext(): Context = appContext
-
-    @JvmStatic
-    fun getClassLoader(): ClassLoader = classLoader
-
-    @JvmStatic
-    fun getHostPackageName(): String = hostPackageName
+    @get:JvmStatic
+    val isHostPackageNameInited: Boolean
+        get() = EzXposed.packageName.isNotEmpty()
 
     @JvmStatic
     fun setLogTag(tag: String) {

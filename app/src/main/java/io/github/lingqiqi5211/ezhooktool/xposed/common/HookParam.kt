@@ -7,7 +7,7 @@ import java.lang.reflect.Member
 /**
  * HyperCeiler 内部使用的 hook 调用参数。
  *
- * <p>本项目不再依赖外部 EzHookTool（其 1.1.3 版本以 Java 25 字节码发布，AGP 8.x 的 R8 无法 dex），
+ * <p>本项目不再依赖外部 EzHookTool（其 1.1.3 以 Java 25 字节码发布，AGP 8.x 的 R8 无法 dex），
  * 这里直接在 libxposed API 102 的 [XposedInterface.Chain] 之上实现等价语义。</p>
  */
 open class HookParam internal constructor(
@@ -17,7 +17,7 @@ open class HookParam internal constructor(
     private var resultValue: Any? = null
     private var throwableValue: Throwable? = null
     private var skipped = false
-    private var hasResult = false
+    private var hasResultValue = false
 
     /** 当前被 hook 的成员。 */
     val executable: Executable
@@ -44,7 +44,7 @@ open class HookParam internal constructor(
         get() = resultValue
         set(value) {
             resultValue = value
-            hasResult = true
+            hasResultValue = true
             skipped = true
         }
 
@@ -62,44 +62,22 @@ open class HookParam internal constructor(
     val isSkipped: Boolean
         get() = skipped
 
-    fun getExecutable(): Executable = executable
-
-    fun getThisObject(): Any = thisObject
-
-    fun getThisObjectOrNull(): Any? = thisObjectOrNull
-
-    fun getArgs(): Array<Any?> = args
-
     fun arg(index: Int): Any? = args[index]
 
     fun <T> argAs(index: Int): T = args[index] as T
 
-    fun getResult(): Any? = resultValue
-
-    fun setResult(value: Any?) {
-        result = value
-    }
-
-    fun getThrowable(): Throwable? = throwableValue
-
-    fun setThrowable(value: Throwable?) {
-        throwable = value
-    }
-
-    fun getHasThrowable(): Boolean = hasThrowable
-
     @Throws(Throwable::class)
     fun getResultOrThrowable(): Any? =
-        if (hasThrowable) throw throwableValue!! else resultValue
+        if (throwableValue != null) throw throwableValue!! else resultValue
 
     internal fun setProceedResult(value: Any?) {
         resultValue = value
-        hasResult = true
+        hasResultValue = true
     }
 
     internal fun setProceedThrowable(value: Throwable) {
         throwableValue = value
     }
 
-    internal fun hasProceedResult(): Boolean = hasResult
+    internal fun hasProceedResult(): Boolean = hasResultValue
 }

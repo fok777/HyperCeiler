@@ -6,10 +6,9 @@ import io.github.libxposed.api.XposedInterface
 import io.github.libxposed.api.XposedModuleInterface
 
 /**
- * 运行时状态持有者。
+ * 运行时状态持有者（本项目自研实现，替代外部 EzHookTool）。
  *
- * <p>本项目直接在 libxposed API 102 之上实现，不再依赖外部 EzHookTool。所有状态最终落到
- * [HookRuntime]，由 [com.sevtinge.hyperceiler.XposedInitEntry] 写入。</p>
+ * <p>所有状态最终落到 [HookRuntime]，由 [com.sevtinge.hyperceiler.XposedInitEntry] 写入。</p>
  */
 object EzXposed {
 
@@ -17,50 +16,32 @@ object EzXposed {
     val frameworkApiVersion: Int
         get() = 102
 
-    @JvmStatic
+    @get:JvmStatic
     val classLoader: ClassLoader
         get() = HookRuntime.classLoader()
 
-    @JvmStatic
+    @get:JvmStatic
     val safeClassLoader: ClassLoader
         get() = HookRuntime.classLoader()
 
-    @JvmStatic
-    fun getClassLoader(): ClassLoader = classLoader
-
-    @JvmStatic
-    fun getSafeClassLoader(): ClassLoader = safeClassLoader
-
-    @JvmStatic
+    @get:JvmStatic
     val appContext: Context
         get() = HookRuntime.appContext()
             ?: throw IllegalStateException("Application context not ready yet.")
 
-    @JvmStatic
+    @get:JvmStatic
     val appContextOrNull: Context?
         get() = HookRuntime.appContext()
 
-    @JvmStatic
-    fun getAppContext(): Context = appContext
-
-    @JvmStatic
-    fun getAppContextOrNull(): Context? = appContextOrNull
-
-    @JvmStatic
+    @get:JvmStatic
     var packageName: String
         get() = HookRuntime.packageName()
         set(value) = HookRuntime.attachPackage(value, HookRuntime.classLoader())
 
-    @JvmStatic
-    fun getPackageName(): String = packageName
-
-    @JvmStatic
+    @get:JvmStatic
     var processName: String
         get() = HookRuntime.processName()
-        set(value) = HookRuntime.attach(HookRuntime.xposed(), HookRuntime.modulePath(), value)
-
-    @JvmStatic
-    fun getProcessName(): String = processName
+        set(value) = HookRuntime.attach(HookRuntime.xposed(), null, value)
 
     @JvmStatic
     fun getModulePath(): String = HookRuntime.modulePath() ?: ""
@@ -91,7 +72,7 @@ object EzXposed {
 
     @JvmStatic
     fun initOnPackageReady(param: XposedModuleInterface.PackageReadyParam) {
-        HookRuntime.attachPackage(param.packageName, param.defaultClassLoader)
+        HookRuntime.attachPackage(param.packageName, param.classLoader)
     }
 
     @JvmStatic
@@ -115,7 +96,7 @@ object EzXposed {
         param: XposedModuleInterface.HotReloadedParam,
         targetReady: Runnable
     ) {
-        HookRuntime.attach(base, HookRuntime.modulePath(), HookRuntime.processName())
+        HookRuntime.attach(base, null, HookRuntime.processName())
         targetReady.run()
     }
 }
