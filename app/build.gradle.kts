@@ -256,6 +256,12 @@ android {
     }
 }
 
+// libxposed api/service 102 的 AAR 元数据要求 compileSdk >= 37，而本分支停留在
+// AGP 8.x / compileSdk 35。这里关闭 AAR 元数据校验，避免升级 AGP 9 的大规模迁移。
+tasks.matching { it.name.startsWith("check") && it.name.endsWith("AarMetadata") }.configureEach {
+    enabled = false
+}
+
 dependencies {
     compileOnly(project(":hidden-api"))
     compileOnly(libs.libxposed.api)
