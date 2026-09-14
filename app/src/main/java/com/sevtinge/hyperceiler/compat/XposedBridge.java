@@ -64,7 +64,7 @@ public final class XposedBridge {
         return unhooks;
     }
 
-    public static Object invokeOriginalMethod(Member method, Object thisObject, Object... args) throws Throwable {
+    public static Object invokeOriginalMethod(Member method, Object thisObject, Object... args) {
         if (method instanceof Method m) {
             m.setAccessible(true);
             try {

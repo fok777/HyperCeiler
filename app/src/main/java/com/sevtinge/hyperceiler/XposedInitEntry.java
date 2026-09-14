@@ -63,7 +63,7 @@ public class XposedInitEntry extends XposedModule {
         if (!param.isFirstPackage()) return;
         EzXposed.initOnPackageReady(param);
         dispatch(param.getPackageName(), param.getClassLoader(), null,
-            param.getProcessName());
+            EzXposed.getProcessName());
     }
 
     @Override

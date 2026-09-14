@@ -20,6 +20,11 @@ public final class CoreTool {
         return Methods.callStaticMethod(clazz, methodName, args);
     }
 
+    public static Object callStaticMethod(String className, String methodName, Object... args) {
+        Class<?> clazz = ClassUtils.loadClassOrNull(className, com.sevtinge.hyperceiler.compat.HookRuntime.classLoader());
+        return clazz == null ? null : Methods.callStaticMethod(clazz, methodName, args);
+    }
+
     public static Object callMethod(Object obj, String methodName, Object... args) {
         return Methods.callMethod(obj, methodName, args);
     }
