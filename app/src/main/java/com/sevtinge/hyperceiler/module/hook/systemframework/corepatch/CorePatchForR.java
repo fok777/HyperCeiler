@@ -414,14 +414,10 @@ public class CorePatchForR extends XposedHelper implements IXposedHookLoadPackag
         try {
             var method = XposedHelpers.findMethodBestMatch(obj.getClass(), methodName, args);
             return XposedBridge.invokeOriginalMethod(method, obj, args);
-        } catch (IllegalAccessException e) {
+        } catch (Throwable e) {
             // should not happen
             XposedBridge.log(e);
             throw new IllegalAccessError(e.getMessage());
-        } catch (IllegalArgumentException e) {
-            throw e;
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e.getCause());
         }
     }
 
