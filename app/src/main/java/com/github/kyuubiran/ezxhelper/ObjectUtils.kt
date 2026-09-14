@@ -66,6 +66,10 @@ class ObjectHelper(private val obj: Any?) {
 
     companion object {
         fun Any?.objectHelper(): ObjectHelper = ObjectHelper(this)
+
+        /** HChenX 风格：在作用域内操作字段。 */
+        fun Any?.objectHelper(block: ObjectHelper.() -> Unit): ObjectHelper =
+            ObjectHelper(this).apply(block)
     }
 }
 

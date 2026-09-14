@@ -52,6 +52,16 @@ object Log {
     }
 
     @JvmStatic
+    fun ex(msg: Any?) {
+        AndroidLog.e(TAG, msg.toString())
+    }
+
+    @JvmStatic
+    fun ex(tag: String, msg: Any?, tr: Throwable? = null) {
+        AndroidLog.e(tag, msg.toString(), tr)
+    }
+
+    @JvmStatic
     fun ex(tr: Throwable?) {
         AndroidLog.e(TAG, AndroidLog.getStackTraceString(tr))
     }

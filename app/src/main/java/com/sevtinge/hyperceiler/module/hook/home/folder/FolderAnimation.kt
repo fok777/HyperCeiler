@@ -40,8 +40,8 @@ class FolderAnimation : BaseHook() {
         value3 = abs(mPrefsMap.getInt("home_folder_anim_3", 99).toFloat() - 200) / 100
         value4 = mPrefsMap.getInt("home_folder_anim_4", 24).toFloat() / 100
         val mSpringAnimator = findClassIfExists("com.miui.home.launcher.animate.SpringAnimator")
-        var hook1: Any? = null
-        var hook2: Any? = null
+        var hook1: XC_MethodHook.Unhook? = null
+        var hook2: XC_MethodHook.Unhook? = null
 
         for (i in 47..60) {
             val launcherClass = findClassIfExists("com.miui.home.launcher.Launcher$$i")
@@ -66,8 +66,8 @@ class FolderAnimation : BaseHook() {
                                                     it[1] == Float::class.javaPrimitiveType
                                             }.single().createHook {
                                                 before {
-                                                    it.args[0] = value1
-                                                    it.args[1] = value2
+                                                    it.args[0] = value1!!
+                                                    it.args[1] = value2!!
                                                 }
                                             }
                                     }

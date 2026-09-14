@@ -17,71 +17,26 @@ import com.sevtinge.hyperceiler.compat.XC_MethodHook
 
 /**
  * EzXHelper MethodHookParam 的 API 102 兼容实现。
+ *
+ * <p>继承 legacy [XC_MethodHook.MethodHookParam]，因此既有代码中把 EzXHelper 回调参数
+ * 传给期望 legacy 类型的方法时可以正常编译；`args` / `thisObject` / `result` 全部转发到
+ * 底层 HookParam。</p>
  */
-class MethodHookParam internal constructor(internal val raw: HookParam) {
+class MethodHookParam internal constructor(raw: HookParam) : XC_MethodHook.MethodHookParam(raw) {
 
-    /** 当前被 hook 的成员。 */
-    val method: Member
-        get() = raw.executable
-
-    /** 当前实例；静态方法时读取会抛异常（与 EzXHelper 行为一致）。 */
-    val thisObject: Any
-        get() = raw.thisObject
-
-    /** 当前实例；静态方法返回 null。 */
-    val thisObjectOrNull: Any?
-        get() = raw.thisObjectOrNull
-
-    /** 当前调用参数。 */
-    @Suppress("UNCHECKED_CAST")
-    val args: Array<Any>
-        get() = raw.args as Array<Any>
-
-    /** 当前返回值，可读写。 */
-    var result: Any?
-        get() = raw.result
-        set(value) {
-            raw.result = value
-        }
-
-    /** 当前异常，可读写。 */
-    var throwable: Throwable?
-        get() = raw.throwable
-        set(value) {
-            raw.throwable = value
-        }
-
-    val hasThrowable: Boolean
-        get() = raw.hasThrowable
-
-    fun getResult(): Any? = raw.result
-
-    fun setResult(value: Any?) {
-        raw.result = value
-    }
-
-    fun getThrowable(): Throwable? = raw.throwable
-
-    fun setThrowable(value: Throwable?) {
-        raw.throwable = value
-    }
-
-    fun hasThrowable(): Boolean = raw.hasThrowable
-
-    @Throws(Throwable::class)
-    fun getResultOrThrowable(): Any? =
-        if (raw.hasThrowable) throw raw.throwable!! else raw.result
+    /** 当前调用参数；下标赋值生效，整体替换数组不生效。 */
+    val argsArray: Array<Any?>
+        get() = raw.args
 
     fun args(index: Int): Any? = raw.arg(index)
 
     fun <T> argsAs(index: Int): T = raw.argAs<T>(index)
 
-    fun setObjectExtra(key: String, value: Any?) =
-        ExtraFields.setInstanceField(raw.thisObject, key, value)
+    fun <T> resultAs(): T = raw.result as T
 
-    fun getObjectExtra(key: String): Any? = ExtraFields.getInstanceField(raw.thisObject, key)
-
-    fun removeObjectExtra(key: String): Any? = ExtraFields.removeInstanceField(raw.thisObject, key)
+    @Throws(Throwable::class)
+    fun getResultOrThrowableCompat(): Any? =
+        if (raw.hasThrowable) throw raw.throwable!! else raw.result
 }
 
 typealias MethodHookBlock = (MethodHookParam) -> Unit

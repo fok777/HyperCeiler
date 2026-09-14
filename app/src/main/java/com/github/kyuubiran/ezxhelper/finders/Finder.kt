@@ -38,7 +38,7 @@ class MethodFinderSeq internal constructor(private val clazz: Class<*>) {
     fun filterByAssignableParamTypes(vararg types: Class<*>?): MethodFinderSeq =
         filter {
             if (parameterCount != types.size) return@filter false
-            types.withIndex().all { (index, type) -> type.isAssignableFrom(parameterTypes[index]) }
+            types.withIndex().all { (index, type) -> type?.isAssignableFrom(parameterTypes[index]) == true }
         }
 
     fun filterByReturnType(type: Class<*>?): MethodFinderSeq = filter { returnType == type }
@@ -67,6 +67,14 @@ class MethodFinderSeq internal constructor(private val clazz: Class<*>) {
     fun filterProtected(): MethodFinderSeq = filter { Modifier.isProtected(modifiers) }
 
     /** 只在当前类查找，不向上查找父类。 */
+    /** 只在父类中查找。 */
+    fun findSuper(): MethodFinderSeq {
+        val parent = clazz.superclass ?: return this
+        val finder = MethodFinderSeq(parent)
+        finder.filters.addAll(filters)
+        return finder
+    }
+
     fun onlySelf(): MethodFinderSeq {
         searchSuper = false
         return this
@@ -266,7 +274,7 @@ class FieldFinderSeq internal constructor(private val clazz: Class<*>) {
 
     fun filterByType(type: Class<*>?): FieldFinderSeq = filter { this.type == type }
 
-    fun filterByAssignableType(type: Class<*>?): FieldFinderSeq = filter { type.isAssignableFrom(this.type) }
+    fun filterByAssignableType(type: Class<*>?): FieldFinderSeq = filter { type?.isAssignableFrom(this.type) == true }
 
     fun filterStatic(): FieldFinderSeq = filter { Modifier.isStatic(modifiers) }
 
