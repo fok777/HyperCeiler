@@ -29,6 +29,7 @@ import com.sevtinge.hyperceiler.compat.XC_MethodHook;
 import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 import com.sevtinge.hyperceiler.compat.XposedBridge;
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.StartupParam;
 
 public class ToastBlur implements IXposedHookZygoteInit {
     private static final String TAG = "ToastBlur";

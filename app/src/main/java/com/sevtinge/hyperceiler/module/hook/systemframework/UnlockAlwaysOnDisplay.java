@@ -22,6 +22,7 @@ import com.sevtinge.hyperceiler.compat.IXposedHookZygoteInit;
 import com.sevtinge.hyperceiler.compat.XC_MethodHook;
 import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.StartupParam;
 
 public class UnlockAlwaysOnDisplay implements IXposedHookZygoteInit {
     private static final String TAG = "UnlockAlwaysOnDisplayF";

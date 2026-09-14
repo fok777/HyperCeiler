@@ -32,6 +32,7 @@ import com.sevtinge.hyperceiler.utils.log.XposedLogUtils;
 import com.sevtinge.hyperceiler.compat.IXposedHookLoadPackage;
 import com.sevtinge.hyperceiler.compat.IXposedHookZygoteInit;
 import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
+import com.sevtinge.hyperceiler.compat.StartupParam;
 
 public class SystemFrameworkForCorePatch implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     public static final String TAG = "CorePatch";

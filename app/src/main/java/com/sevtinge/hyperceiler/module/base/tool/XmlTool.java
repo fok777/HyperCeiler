@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.sevtinge.hyperceiler.compat.IXposedHookZygoteInit;
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.StartupParam;
 
 /**
  * Xml 钩子

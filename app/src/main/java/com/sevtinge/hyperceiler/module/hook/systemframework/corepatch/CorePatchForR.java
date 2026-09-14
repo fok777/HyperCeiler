@@ -55,6 +55,7 @@ import com.sevtinge.hyperceiler.compat.XSharedPreferences;
 import com.sevtinge.hyperceiler.compat.XposedBridge;
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
 import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
+import com.sevtinge.hyperceiler.compat.StartupParam;
 
 public class CorePatchForR extends XposedHelper implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     private final static Method deoptimizeMethod;
