@@ -25,8 +25,8 @@ import com.sevtinge.hyperceiler.module.base.BaseHook;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class FuckXlDownload extends BaseHook {
     private static final String TARGET_PACKAGE = "com.android.providers.downloads";

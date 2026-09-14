@@ -20,7 +20,10 @@ package com.sevtinge.hyperceiler.module.hook.screenrecorder
 
 import com.sevtinge.hyperceiler.module.base.*
 import com.sevtinge.hyperceiler.module.base.dexkit.*
-import de.robv.android.xposed.*
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedBridge;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
 import java.lang.reflect.*
 
 object UnlockMoreVolumeFromNew : BaseHook() {

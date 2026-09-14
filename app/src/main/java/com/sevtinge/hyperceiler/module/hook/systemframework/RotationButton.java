@@ -24,7 +24,7 @@ import android.provider.Settings;
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 import com.sevtinge.hyperceiler.utils.devicesdk.SystemSDKKt;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class RotationButton extends BaseHook {
     Context context;

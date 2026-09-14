@@ -25,7 +25,7 @@ import com.sevtinge.hyperceiler.module.base.BaseHook;
 import java.util.HashSet;
 import java.util.Objects;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class LanguageMenuShowAllApps extends BaseHook {
     @Override

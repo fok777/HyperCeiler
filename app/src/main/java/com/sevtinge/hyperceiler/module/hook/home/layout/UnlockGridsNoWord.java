@@ -20,7 +20,7 @@ package com.sevtinge.hyperceiler.module.hook.home.layout;
 
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 
-import de.robv.android.xposed.XC_MethodReplacement;
+import com.sevtinge.hyperceiler.compat.XC_MethodReplacement;
 
 public class UnlockGridsNoWord extends BaseHook {
 

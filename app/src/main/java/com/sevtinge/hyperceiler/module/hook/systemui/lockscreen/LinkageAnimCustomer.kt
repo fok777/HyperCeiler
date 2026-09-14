@@ -21,7 +21,10 @@ package com.sevtinge.hyperceiler.module.hook.systemui.lockscreen
 
 import android.view.*
 import com.sevtinge.hyperceiler.module.base.*
-import de.robv.android.xposed.*
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedBridge;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
 
 // from https://github.com/Art-Chen/MIUI-Extra-YukiAPI/blob/f5a3ba5d17e0e62114fc355c3ff1a8daa9da94ff/app/src/main/java/moe/chenxy/miuiextra/hooker/entity/systemui/LinkageAnimCustomer.kt
 class LinkageAnimCustomer : BaseHook() {

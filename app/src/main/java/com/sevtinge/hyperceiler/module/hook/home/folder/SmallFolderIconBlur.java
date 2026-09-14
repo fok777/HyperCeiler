@@ -28,7 +28,7 @@ import com.sevtinge.hyperceiler.module.base.BaseHook;
 import com.sevtinge.hyperceiler.utils.blur.BlurUtils;
 import com.sevtinge.hyperceiler.utils.devicesdk.DisplayUtils;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class SmallFolderIconBlur extends BaseHook {
 

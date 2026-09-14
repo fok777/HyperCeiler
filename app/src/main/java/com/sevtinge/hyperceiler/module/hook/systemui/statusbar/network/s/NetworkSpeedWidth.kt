@@ -20,7 +20,7 @@ package com.sevtinge.hyperceiler.module.hook.systemui.statusbar.network.s
 
 import android.widget.TextView
 import com.sevtinge.hyperceiler.module.base.BaseHook
-import de.robv.android.xposed.XposedHelpers
+import com.sevtinge.hyperceiler.compat.XposedHelpers
 
 object NetworkSpeedWidth : BaseHook() {
     override fun init() {

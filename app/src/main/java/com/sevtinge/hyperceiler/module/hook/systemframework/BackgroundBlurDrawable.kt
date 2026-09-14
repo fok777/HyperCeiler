@@ -20,10 +20,10 @@ package com.sevtinge.hyperceiler.module.hook.systemframework
 
 import android.graphics.Canvas
 import com.sevtinge.hyperceiler.utils.log.XposedLogUtils.logI
-import de.robv.android.xposed.IXposedHookZygoteInit
-import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.XposedBridge
-import de.robv.android.xposed.XposedHelpers
+import com.sevtinge.hyperceiler.compat.IXposedHookZygoteInit
+import com.sevtinge.hyperceiler.compat.XC_MethodHook
+import com.sevtinge.hyperceiler.compat.XposedBridge
+import com.sevtinge.hyperceiler.compat.XposedHelpers
 
 class BackgroundBlurDrawable : IXposedHookZygoteInit {
     override fun initZygote(startupParam: IXposedHookZygoteInit.StartupParam) {

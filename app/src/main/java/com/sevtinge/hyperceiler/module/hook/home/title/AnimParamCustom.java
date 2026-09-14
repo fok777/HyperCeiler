@@ -19,15 +19,15 @@
 package com.sevtinge.hyperceiler.module.hook.home.title;
 
 import static com.sevtinge.hyperceiler.utils.devicesdk.SystemSDKKt.isMoreHyperOSVersion;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.setObjectField;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.callMethod;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.setObjectField;
 
 import com.github.kyuubiran.ezxhelper.ClassUtils;
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 import com.sevtinge.hyperceiler.utils.log.AndroidLogUtils;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodReplacement;
 
 public class AnimParamCustom extends BaseHook {
     @Override

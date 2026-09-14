@@ -25,7 +25,7 @@ import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinde
 import com.sevtinge.hyperceiler.module.base.BaseHook
 import com.sevtinge.hyperceiler.utils.hookAfterMethod
 import com.sevtinge.hyperceiler.utils.hookBeforeMethod
-import de.robv.android.xposed.XC_MethodHook
+import com.sevtinge.hyperceiler.compat.XC_MethodHook
 
 object FoldDeviceDock : BaseHook() {
     private val mHotSeatsClass by lazy {

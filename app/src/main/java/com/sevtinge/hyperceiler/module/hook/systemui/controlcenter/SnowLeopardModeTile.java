@@ -32,8 +32,8 @@ import com.sevtinge.hyperceiler.utils.TileUtils;
 
 import java.util.Objects;
 
-import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class SnowLeopardModeTile extends TileUtils {
     private static boolean isInSnowLeopardMode = false;

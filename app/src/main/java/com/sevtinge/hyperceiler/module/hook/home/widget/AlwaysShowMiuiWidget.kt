@@ -23,7 +23,7 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.sevtinge.hyperceiler.module.base.BaseHook
 import com.sevtinge.hyperceiler.utils.setObjectField
-import de.robv.android.xposed.XC_MethodHook
+import com.sevtinge.hyperceiler.compat.XC_MethodHook
 
 object AlwaysShowMiuiWidget : BaseHook() {
     override fun init() {

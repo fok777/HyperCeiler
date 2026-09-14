@@ -18,15 +18,15 @@
 */
 package com.sevtinge.hyperceiler.module.hook.systemframework.corepatch;
 
-import static de.robv.android.xposed.XposedBridge.hookMethod;
+import static com.sevtinge.hyperceiler.compat.XposedBridge.hookMethod;
 
 import android.os.Build;
 
 import java.lang.reflect.InvocationTargetException;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
 
 public class CorePatchForS extends CorePatchForR {
     public static final String TAG = "[CorePatchForS]";

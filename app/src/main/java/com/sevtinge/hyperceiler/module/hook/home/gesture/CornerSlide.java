@@ -26,7 +26,7 @@ import android.view.MotionEvent;
 import com.sevtinge.hyperceiler.module.hook.GlobalActions;
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class CornerSlide extends BaseHook {
     public int inDirection = 0;

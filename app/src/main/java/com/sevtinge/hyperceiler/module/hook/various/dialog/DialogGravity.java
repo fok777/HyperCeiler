@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class DialogGravity extends BaseHook {
 

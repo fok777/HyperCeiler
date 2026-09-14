@@ -19,8 +19,8 @@
 
 package com.sevtinge.hyperceiler.module.hook.home.title;
 
-import static de.robv.android.xposed.XposedHelpers.setIntField;
-import static de.robv.android.xposed.XposedHelpers.setStaticIntField;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.setIntField;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.setStaticIntField;
 
 import android.content.Context;
 

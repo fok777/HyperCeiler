@@ -1,6 +1,6 @@
 package com.sevtinge.hyperceiler.module.hook.systemui.controlcenter;
 
-import static de.robv.android.xposed.XposedHelpers.setBooleanField;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.setBooleanField;
 
 import android.app.admin.DevicePolicyManager;
 import android.graphics.drawable.Drawable;

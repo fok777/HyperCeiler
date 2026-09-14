@@ -24,7 +24,7 @@ import com.sevtinge.hyperceiler.module.base.BaseHook;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.robv.android.xposed.XC_MethodReplacement;
+import com.sevtinge.hyperceiler.compat.XC_MethodReplacement;
 
 public class DisableFreeformBlackList extends BaseHook {
 

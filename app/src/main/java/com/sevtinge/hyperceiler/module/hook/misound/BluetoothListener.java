@@ -52,7 +52,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class BluetoothListener extends BaseHook {
     private static final String TAG = "BluetoothListener";

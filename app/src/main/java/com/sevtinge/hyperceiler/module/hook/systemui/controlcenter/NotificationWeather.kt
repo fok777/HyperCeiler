@@ -36,7 +36,7 @@ import com.sevtinge.hyperceiler.utils.api.LazyClass.miuiConfigs
 import com.sevtinge.hyperceiler.utils.devicesdk.*
 import com.sevtinge.hyperceiler.utils.devicesdk.DisplayUtils.*
 import com.sevtinge.hyperceiler.view.*
-import de.robv.android.xposed.XposedHelpers.findMethodExactIfExists
+import com.sevtinge.hyperceiler.compat.XposedHelpers.findMethodExactIfExists
 
 @SuppressLint("DiscouragedApi", "ServiceCast", "StaticFieldLeak")
 object NotificationWeather : BaseHook() {

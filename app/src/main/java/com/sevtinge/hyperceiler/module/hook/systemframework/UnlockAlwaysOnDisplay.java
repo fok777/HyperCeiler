@@ -18,9 +18,9 @@
 */
 package com.sevtinge.hyperceiler.module.hook.systemframework;
 
-import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.IXposedHookZygoteInit;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class UnlockAlwaysOnDisplay implements IXposedHookZygoteInit {
     private static final String TAG = "UnlockAlwaysOnDisplayF";

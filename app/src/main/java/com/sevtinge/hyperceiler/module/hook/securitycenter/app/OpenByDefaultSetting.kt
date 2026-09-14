@@ -32,8 +32,11 @@ import com.sevtinge.hyperceiler.*
 import com.sevtinge.hyperceiler.module.base.*
 import com.sevtinge.hyperceiler.module.base.dexkit.*
 import com.sevtinge.hyperceiler.utils.log.*
-import de.robv.android.xposed.*
-import de.robv.android.xposed.XposedHelpers.*
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedBridge;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
+import com.sevtinge.hyperceiler.compat.XposedHelpers.*
 import java.lang.reflect.*
 
 

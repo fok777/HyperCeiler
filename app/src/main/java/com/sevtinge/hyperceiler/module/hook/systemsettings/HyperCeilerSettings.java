@@ -37,7 +37,7 @@ import com.sevtinge.hyperceiler.utils.api.ProjectApi;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 import fan.core.utils.RomUtils;
 
 public class HyperCeilerSettings extends BaseHook {

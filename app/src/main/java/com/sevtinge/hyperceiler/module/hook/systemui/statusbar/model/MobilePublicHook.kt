@@ -29,8 +29,8 @@ import com.sevtinge.hyperceiler.module.hook.systemui.statusbar.model.public.Mobi
 import com.sevtinge.hyperceiler.utils.devicesdk.*
 import com.sevtinge.hyperceiler.utils.getIntField
 import com.sevtinge.hyperceiler.utils.setObjectField
-import de.robv.android.xposed.XC_MethodHook.MethodHookParam
-import de.robv.android.xposed.XposedHelpers
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam
+import com.sevtinge.hyperceiler.compat.XposedHelpers
 
 object MobilePublicHook : BaseHook() {
     private val statusBarMobileClass by lazy {

@@ -33,7 +33,7 @@ import org.luckypray.dexkit.result.base.BaseData;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
-import de.robv.android.xposed.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
 
 public class EnableGameSpeed extends BaseHook {
     @Override

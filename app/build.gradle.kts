@@ -132,7 +132,17 @@ android {
 
     packaging {
         resources {
-            excludes += listOf("/META-INF/**", "/kotlin/**", "/*.txt", "/*.bin", "/*.json")
+            excludes += listOf("/kotlin/**", "/*.txt", "/*.bin", "/*.json")
+            // libxposed 模块声明必须打包进 APK
+            excludes -= listOf("/META-INF/**")
+            excludes += listOf(
+                "/META-INF/*.kotlin_module",
+                "/META-INF/*.version",
+                "/META-INF/services/**",
+                "/META-INF/DEPENDENCIES",
+                "/META-INF/LICENSE*",
+                "/META-INF/NOTICE*"
+            )
         }
         dex {
             useLegacyPackaging = true
@@ -248,14 +258,14 @@ android {
 
 dependencies {
     compileOnly(project(":hidden-api"))
-    compileOnly(libs.xposed.api)
+    compileOnly(libs.libxposed.api)
 
+    implementation(libs.ezhooktool.core)
+    implementation(libs.ezhooktool.xposed102)
     implementation(libs.dexkit)
     implementation(libs.mmkv)
-    implementation(libs.ezxhelper)
     implementation(libs.hiddenapibypass)
     implementation(libs.gson)
-    implementation(libs.hooktool)
     implementation(libs.lyric.getter.api)
     implementation(libs.lunarcalendar)
 

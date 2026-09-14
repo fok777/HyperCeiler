@@ -45,8 +45,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Objects;
 
-import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class SunlightModeHigh extends TileUtils {
     public static String path = null;

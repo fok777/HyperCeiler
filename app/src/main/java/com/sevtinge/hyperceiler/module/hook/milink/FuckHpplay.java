@@ -25,7 +25,7 @@ import com.sevtinge.hyperceiler.module.base.BaseHook;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import de.robv.android.xposed.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
 
 import static com.sevtinge.hyperceiler.utils.devicesdk.SystemSDKKt.isMoreHyperOSVersion;
 

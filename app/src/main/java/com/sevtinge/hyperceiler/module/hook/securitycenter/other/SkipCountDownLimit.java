@@ -19,7 +19,7 @@
 
 package com.sevtinge.hyperceiler.module.hook.securitycenter.other;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.callMethod;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -22,7 +22,7 @@ import com.sevtinge.hyperceiler.module.base.BaseHook;
 
 import java.util.Set;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class ClipboardWhitelist extends BaseHook {
     @Override

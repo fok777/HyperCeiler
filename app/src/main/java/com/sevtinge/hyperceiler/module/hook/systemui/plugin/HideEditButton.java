@@ -1,8 +1,8 @@
 package com.sevtinge.hyperceiler.module.hook.systemui.plugin;
 
-import static de.robv.android.xposed.XC_MethodReplacement.returnConstant;
+import static com.sevtinge.hyperceiler.compat.XC_MethodReplacement.returnConstant;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class HideEditButton {
     public static void initHideEditButton(ClassLoader classLoader) {

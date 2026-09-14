@@ -30,7 +30,7 @@ import com.github.kyuubiran.ezxhelper.finders.FieldFinder.`-Static`.fieldFinder
 import com.sevtinge.hyperceiler.*
 import com.sevtinge.hyperceiler.module.base.*
 import com.sevtinge.hyperceiler.utils.*
-import de.robv.android.xposed.XC_MethodHook.MethodHookParam
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam
 import kotlinx.coroutines.*
 import org.lsposed.hiddenapibypass.*
 

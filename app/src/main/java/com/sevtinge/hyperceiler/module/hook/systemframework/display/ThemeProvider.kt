@@ -23,7 +23,7 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.github.kyuubiran.ezxhelper.Log
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.sevtinge.hyperceiler.module.base.*
-import de.robv.android.xposed.XC_MethodHook
+import com.sevtinge.hyperceiler.compat.XC_MethodHook
 import miui.drm.DrmManager
 import miui.drm.ThemeReceiver
 

@@ -26,7 +26,10 @@ import android.graphics.*
 import android.view.*
 import android.widget.*
 import com.github.kyuubiran.ezxhelper.misc.ViewUtils.findViewByIdName
-import de.robv.android.xposed.*
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedBridge;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
 import java.lang.reflect.*
 
 // from https://github.com/YunZiA/HyperStar2.0/blob/master/app/src/main/java/com/yunzia/hyperstar/hook/app/plugin/QSVolumeOrBrightnessValue.kt

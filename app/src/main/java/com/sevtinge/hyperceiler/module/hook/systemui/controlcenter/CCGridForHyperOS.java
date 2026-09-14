@@ -32,8 +32,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class CCGridForHyperOS {
     private static final float radius = (float) mPrefsMap.getInt("system_ui_control_center_rounded_rect_radius", 72);

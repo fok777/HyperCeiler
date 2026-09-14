@@ -26,7 +26,7 @@ import com.sevtinge.hyperceiler.module.base.BaseHook;
 
 import java.util.Locale;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class PinyinArrangement extends BaseHook {
     LocaleList locale;

@@ -29,9 +29,9 @@ import com.sevtinge.hyperceiler.module.hook.systemframework.corepatch.CorePatchF
 import com.sevtinge.hyperceiler.module.hook.systemframework.corepatch.CorePatchForV;
 import com.sevtinge.hyperceiler.utils.log.XposedLogUtils;
 
-import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import com.sevtinge.hyperceiler.compat.IXposedHookLoadPackage;
+import com.sevtinge.hyperceiler.compat.IXposedHookZygoteInit;
+import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
 
 public class SystemFrameworkForCorePatch implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     public static final String TAG = "CorePatch";

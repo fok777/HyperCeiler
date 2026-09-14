@@ -25,8 +25,8 @@ import android.os.Bundle;
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 import com.sevtinge.hyperceiler.module.hook.GlobalActions;
 
-import de.robv.android.xposed.XC_MethodReplacement;
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XC_MethodReplacement;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class SwipeAndStop extends BaseHook {
     @Override

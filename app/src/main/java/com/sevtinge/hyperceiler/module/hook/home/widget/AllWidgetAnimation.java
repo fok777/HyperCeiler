@@ -20,7 +20,7 @@ package com.sevtinge.hyperceiler.module.hook.home.widget;
 
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 
-import de.robv.android.xposed.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
 
 public class AllWidgetAnimation extends BaseHook {
     @Override

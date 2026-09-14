@@ -20,7 +20,7 @@ package com.sevtinge.hyperceiler.module.hook.systemui.controlcenter;
 
 import static com.sevtinge.hyperceiler.utils.devicesdk.SystemSDKKt.isMoreHyperOSVersion;
 import static com.sevtinge.hyperceiler.utils.log.XposedLogUtils.logE;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.findAndHookMethod;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -29,9 +29,9 @@ import android.widget.LinearLayout;
 
 import java.util.List;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XCallback;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XCallback;
 
 public class CustomCardTiles {
     private static final String TAG = "CustomCardTiles";

@@ -25,8 +25,8 @@ import android.widget.Switch;
 import com.sevtinge.hyperceiler.R;
 import com.sevtinge.hyperceiler.utils.TileUtils;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class ReduceBrightColorsTile extends TileUtils {
     @Override
