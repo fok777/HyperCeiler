@@ -10,11 +10,15 @@ import io.github.lingqiqi5211.ezhooktool.xposed.EzXposed
  */
 object EzXHelper {
 
-    @set:JvmStatic
-    var logTag: String = "HyperCeiler"
+    var logTagInternal: String = "HyperCeiler"
 
-    @set:JvmStatic
-    var toastTag: String = "HyperCeiler"
+    var toastTagInternal: String = "HyperCeiler"
+
+    val logTag: String
+        get() = logTagInternal
+
+    val toastTag: String
+        get() = toastTagInternal
 
     @get:JvmStatic
     val appContext: Context
@@ -35,6 +39,16 @@ object EzXHelper {
     @get:JvmStatic
     val isHostPackageNameInited: Boolean
         get() = EzXposed.packageName.isNotEmpty()
+
+    @JvmStatic
+    fun setLogTag(tag: String) {
+        logTagInternal = tag
+    }
+
+    @JvmStatic
+    fun setToastTag(tag: String) {
+        toastTagInternal = tag
+    }
 
     @JvmStatic
     fun initAppContext(context: Context?) {
