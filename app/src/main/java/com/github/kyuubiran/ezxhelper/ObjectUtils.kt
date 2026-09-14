@@ -2,67 +2,67 @@
 
 package com.github.kyuubiran.ezxhelper
 
-import io.github.lingqiqi5211.ezhooktool.core.BestMatchUtils
+import io.github.lingqiqi5211.ezhooktool.core.findMethodBestMatch as coreFindMethodBestMatch
 import io.github.lingqiqi5211.ezhooktool.core.java.Fields
 import io.github.lingqiqi5211.ezhooktool.core.java.Methods
+import java.lang.reflect.Field
 
 /**
  * EzXHelper ObjectHelper 的 API 102 兼容实现。
  */
 class ObjectHelper(private val obj: Any?) {
 
-    fun getObject(fieldName: String): Any? =
-        Fields.getObjectField(obj, fieldName)
+    fun getObject(fieldName: String): Any? = Fields.getObjectField(require(obj), fieldName)
 
     fun getObjectOrNull(fieldName: String): Any? =
-        runCatching { Fields.getObjectField(obj, fieldName) }.getOrNull()
+        runCatching { Fields.getObjectField(require(obj), fieldName) }.getOrNull()
 
-    fun <T> getObjectOrNullAs(fieldName: String): T? =
-        getObjectOrNull(fieldName) as? T
+    fun <T> getObjectOrNullAs(fieldName: String): T? = getObjectOrNull(fieldName) as? T
 
-    fun <T> getObjectAs(fieldName: String): T =
-        Fields.getObjectField(obj, fieldName) as T
+    fun <T> getObjectAs(fieldName: String): T = Fields.getObjectField(require(obj), fieldName) as T
 
-    fun setObject(fieldName: String, value: Any?) {
-        Fields.setObjectField(obj, fieldName, value)
+    fun setObject(fieldName: String, value: Any?) = Fields.setObjectField(require(obj), fieldName, value)
+
+    fun getObjectUntilSuperclass(fieldName: String): Any? = findFieldUntilSuperclass(fieldName)?.let {
+        runCatching { it.get(obj) }.getOrNull()
     }
+
+    fun getObjectOrNullUntilSuperclass(fieldName: String): Any? = getObjectUntilSuperclass(fieldName)
+
+    fun <T> getObjectOrNullUntilSuperclassAs(fieldName: String): T? =
+        getObjectUntilSuperclass(fieldName) as? T
 
     fun setObjectUntilSuperclass(fieldName: String, value: Any?) {
-        var current: Class<*>? = obj?.javaClass
-        while (current != null) {
-            val field = runCatching { current!!.getDeclaredField(fieldName) }.getOrNull()
-            if (field != null) {
-                field.isAccessible = true
-                runCatching { field.set(obj, value) }
-                return
-            }
-            current = current.superclass
-        }
+        val field = findFieldUntilSuperclass(fieldName) ?: return
+        runCatching { field.set(obj, value) }
     }
 
-    fun getObjectUntilSuperclass(fieldName: String): Any? {
+    fun invokeMethodBestMatch(methodName: String, vararg args: Any?): Any? =
+        Methods.callMethod(require(obj), methodName, *args)
+
+    fun invokeMethod(methodName: String, vararg args: Any?): Any? =
+        Methods.callMethod(require(obj), methodName, *args)
+
+    fun newInstance(vararg args: Any?): Any? {
+        val clazz = obj as? Class<*> ?: return null
+        return io.github.lingqiqi5211.ezhooktool.core.java.Constructors.newInstance(clazz, *args)
+    }
+
+    private fun findFieldUntilSuperclass(fieldName: String): Field? {
         var current: Class<*>? = obj?.javaClass
         while (current != null) {
             val field = runCatching { current!!.getDeclaredField(fieldName) }.getOrNull()
             if (field != null) {
                 field.isAccessible = true
-                return runCatching { field.get(obj) }.getOrNull()
+                return field
             }
             current = current.superclass
         }
         return null
     }
 
-    fun invokeMethodBestMatch(methodName: String, vararg args: Any?): Any? =
-        Methods.callMethod(obj, methodName, *args)
-
-    fun invokeMethod(methodName: String, vararg args: Any?): Any? =
-        Methods.callMethod(obj, methodName, *args)
-
-    fun newInstance(vararg args: Any?): Any? {
-        val clazz = obj as? Class<*> ?: return null
-        return io.github.lingqiqi5211.ezhooktool.core.java.Constructors.newInstance(clazz, *args)
-    }
+    private fun require(value: Any?): Any =
+        value ?: throw NullPointerException("ObjectHelper: target object is null.")
 
     companion object {
         fun Any?.objectHelper(): ObjectHelper = ObjectHelper(this)
@@ -75,48 +75,38 @@ class ObjectHelper(private val obj: Any?) {
 object ObjectUtils {
 
     @JvmStatic
+    fun getObject(obj: Any?, fieldName: String): Any? =
+        Fields.getObjectField(obj ?: return null, fieldName)
+
+    @JvmStatic
+    fun getObjectOrNull(obj: Any?, fieldName: String): Any? =
+        if (obj == null) null else runCatching { Fields.getObjectField(obj, fieldName) }.getOrNull()
+
+    @JvmStatic
+    fun <T> getObjectOrNullAs(obj: Any?, fieldName: String): T? = getObjectOrNull(obj, fieldName) as? T
+
+    @JvmStatic
+    fun <T> getObjectAs(obj: Any?, fieldName: String): T =
+        Fields.getObjectField(obj ?: throw NullPointerException("obj is null"), fieldName) as T
+
+    @JvmStatic
+    fun setObject(obj: Any?, fieldName: String, value: Any?) {
+        if (obj == null) return
+        Fields.setObjectField(obj, fieldName, value)
+    }
+
+    @JvmStatic
     fun invokeMethodBestMatch(obj: Any?, methodName: String, vararg args: Any?): Any? =
-        Methods.callMethod(obj, methodName, *args)
+        Methods.callMethod(obj ?: throw NullPointerException("obj is null"), methodName, *args)
 
     @JvmStatic
     fun invokeMethodBestMatch(clazz: Class<*>, methodName: String, vararg args: Any?): Any? =
         Methods.callStaticMethod(clazz, methodName, *args)
 
     @JvmStatic
-    fun setObject(obj: Any?, fieldName: String, value: Any?) {
-        Fields.setObjectField(obj, fieldName, value)
-    }
-
-    @JvmStatic
-    fun getObject(obj: Any?, fieldName: String): Any? =
-        Fields.getObjectField(obj, fieldName)
-
-    @JvmStatic
-    fun getObjectOrNull(obj: Any?, fieldName: String): Any? =
-        runCatching { Fields.getObjectField(obj, fieldName) }.getOrNull()
-
-    @JvmStatic
-    fun <T> getObjectOrNullAs(obj: Any?, fieldName: String): T? =
-        getObjectOrNull(obj, fieldName) as? T
-
-    @JvmStatic
-    fun findMethodBestMatch(clazz: Class<*>, methodName: String, vararg parameterTypes: Class<*>): java.lang.reflect.Method =
-        BestMatchUtils.findMethodBestMatch(clazz, methodName, parameterTypes)
+    fun findMethodBestMatch(
+        clazz: Class<*>,
+        methodName: String,
+        vararg parameterTypes: Class<*>
+    ): java.lang.reflect.Method = coreFindMethodBestMatch(clazz, methodName, *parameterTypes)
 }
-
-/** `Any.invokeMethodBestMatch()` 扩展入口。 */
-fun Any?.invokeMethodBestMatch(methodName: String, vararg args: Any?): Any? =
-    Methods.callMethod(this, methodName, *args)
-
-/** `Any.setObject()` 扩展入口。 */
-fun Any?.setObject(fieldName: String, value: Any?) {
-    Fields.setObjectField(this, fieldName, value)
-}
-
-/** `Any.getObjectOrNull()` 扩展入口。 */
-fun Any?.getObjectOrNull(fieldName: String): Any? =
-    runCatching { Fields.getObjectField(this, fieldName) }.getOrNull()
-
-/** `Any.getObjectOrNullAs()` 扩展入口。 */
-fun <T> Any?.getObjectOrNullAs(fieldName: String): T? =
-    getObjectOrNull(fieldName) as? T

@@ -2,6 +2,8 @@
 
 package com.github.kyuubiran.ezxhelper
 
+import android.util.Log
+import com.github.kyuubiran.ezxhelper.interfaces.IMethodHookCallback
 import io.github.libxposed.api.XposedInterface
 import io.github.lingqiqi5211.ezhooktool.xposed.common.HookParam
 import io.github.lingqiqi5211.ezhooktool.xposed.java.ExtraFields
@@ -14,8 +16,6 @@ import java.util.function.Consumer
 
 /**
  * EzXHelper MethodHookParam 的 API 102 兼容实现。
- *
- * <p>字段与 EzXHelper 2.x 保持一致，内部转发到 EzHookTool 的 [HookParam]。</p>
  */
 class MethodHookParam internal constructor(internal val raw: HookParam) {
 
@@ -27,8 +27,13 @@ class MethodHookParam internal constructor(internal val raw: HookParam) {
     val thisObject: Any
         get() = raw.thisObject
 
-    /** 当前调用参数；原地修改下标即修改实参。 */
-    var args: Array<Any?> = raw.args
+    /** 当前实例；静态方法返回 null。 */
+    val thisObjectOrNull: Any?
+        get() = raw.thisObjectOrNull
+
+    /** 当前调用参数。 */
+    val args: Array<Any?>
+        get() = raw.args
 
     /** 当前返回值，可读写。 */
     var result: Any?
@@ -44,11 +49,16 @@ class MethodHookParam internal constructor(internal val raw: HookParam) {
             raw.throwable = value
         }
 
+    val hasThrowable: Boolean
+        get() = raw.hasThrowable
+
     fun getResult(): Any? = raw.result
 
     fun setResult(value: Any?) {
         raw.result = value
     }
+
+    fun getThrowable(): Throwable? = raw.throwable
 
     fun setThrowable(value: Throwable?) {
         raw.throwable = value
@@ -57,35 +67,27 @@ class MethodHookParam internal constructor(internal val raw: HookParam) {
     fun hasThrowable(): Boolean = raw.hasThrowable
 
     @Throws(Throwable::class)
-    fun getResultOrThrowable(): Any? {
-        if (raw.hasThrowable) throw raw.throwable!!
-        return raw.result
-    }
+    fun getResultOrThrowable(): Any? =
+        if (raw.hasThrowable) throw raw.throwable!! else raw.result
 
-    fun setObjectExtra(key: String, value: Any?) {
-        ExtraFields.setInstanceField(thisObject, key, value)
-    }
-
-    fun getObjectExtra(key: String): Any? = ExtraFields.getInstanceField(thisObject, key)
-
-    fun removeObjectExtra(key: String): Any? = ExtraFields.removeInstanceField(thisObject, key)
-
-    /** 按下标读取参数。 */
     fun args(index: Int): Any? = raw.arg(index)
 
-    /** 按下标读取并转型。 */
-    fun <T> argsAs(index: Int): T = raw.arg(index) as T
+    fun <T> argsAs(index: Int): T = raw.argAs<T>(index)
+
+    fun setObjectExtra(key: String, value: Any?) =
+        ExtraFields.setInstanceField(raw.thisObject, key, value)
+
+    fun getObjectExtra(key: String): Any? = ExtraFields.getInstanceField(raw.thisObject, key)
+
+    fun removeObjectExtra(key: String): Any? = ExtraFields.removeInstanceField(raw.thisObject, key)
 }
 
 typealias MethodHookBlock = MethodHookParam.() -> Unit
 
 /**
- * EzXHelper HookFactory 的 API 102 兼容实现。
- *
- * <p>Kotlin 侧：`Method.createHook { before {}; after {}; returnConstant(x) }`；
- * Java 侧：[createMethodHook] 配合 [Consumer]。</p>
+ * Kotlin DSL 作用域：对应 EzXHelper `createHook { }` 块内的接收者。
  */
-class HookFactory {
+class HookScope {
 
     internal var beforeBlock: MethodHookBlock? = null
     internal var afterBlock: MethodHookBlock? = null
@@ -120,105 +122,128 @@ class HookFactory {
     fun interrupt() {
         replaceBlock = { null }
     }
+}
 
-    // ==================== Java 入口 ====================
+/**
+ * EzXHelper HookFactory 的 API 102 兼容实现。
+ *
+ * - Kotlin DSL：`Method.createHook { before {}; after {}; returnConstant(x) }`
+ * - Java DSL：`HookFactory.createMethodHook(method, hookFactory -> hookFactory.before(...))`
+ */
+object HookFactory {
 
-    fun before(callback: interfaces.IMethodHookCallback) {
-        beforeBlock = { callback.onMethodHooked(this) }
+    private val javaScope = ThreadLocal<HookScope>()
+
+    fun before(callback: IMethodHookCallback) {
+        val scope = javaScope.get()
+            ?: error("HookFactory.before must be called inside createMethodHook.")
+        scope.beforeBlock = { callback.onMethodHooked(this) }
     }
 
-    fun after(callback: interfaces.IMethodHookCallback) {
-        afterBlock = { callback.onMethodHooked(this) }
+    fun after(callback: IMethodHookCallback) {
+        val scope = javaScope.get()
+            ?: error("HookFactory.after must be called inside createMethodHook.")
+        scope.afterBlock = { callback.onMethodHooked(this) }
     }
 
-    @JvmName("-Static")
-    companion object {
+    fun returnConstant(value: Any?) {
+        val scope = javaScope.get()
+            ?: error("HookFactory.returnConstant must be called inside createMethodHook.")
+        scope.returnConstant(value)
+    }
 
-        @JvmStatic
-        fun createMethodHook(method: Method, hook: Consumer<HookFactory>) {
-            val factory = HookFactory()
-            hook.accept(factory)
-            install(method, factory)
+    @JvmStatic
+    fun createMethodHook(method: Method, hook: Consumer<HookFactory>) {
+        createHookInternal(method, hook)
+    }
+
+    @JvmStatic
+    fun createConstructorHook(constructor: Constructor<*>, hook: Consumer<HookFactory>) {
+        createHookInternal(constructor, hook)
+    }
+
+    private fun createHookInternal(member: Member, hook: Consumer<HookFactory>) {
+        val scope = HookScope()
+        val previous = javaScope.get()
+        javaScope.set(scope)
+        try {
+            hook.accept(this)
+        } finally {
+            if (previous == null) javaScope.remove() else javaScope.set(previous)
         }
+        install(member, scope)
+    }
 
-        @JvmStatic
-        fun createConstructorHook(constructor: Constructor<*>, hook: Consumer<HookFactory>) {
-            val factory = HookFactory()
-            hook.accept(factory)
-            install(constructor, factory)
-        }
+    /** Kotlin DSL 扩展入口。 */
+    object `-Static` {
 
-        // ==================== Kotlin 扩展 ====================
-
-        fun Method.createHook(block: HookFactory.() -> Unit = {}): XposedInterface.HookHandle =
-            install(this, HookFactory().apply(block))
+        fun Method.createHook(block: HookScope.() -> Unit = {}): XposedInterface.HookHandle =
+            install(this, HookScope().apply(block))
 
         fun Method.createBeforeHook(block: MethodHookBlock): XposedInterface.HookHandle =
-            install(this, HookFactory().apply { before(block) })
+            install(this, HookScope().apply { before(block) })
 
         fun Method.createAfterHook(block: MethodHookBlock): XposedInterface.HookHandle =
-            install(this, HookFactory().apply { after(block) })
+            install(this, HookScope().apply { after(block) })
 
         fun Method.createReplaceHook(block: MethodHookParam.() -> Any?): XposedInterface.HookHandle =
-            install(this, HookFactory().apply { replace(block) })
+            install(this, HookScope().apply { replace(block) })
 
-        fun Constructor<*>.createHook(block: HookFactory.() -> Unit = {}): XposedInterface.HookHandle =
-            install(this, HookFactory().apply(block))
+        fun Constructor<*>.createHook(block: HookScope.() -> Unit = {}): XposedInterface.HookHandle =
+            install(this, HookScope().apply(block))
 
         fun Constructor<*>.createBeforeHook(block: MethodHookBlock): XposedInterface.HookHandle =
-            install(this, HookFactory().apply { before(block) })
+            install(this, HookScope().apply { before(block) })
 
         fun Constructor<*>.createAfterHook(block: MethodHookBlock): XposedInterface.HookHandle =
-            install(this, HookFactory().apply { after(block) })
+            install(this, HookScope().apply { after(block) })
 
         fun Iterable<Method>.createHooks(
-            block: HookFactory.() -> Unit = {}
+            block: HookScope.() -> Unit = {}
         ): List<XposedInterface.HookHandle> {
-            val factory = HookFactory().apply(block)
-            return map { install(it, factory) }
+            val scope = HookScope().apply(block)
+            return map { install(it, scope) }
         }
 
         fun Array<Method>.createHooks(
-            block: HookFactory.() -> Unit = {}
+            block: HookScope.() -> Unit = {}
         ): List<XposedInterface.HookHandle> {
-            val factory = HookFactory().apply(block)
-            return map { install(it, factory) }
+            val scope = HookScope().apply(block)
+            return map { install(it, scope) }
         }
+    }
 
-        internal fun install(member: Member, factory: HookFactory): XposedInterface.HookHandle {
-            val replaceBlock = factory.replaceBlock
-            if (replaceBlock != null) {
-                val replaceHook = IReplaceHook { param -> replaceBlock.invoke(MethodHookParam(param)) }
-                return when (member) {
-                    is Method -> Hooks.createHook(member, replaceHook)
-                    is Constructor<*> -> Hooks.createHook(member, replaceHook)
-                    else -> error("Unsupported member: $member")
-                }
-            }
-
-            val beforeBlock = factory.beforeBlock
-            val afterBlock = factory.afterBlock
-            val methodHook = object : io.github.lingqiqi5211.ezhooktool.xposed.java.IMethodHook {
-                override fun before(param: HookParam) {
-                    beforeBlock?.let { block ->
-                        runCatching { MethodHookParam(param).block() }
-                            .onFailure { android.util.Log.e("HyperCeiler", "before hook failed", it) }
-                    }
-                }
-
-                override fun after(param: HookParam) {
-                    afterBlock?.let { block ->
-                        runCatching { MethodHookParam(param).block() }
-                            .onFailure { android.util.Log.e("HyperCeiler", "after hook failed", it) }
-                    }
-                }
-            }
-
+    internal fun install(member: Member, scope: HookScope): XposedInterface.HookHandle {
+        val replaceBlock = scope.replaceBlock
+        if (replaceBlock != null) {
+            val replaceHook = IReplaceHook { param -> replaceBlock.invoke(MethodHookParam(param)) }
             return when (member) {
-                is Method -> Hooks.createHook(member, methodHook)
-                is Constructor<*> -> Hooks.createHook(member, methodHook)
+                is Method -> Hooks.createHook(member, replaceHook)
+                is Constructor<*> -> Hooks.createHook(member, replaceHook)
                 else -> error("Unsupported member: $member")
             }
+        }
+
+        val beforeBlock = scope.beforeBlock
+        val afterBlock = scope.afterBlock
+        val methodHook = object : io.github.lingqiqi5211.ezhooktool.xposed.java.IMethodHook {
+            override fun before(param: HookParam) {
+                beforeBlock ?: return
+                runCatching { MethodHookParam(param).beforeBlock!!() }
+                    .onFailure { Log.e("HyperCeiler", "before hook failed", it) }
+            }
+
+            override fun after(param: HookParam) {
+                afterBlock ?: return
+                runCatching { MethodHookParam(param).afterBlock!!() }
+                    .onFailure { Log.e("HyperCeiler", "after hook failed", it) }
+            }
+        }
+
+        return when (member) {
+            is Method -> Hooks.createHook(member, methodHook)
+            is Constructor<*> -> Hooks.createHook(member, methodHook)
+            else -> error("Unsupported member: $member")
         }
     }
 }

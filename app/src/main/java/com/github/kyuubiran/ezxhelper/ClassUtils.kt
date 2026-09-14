@@ -2,44 +2,44 @@
 
 package com.github.kyuubiran.ezxhelper
 
-import io.github.lingqiqi5211.ezhooktool.core.BestMatchUtils
+import io.github.lingqiqi5211.ezhooktool.core.findMethodBestMatch as coreFindMethodBestMatch
+import io.github.lingqiqi5211.ezhooktool.core.loadClass as coreLoadClass
+import io.github.lingqiqi5211.ezhooktool.core.loadClassFirst as coreLoadClassFirst
+import io.github.lingqiqi5211.ezhooktool.core.loadClassFirstOrNull as coreLoadClassFirstOrNull
+import io.github.lingqiqi5211.ezhooktool.core.loadClassOrNull as coreLoadClassOrNull
 import io.github.lingqiqi5211.ezhooktool.core.java.Fields
 import io.github.lingqiqi5211.ezhooktool.core.java.Methods
-import java.lang.reflect.Method
 
 /**
  * EzXHelper ClassUtils 的 API 102 兼容实现。
  */
 object ClassUtils {
 
-    internal fun loader(): ClassLoader = EzXHelper.classLoader
+    @JvmStatic
+    @JvmOverloads
+    fun loadClass(name: String, classLoader: ClassLoader = EzXHelper.classLoader): Class<*> =
+        coreLoadClass(name, classLoader)
 
     @JvmStatic
     @JvmOverloads
-    fun loadClass(name: String, classLoader: ClassLoader = loader()): Class<*> =
-        io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClass(name, classLoader)
-
-    @JvmStatic
-    @JvmOverloads
-    fun loadClassOrNull(name: String, classLoader: ClassLoader = loader()): Class<*>? =
-        io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassOrNull(name, classLoader)
+    fun loadClassOrNull(name: String, classLoader: ClassLoader = EzXHelper.classLoader): Class<*>? =
+        coreLoadClassOrNull(name, classLoader)
 
     @JvmStatic
     fun loadFirstClass(vararg names: String): Class<*> =
-        io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassFirst(*names)
+        coreLoadClassFirst(names = names, classLoader = EzXHelper.classLoader)
 
     @JvmStatic
     fun loadFirstClass(classLoader: ClassLoader, vararg names: String): Class<*> =
-        io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassFirst(classLoader, *names)
+        coreLoadClassFirst(names = names, classLoader = classLoader)
 
     @JvmStatic
     fun loadFirstClassOrNull(vararg names: String): Class<*>? =
-        io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassFirstOrNull(*names)
+        coreLoadClassFirstOrNull(names = names, classLoader = EzXHelper.classLoader)
 
     @JvmStatic
-    fun setStaticObject(clazz: Class<*>, fieldName: String, value: Any?) {
+    fun setStaticObject(clazz: Class<*>, fieldName: String, value: Any?) =
         Fields.setStaticObjectField(clazz, fieldName, value)
-    }
 
     @JvmStatic
     fun getStaticObject(clazz: Class<*>, fieldName: String): Any? =
@@ -66,5 +66,5 @@ object ClassUtils {
         clazz: Class<*>,
         methodName: String,
         vararg parameterTypes: Class<*>
-    ): Method = BestMatchUtils.findMethodBestMatch(clazz, methodName, parameterTypes)
+    ): java.lang.reflect.Method = coreFindMethodBestMatch(clazz, methodName, *parameterTypes)
 }

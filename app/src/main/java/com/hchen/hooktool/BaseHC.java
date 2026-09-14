@@ -11,7 +11,6 @@ import java.util.Optional;
 
 import io.github.libxposed.api.XposedInterface;
 import io.github.lingqiqi5211.ezhooktool.core.BestMatchUtils;
-import io.github.lingqiqi5211.ezhooktool.core.ClassUtils;
 import io.github.lingqiqi5211.ezhooktool.core.java.Fields;
 import io.github.lingqiqi5211.ezhooktool.core.java.Methods;
 import io.github.lingqiqi5211.ezhooktool.xposed.java.Hooks;
@@ -70,29 +69,29 @@ public abstract class BaseHC {
     // ==================== 类查找 ====================
 
     public Optional<Class<?>> findClass(String className) {
-        return Optional.ofNullable(ClassUtils.loadClassOrNull(className, currentLoader()));
+        return Optional.ofNullable(io.github.lingqiqi5211.ezhooktool.core.ClassUtilsKt.loadClassOrNull(className, currentLoader()));
     }
 
     public Optional<Class<?>> findClass(String className, ClassLoader classLoader) {
-        return Optional.ofNullable(ClassUtils.loadClassOrNull(className, classLoader));
+        return Optional.ofNullable(io.github.lingqiqi5211.ezhooktool.core.ClassUtilsKt.loadClassOrNull(className, classLoader));
     }
 
     public Class<?> loadClass(String className) {
-        return ClassUtils.loadClass(className, currentLoader());
+        return io.github.lingqiqi5211.ezhooktool.core.ClassUtilsKt.loadClass(className, currentLoader());
     }
 
     public boolean existsClass(String className) {
-        return ClassUtils.loadClassOrNull(className, currentLoader()) != null;
+        return io.github.lingqiqi5211.ezhooktool.core.ClassUtilsKt.loadClassOrNull(className, currentLoader()) != null;
     }
 
     public boolean existsClass(String className, ClassLoader classLoader) {
-        return ClassUtils.loadClassOrNull(className, classLoader) != null;
+        return io.github.lingqiqi5211.ezhooktool.core.ClassUtilsKt.loadClassOrNull(className, classLoader) != null;
     }
 
     // ==================== 反射调用 ====================
 
     public Object callMethod(Object obj, String methodName, Object... args) {
-        return Methods.callMethod(obj, methodName, args);
+        return Methods.callMethod(require(obj), methodName, args);
     }
 
     public Object callStaticMethod(Class<?> clazz, String methodName, Object... args) {
@@ -100,13 +99,13 @@ public abstract class BaseHC {
     }
 
     public Object callStaticMethod(String className, String methodName, Object... args) {
-        Class<?> clazz = ClassUtils.loadClassOrNull(className, currentLoader());
+        Class<?> clazz = io.github.lingqiqi5211.ezhooktool.core.ClassUtilsKt.loadClassOrNull(className, currentLoader());
         if (clazz == null) return null;
         return Methods.callStaticMethod(clazz, methodName, args);
     }
 
     public Object getField(Object obj, String fieldName) {
-        return Fields.getObjectField(obj, fieldName);
+        return Fields.getObjectField(require(obj), fieldName);
     }
 
     public Object getStaticField(Class<?> clazz, String fieldName) {
@@ -114,7 +113,7 @@ public abstract class BaseHC {
     }
 
     public void setField(Object obj, String fieldName, Object value) {
-        Fields.setObjectField(obj, fieldName, value);
+        Fields.setObjectField(require(obj), fieldName, value);
     }
 
     public void setStaticField(Class<?> clazz, String fieldName, Object value) {
@@ -142,12 +141,12 @@ public abstract class BaseHC {
         for (int i = 0; i < parameterTypes.length; i++) {
             parameterTypes[i] = (Class<?>) args[i];
         }
-        Method method = BestMatchUtils.findMethodBestMatch(clazz, methodName, parameterTypes);
+        Method method = io.github.lingqiqi5211.ezhooktool.core.BestMatchUtilsKt.findMethodBestMatch(clazz, methodName, parameterTypes);
         return Hooks.createHook(method, asMethodHook(hook));
     }
 
     public XposedInterface.HookHandle hookMethod(String className, String methodName, Object... args) {
-        Class<?> clazz = ClassUtils.loadClassOrNull(className, currentLoader());
+        Class<?> clazz = io.github.lingqiqi5211.ezhooktool.core.ClassUtilsKt.loadClassOrNull(className, currentLoader());
         if (clazz == null) {
             logE(TAG, "hookMethod: class not found: " + className);
             return null;
@@ -271,7 +270,7 @@ public abstract class BaseHC {
     /** 按链式声明批量 hook。 */
     public void chain(String className, ClassLoader classLoader, ChainBuilder builder) {
         if (builder == null) return;
-        Class<?> clazz = ClassUtils.loadClassOrNull(className,
+        Class<?> clazz = io.github.lingqiqi5211.ezhooktool.core.ClassUtilsKt.loadClassOrNull(className,
             classLoader != null ? classLoader : currentLoader());
         if (clazz == null) {
             logE(TAG, "chain: class not found: " + className);
@@ -305,6 +304,11 @@ public abstract class BaseHC {
 
     /** 子类可覆写：在 init 中满足条件后调用以启用 hook 分组。 */
     protected void startHook() {
+    }
+
+    private static Object require(Object obj) {
+        if (obj == null) throw new NullPointerException("BaseHC: target object is null.");
+        return obj;
     }
 
     // ==================== 日志 ====================

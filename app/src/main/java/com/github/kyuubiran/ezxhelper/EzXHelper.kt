@@ -10,36 +10,30 @@ import io.github.lingqiqi5211.ezhooktool.xposed.EzXposed
  */
 object EzXHelper {
 
-    /** 当前日志 tag。 */
     var logTag: String = "HyperCeiler"
 
-    /** 当前 toast tag。 */
     var toastTag: String = "HyperCeiler"
 
-    /** 目标进程 application context；尚未就绪时为 null。 */
     val appContext: Context?
         get() = EzXposed.appContextOrNull
+
+    val classLoader: ClassLoader
+        get() = EzXposed.safeClassLoader
+
+    val hostPackageName: String
+        get() = EzXposed.packageName
+
+    val processName: String
+        get() = EzXposed.processName
 
     @JvmStatic
     fun getAppContext(): Context? = appContext
 
-    /** 当前目标 ClassLoader。 */
-    val classLoader: ClassLoader
-        get() = EzXposed.safeClassLoader
-
     @JvmStatic
     fun getClassLoader(): ClassLoader = classLoader
 
-    /** 当前宿主包名。 */
-    val hostPackageName: String
-        get() = EzXposed.packageName
-
     @JvmStatic
     fun getHostPackageName(): String = hostPackageName
-
-    /** 当前进程名。 */
-    val processName: String
-        get() = EzXposed.processName
 
     @JvmStatic
     fun setLogTag(tag: String) {
@@ -53,18 +47,14 @@ object EzXHelper {
 
     @JvmStatic
     fun initAppContext(context: Context?) {
-        if (context != null) {
-            runCatching { EzXposed.initAppContext(context) }
-        }
+        if (context != null) runCatching { EzXposed.initAppContext(context) }
     }
 
+    /** API 102 下由模块入口统一初始化，保留空实现以兼容旧调用。 */
     @JvmStatic
-    fun initZygote(startupParam: Any?) {
-        // API 102 下由模块入口统一初始化。
-    }
+    fun initZygote(startupParam: Any?) = Unit
 
+    /** API 102 下 ClassLoader 由运行时管理，保留空实现以兼容旧调用。 */
     @JvmStatic
-    fun initHandleLoadPackage(lpparam: Any?) {
-        // API 102 下由 EzHookTool 运行时管理 ClassLoader。
-    }
+    fun initHandleLoadPackage(lpparam: Any?) = Unit
 }

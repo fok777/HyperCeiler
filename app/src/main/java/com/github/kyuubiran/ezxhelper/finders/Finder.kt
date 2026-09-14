@@ -10,64 +10,64 @@ import java.lang.reflect.Modifier
 /**
  * EzXHelper MethodFinder 的 API 102 兼容实现。
  */
-class MethodFinder internal constructor(private val clazz: Class<*>) {
+class MethodFinderSeq internal constructor(private val clazz: Class<*>) {
 
     private var searchSuper = true
-    private val filters = mutableListOf<(Method) -> Boolean>()
+    private val filters = mutableListOf<Method.() -> Boolean>()
 
-    fun filter(condition: (Method) -> Boolean): MethodFinder {
+    fun filter(condition: Method.() -> Boolean): MethodFinderSeq {
         filters += condition
         return this
     }
 
-    fun filterByName(name: String): MethodFinder = filter { it.name == name }
+    fun filterByName(value: String): MethodFinderSeq = filter { name == value }
 
-    fun filterByNameContains(value: String, ignoreCase: Boolean = false): MethodFinder =
-        filter { it.name.contains(value, ignoreCase) }
+    fun filterByNameContains(value: String, ignoreCase: Boolean = false): MethodFinderSeq =
+        filter { name.contains(value, ignoreCase) }
 
-    fun filterByParamCount(count: Int): MethodFinder = filter { it.parameterCount == count }
+    fun filterByParamCount(count: Int): MethodFinderSeq = filter { parameterCount == count }
 
-    fun filterByParamCount(range: IntRange): MethodFinder = filter { it.parameterCount in range }
+    fun filterByParamCount(range: IntRange): MethodFinderSeq = filter { parameterCount in range }
 
-    fun filterByParamTypes(condition: (Array<Class<*>>) -> Boolean): MethodFinder =
-        filter { condition(it.parameterTypes) }
+    fun filterByParamTypes(condition: (Array<Class<*>>) -> Boolean): MethodFinderSeq =
+        filter { condition(parameterTypes) }
 
-    fun filterByParamTypes(vararg types: Class<*>): MethodFinder =
-        filter { it.parameterTypes.contentEquals(types) }
+    fun filterByParamTypes(vararg types: Class<*>): MethodFinderSeq =
+        filter { parameterTypes.contentEquals(types) }
 
-    fun filterByAssignableParamTypes(vararg types: Class<*>): MethodFinder =
-        filter { method ->
-            if (method.parameterCount != types.size) return@filter false
-            types.withIndex().all { (index, type) -> type.isAssignableFrom(method.parameterTypes[index]) }
+    fun filterByAssignableParamTypes(vararg types: Class<*>): MethodFinderSeq =
+        filter {
+            if (parameterCount != types.size) return@filter false
+            types.withIndex().all { (index, type) -> type.isAssignableFrom(parameterTypes[index]) }
         }
 
-    fun filterByReturnType(type: Class<*>): MethodFinder = filter { it.returnType == type }
+    fun filterByReturnType(type: Class<*>): MethodFinderSeq = filter { returnType == type }
 
-    fun filterByReturnType(condition: (Class<*>) -> Boolean): MethodFinder =
-        filter { condition(it.returnType) }
+    fun filterByReturnType(condition: (Class<*>) -> Boolean): MethodFinderSeq =
+        filter { condition(returnType) }
 
-    fun filterStatic(): MethodFinder = filter { Modifier.isStatic(it.modifiers) }
+    fun filterStatic(): MethodFinderSeq = filter { Modifier.isStatic(modifiers) }
 
-    fun filterNonStatic(): MethodFinder = filter { !Modifier.isStatic(it.modifiers) }
+    fun filterNonStatic(): MethodFinderSeq = filter { !Modifier.isStatic(modifiers) }
 
-    fun filterNonAbstract(): MethodFinder = filter { !Modifier.isAbstract(it.modifiers) }
+    fun filterAbstract(): MethodFinderSeq = filter { Modifier.isAbstract(modifiers) }
 
-    fun filterAbstract(): MethodFinder = filter { Modifier.isAbstract(it.modifiers) }
+    fun filterNonAbstract(): MethodFinderSeq = filter { !Modifier.isAbstract(modifiers) }
 
-    fun filterFinal(): MethodFinder = filter { Modifier.isFinal(it.modifiers) }
+    fun filterFinal(): MethodFinderSeq = filter { Modifier.isFinal(modifiers) }
 
-    fun filterNonFinal(): MethodFinder = filter { !Modifier.isFinal(it.modifiers) }
+    fun filterNonFinal(): MethodFinderSeq = filter { !Modifier.isFinal(modifiers) }
 
-    fun filterPublic(): MethodFinder = filter { Modifier.isPublic(it.modifiers) }
+    fun filterPublic(): MethodFinderSeq = filter { Modifier.isPublic(modifiers) }
 
-    fun filterNonPublic(): MethodFinder = filter { !Modifier.isPublic(it.modifiers) }
+    fun filterNonPublic(): MethodFinderSeq = filter { !Modifier.isPublic(modifiers) }
 
-    fun filterPrivate(): MethodFinder = filter { Modifier.isPrivate(it.modifiers) }
+    fun filterPrivate(): MethodFinderSeq = filter { Modifier.isPrivate(modifiers) }
 
-    fun filterProtected(): MethodFinder = filter { Modifier.isProtected(it.modifiers) }
+    fun filterProtected(): MethodFinderSeq = filter { Modifier.isProtected(modifiers) }
 
     /** 只在当前类查找，不向上查找父类。 */
-    fun onlySelf(): MethodFinder {
+    fun onlySelf(): MethodFinderSeq {
         searchSuper = false
         return this
     }
@@ -83,7 +83,7 @@ class MethodFinder internal constructor(private val clazz: Class<*>) {
             if (!searchSuper) break
             current = current.superclass
         }
-        return result.values.filter { method -> filters.all { it(method) } }
+        return result.values.filter { method -> filters.all { condition -> method.condition() } }
     }
 
     fun toList(): List<Method> = candidates()
@@ -104,41 +104,43 @@ class MethodFinder internal constructor(private val clazz: Class<*>) {
     fun lastOrNull(): Method? = toList().lastOrNull()
 
     fun count(): Int = toList().size
+}
 
-    @JvmName("-Static")
-    companion object {
-        fun Class<*>.methodFinder(): MethodFinder = MethodFinder(this)
+/** `Class<*>.methodFinder()` 扩展入口。 */
+object MethodFinder {
+    object `-Static` {
+        fun Class<*>.methodFinder(): MethodFinderSeq = MethodFinderSeq(this)
     }
 }
 
 /**
  * EzXHelper ConstructorFinder 的 API 102 兼容实现。
  */
-class ConstructorFinder internal constructor(private val clazz: Class<*>) {
+class ConstructorFinderSeq internal constructor(private val clazz: Class<*>) {
 
-    private val filters = mutableListOf<(Constructor<*>) -> Boolean>()
+    private val filters = mutableListOf<Constructor<*>.() -> Boolean>()
 
-    fun filter(condition: (Constructor<*>) -> Boolean): ConstructorFinder {
+    fun filter(condition: Constructor<*>.() -> Boolean): ConstructorFinderSeq {
         filters += condition
         return this
     }
 
-    fun filterByParamCount(count: Int): ConstructorFinder = filter { it.parameterCount == count }
+    fun filterByParamCount(count: Int): ConstructorFinderSeq = filter { parameterCount == count }
 
-    fun filterByParamTypes(condition: (Array<Class<*>>) -> Boolean): ConstructorFinder =
-        filter { condition(it.parameterTypes) }
+    fun filterByParamTypes(condition: (Array<Class<*>>) -> Boolean): ConstructorFinderSeq =
+        filter { condition(parameterTypes) }
 
-    fun filterByParamTypes(vararg types: Class<*>): ConstructorFinder =
-        filter { it.parameterTypes.contentEquals(types) }
+    fun filterByParamTypes(vararg types: Class<*>): ConstructorFinderSeq =
+        filter { parameterTypes.contentEquals(types) }
 
-    fun filterEmptyParam(): ConstructorFinder = filter { it.parameterCount == 0 }
+    fun filterEmptyParam(): ConstructorFinderSeq = filter { parameterCount == 0 }
 
-    fun filterNotEmptyParam(): ConstructorFinder = filter { it.parameterCount != 0 }
+    fun filterNotEmptyParam(): ConstructorFinderSeq = filter { parameterCount != 0 }
 
-    fun filterPublic(): ConstructorFinder = filter { Modifier.isPublic(it.modifiers) }
+    fun filterPublic(): ConstructorFinderSeq = filter { Modifier.isPublic(modifiers) }
 
     private fun candidates(): List<Constructor<*>> =
-        clazz.declaredConstructors.filter { c -> filters.all { it(c) } }
+        clazz.declaredConstructors.filter { c -> filters.all { condition -> c.condition() } }
 
     fun toList(): List<Constructor<*>> = candidates()
 
@@ -154,39 +156,41 @@ class ConstructorFinder internal constructor(private val clazz: Class<*>) {
 
     fun last(): Constructor<*> = toList().lastOrNull()
         ?: throw NoSuchMethodError("Constructor not found in ${clazz.name}")
+}
 
-    @JvmName("-Static")
-    companion object {
-        fun Class<*>.constructorFinder(): ConstructorFinder = ConstructorFinder(this)
+/** `Class<*>.constructorFinder()` 扩展入口。 */
+object ConstructorFinder {
+    object `-Static` {
+        fun Class<*>.constructorFinder(): ConstructorFinderSeq = ConstructorFinderSeq(this)
     }
 }
 
 /**
  * EzXHelper FieldFinder 的 API 102 兼容实现。
  */
-class FieldFinder internal constructor(private val clazz: Class<*>) {
+class FieldFinderSeq internal constructor(private val clazz: Class<*>) {
 
     private var searchSuper = true
-    private val filters = mutableListOf<(Field) -> Boolean>()
+    private val filters = mutableListOf<Field.() -> Boolean>()
 
-    fun filter(condition: (Field) -> Boolean): FieldFinder {
+    fun filter(condition: Field.() -> Boolean): FieldFinderSeq {
         filters += condition
         return this
     }
 
-    fun filterByName(name: String): FieldFinder = filter { it.name == name }
+    fun filterByName(value: String): FieldFinderSeq = filter { name == value }
 
-    fun filterByType(type: Class<*>): FieldFinder = filter { it.type == type }
+    fun filterByType(type: Class<*>): FieldFinderSeq = filter { this.type == type }
 
-    fun filterByAssignableType(type: Class<*>): FieldFinder = filter { type.isAssignableFrom(it.type) }
+    fun filterByAssignableType(type: Class<*>): FieldFinderSeq = filter { type.isAssignableFrom(this.type) }
 
-    fun filterStatic(): FieldFinder = filter { Modifier.isStatic(it.modifiers) }
+    fun filterStatic(): FieldFinderSeq = filter { Modifier.isStatic(modifiers) }
 
-    fun filterNonStatic(): FieldFinder = filter { !Modifier.isStatic(it.modifiers) }
+    fun filterNonStatic(): FieldFinderSeq = filter { !Modifier.isStatic(modifiers) }
 
-    fun filterFinal(): FieldFinder = filter { Modifier.isFinal(it.modifiers) }
+    fun filterFinal(): FieldFinderSeq = filter { Modifier.isFinal(modifiers) }
 
-    fun onlySelf(): FieldFinder {
+    fun onlySelf(): FieldFinderSeq {
         searchSuper = false
         return this
     }
@@ -201,7 +205,7 @@ class FieldFinder internal constructor(private val clazz: Class<*>) {
             if (!searchSuper) break
             current = current.superclass
         }
-        return result.values.filter { f -> filters.all { it(f) } }
+        return result.values.filter { f -> filters.all { condition -> f.condition() } }
     }
 
     fun toList(): List<Field> = candidates()
@@ -215,10 +219,11 @@ class FieldFinder internal constructor(private val clazz: Class<*>) {
         ?: throw NoSuchFieldError("Field not found or not single in ${clazz.name}")
 
     fun singleOrNull(): Field? = toList().singleOrNull()
-
-    @JvmName("-Static")
-    companion object {
-        fun Class<*>.fieldFinder(): FieldFinder = FieldFinder(this)
-    }
 }
 
+/** `Class<*>.fieldFinder()` 扩展入口。 */
+object FieldFinder {
+    object `-Static` {
+        fun Class<*>.fieldFinder(): FieldFinderSeq = FieldFinderSeq(this)
+    }
+}

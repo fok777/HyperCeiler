@@ -1,13 +1,10 @@
+@file:JvmName("MemberExtensions")
 @file:Suppress("unused")
 
 package com.github.kyuubiran.ezxhelper
 
 import java.lang.reflect.Member
 import java.lang.reflect.Modifier
-
-/**
- * EzXHelper MemberExtensions 的 API 102 兼容实现。
- */
 
 /** 成员参数个数。 */
 val Member.paramCount: Int
