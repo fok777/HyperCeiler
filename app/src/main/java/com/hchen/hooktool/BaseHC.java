@@ -69,23 +69,23 @@ public abstract class BaseHC {
     // ==================== 类查找 ====================
 
     public Optional<Class<?>> findClass(String className) {
-        return Optional.ofNullable(io.github.lingqiqi5211.ezhooktool.core.ClassUtilsKt.loadClassOrNull(className, currentLoader()));
+        return Optional.ofNullable(io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassOrNull(className, currentLoader()));
     }
 
     public Optional<Class<?>> findClass(String className, ClassLoader classLoader) {
-        return Optional.ofNullable(io.github.lingqiqi5211.ezhooktool.core.ClassUtilsKt.loadClassOrNull(className, classLoader));
+        return Optional.ofNullable(io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassOrNull(className, classLoader));
     }
 
     public Class<?> loadClass(String className) {
-        return io.github.lingqiqi5211.ezhooktool.core.ClassUtilsKt.loadClass(className, currentLoader());
+        return io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClass(className, currentLoader());
     }
 
     public boolean existsClass(String className) {
-        return io.github.lingqiqi5211.ezhooktool.core.ClassUtilsKt.loadClassOrNull(className, currentLoader()) != null;
+        return io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassOrNull(className, currentLoader()) != null;
     }
 
     public boolean existsClass(String className, ClassLoader classLoader) {
-        return io.github.lingqiqi5211.ezhooktool.core.ClassUtilsKt.loadClassOrNull(className, classLoader) != null;
+        return io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassOrNull(className, classLoader) != null;
     }
 
     // ==================== 反射调用 ====================
@@ -99,7 +99,7 @@ public abstract class BaseHC {
     }
 
     public Object callStaticMethod(String className, String methodName, Object... args) {
-        Class<?> clazz = io.github.lingqiqi5211.ezhooktool.core.ClassUtilsKt.loadClassOrNull(className, currentLoader());
+        Class<?> clazz = io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassOrNull(className, currentLoader());
         if (clazz == null) return null;
         return Methods.callStaticMethod(clazz, methodName, args);
     }
@@ -141,12 +141,12 @@ public abstract class BaseHC {
         for (int i = 0; i < parameterTypes.length; i++) {
             parameterTypes[i] = (Class<?>) args[i];
         }
-        Method method = io.github.lingqiqi5211.ezhooktool.core.BestMatchUtilsKt.findMethodBestMatch(clazz, methodName, parameterTypes);
+        Method method = io.github.lingqiqi5211.ezhooktool.core.BestMatchUtils.findMethodBestMatch(clazz, methodName, parameterTypes);
         return Hooks.createHook(method, asMethodHook(hook));
     }
 
     public XposedInterface.HookHandle hookMethod(String className, String methodName, Object... args) {
-        Class<?> clazz = io.github.lingqiqi5211.ezhooktool.core.ClassUtilsKt.loadClassOrNull(className, currentLoader());
+        Class<?> clazz = io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassOrNull(className, currentLoader());
         if (clazz == null) {
             logE(TAG, "hookMethod: class not found: " + className);
             return null;
@@ -270,7 +270,7 @@ public abstract class BaseHC {
     /** 按链式声明批量 hook。 */
     public void chain(String className, ClassLoader classLoader, ChainBuilder builder) {
         if (builder == null) return;
-        Class<?> clazz = io.github.lingqiqi5211.ezhooktool.core.ClassUtilsKt.loadClassOrNull(className,
+        Class<?> clazz = io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassOrNull(className,
             classLoader != null ? classLoader : currentLoader());
         if (clazz == null) {
             logE(TAG, "chain: class not found: " + className);

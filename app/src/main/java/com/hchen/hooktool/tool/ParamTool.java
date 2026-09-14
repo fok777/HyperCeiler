@@ -1,6 +1,7 @@
 package com.hchen.hooktool.tool;
 
 import java.lang.reflect.Method;
+import io.github.libxposed.api.XposedInterface;
 
 /**
  * HChenX HookTool 的 ParamTool 兼容实现（API 102）。
@@ -18,6 +19,7 @@ public interface ParamTool {
         public Object result;
         public Throwable throwable;
         public Method method;
+        public XposedInterface.HookHandle handle;
     }
 
     static HookState state() {
@@ -40,6 +42,10 @@ public interface ParamTool {
 
     default Object getThisObject() {
         return state().thisObject;
+    }
+
+    default <T> T getResultAs() {
+        return (T) state().result;
     }
 
     default Object getResult() {
@@ -68,6 +74,37 @@ public interface ParamTool {
 
     default Object getField(String fieldName) {
         return io.github.lingqiqi5211.ezhooktool.core.java.Fields.getObjectField(getThisObject(), fieldName);
+    }
+
+    /** 读取指定对象的字段。 */
+    default Object getField(Object obj, String fieldName) {
+        return io.github.lingqiqi5211.ezhooktool.core.java.Fields.getObjectField(obj, fieldName);
+    }
+
+    /** 读取 this 对象字段并强制转型。 */
+    default <T> T getThisField(String fieldName) {
+        return (T) io.github.lingqiqi5211.ezhooktool.core.java.Fields.getObjectField(getThisObject(), fieldName);
+    }
+
+    /** 读取指定对象字段并强制转型。 */
+    default <T> T getFieldAs(Object obj, String fieldName) {
+        return (T) io.github.lingqiqi5211.ezhooktool.core.java.Fields.getObjectField(obj, fieldName);
+    }
+
+    default void setField(Object obj, String fieldName, Object value) {
+        io.github.lingqiqi5211.ezhooktool.core.java.Fields.setObjectField(obj, fieldName, value);
+    }
+
+    default Object callMethod(Object obj, String methodName, Object... args) {
+        return io.github.lingqiqi5211.ezhooktool.core.java.Methods.callMethod(obj, methodName, args);
+    }
+
+    default <T> T callMethodAs(Object obj, String methodName, Object... args) {
+        return (T) io.github.lingqiqi5211.ezhooktool.core.java.Methods.callMethod(obj, methodName, args);
+    }
+
+    default Object callStaticMethod(Class<?> clazz, String methodName, Object... args) {
+        return io.github.lingqiqi5211.ezhooktool.core.java.Methods.callStaticMethod(clazz, methodName, args);
     }
 
     default void setField(String fieldName, Object value) {

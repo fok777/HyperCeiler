@@ -152,6 +152,11 @@ public abstract class XC_MethodHook {
             mHandle = handle;
         }
 
+        /** 包装可能为 null 的 handle（hook 安装失败时返回空 Unhook）。 */
+        public static Unhook wrap(XposedInterface.HookHandle handle) {
+            return new Unhook(handle);
+        }
+
         public void unhook() {
             if (mHandle != null) mHandle.unhook();
         }

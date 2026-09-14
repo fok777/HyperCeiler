@@ -303,24 +303,24 @@ public final class XposedHelpers {
 
     public static XC_MethodHook.Unhook findAndHookMethod(Class<?> clazz, String methodName, Object... parameterTypesAndCallback) {
         Object[] args = HookBridgeCompat.unwrapArgs(parameterTypesAndCallback);
-        return new XC_MethodHook.Unhook(Hooks.findAndHookMethod(clazz, methodName, args));
+        return XC_MethodHook.Unhook.wrap(Hooks.findAndHookMethod(clazz, methodName, args));
     }
 
     public static XC_MethodHook.Unhook findAndHookMethod(String className, ClassLoader classLoader, String methodName,
                                                         Object... parameterTypesAndCallback) {
         Object[] args = HookBridgeCompat.unwrapArgs(parameterTypesAndCallback);
-        return new XC_MethodHook.Unhook(
+        return XC_MethodHook.Unhook.wrap(
             Hooks.findAndHookMethod(className, classLoader, methodName, args));
     }
 
     public static XC_MethodHook.Unhook findAndHookConstructor(Class<?> clazz, Object... parameterTypesAndCallback) {
         Object[] args = HookBridgeCompat.unwrapArgs(parameterTypesAndCallback);
-        return new XC_MethodHook.Unhook(Hooks.findAndHookConstructor(clazz, args));
+        return XC_MethodHook.Unhook.wrap(Hooks.findAndHookConstructor(clazz, args));
     }
 
     public static XC_MethodHook.Unhook findAndHookConstructor(String className, ClassLoader classLoader,
                                                              Object... parameterTypesAndCallback) {
         Object[] args = HookBridgeCompat.unwrapArgs(parameterTypesAndCallback);
-        return new XC_MethodHook.Unhook(Hooks.findAndHookConstructor(className, classLoader, args));
+        return XC_MethodHook.Unhook.wrap(Hooks.findAndHookConstructor(className, classLoader, args));
     }
 }

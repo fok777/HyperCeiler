@@ -122,6 +122,31 @@ object Hooks {
     }
 
     @JvmStatic
+    fun findAndHookMethod(
+        className: String,
+        classLoader: ClassLoader?,
+        methodName: String,
+        vararg parameterTypesAndCallback: Any?
+    ): XposedInterface.HookHandle? {
+        val clazz = runCatching {
+            Class.forName(className, false, classLoader ?: EzClassLoader.current())
+        }.getOrNull() ?: return null
+        return findAndHookMethod(clazz, methodName, *parameterTypesAndCallback)
+    }
+
+    @JvmStatic
+    fun findAndHookConstructor(
+        className: String,
+        classLoader: ClassLoader?,
+        vararg parameterTypesAndCallback: Any?
+    ): XposedInterface.HookHandle? {
+        val clazz = runCatching {
+            Class.forName(className, false, classLoader ?: EzClassLoader.current())
+        }.getOrNull() ?: return null
+        return findAndHookConstructor(clazz, *parameterTypesAndCallback)
+    }
+
+    @JvmStatic
     fun findAndHookConstructor(
         clazz: Class<*>,
         vararg parameterTypesAndCallback: Any?
