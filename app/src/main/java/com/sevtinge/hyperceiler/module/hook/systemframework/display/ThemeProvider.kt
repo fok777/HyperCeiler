@@ -29,7 +29,7 @@ import miui.drm.ThemeReceiver
 
 class ThemeProvider : BaseHook() {
     override fun init() {
-        var hook: List<XC_MethodHook.Unhook>? = null
+        var hook: List<XC_MethodHook.Unhook?>? = null
         try {
             ThemeReceiver::class.java.methodFinder().filterByName("validateTheme").first().createHook {
                 before {

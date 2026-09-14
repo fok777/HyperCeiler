@@ -2,6 +2,7 @@ package io.github.lingqiqi5211.ezhooktool.xposed.java
 
 import com.sevtinge.hyperceiler.compat.HookRuntime
 import io.github.libxposed.api.XposedInterface
+import io.github.lingqiqi5211.ezhooktool.core.EzClassLoader
 import io.github.lingqiqi5211.ezhooktool.xposed.common.HookParam
 import java.lang.reflect.Constructor
 import java.lang.reflect.Executable
