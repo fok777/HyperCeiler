@@ -91,6 +91,19 @@ class MethodFinderSeq internal constructor(private val clazz: Class<*>) {
     fun first(): Method = toList().firstOrNull()
         ?: throw NoSuchMethodError("Method not found in ${clazz.name}")
 
+    fun first(condition: Method.() -> Boolean): Method = toList().firstOrNull { it.condition() }
+        ?: throw NoSuchMethodError("Method not found in ${clazz.name}")
+
+    fun firstOrNull(condition: Method.() -> Boolean): Method? = toList().firstOrNull { it.condition() }
+
+    fun single(condition: Method.() -> Boolean): Method = toList().singleOrNull { it.condition() }
+        ?: throw NoSuchMethodError("Method not found or not single in ${clazz.name}")
+
+    fun singleOrNull(condition: Method.() -> Boolean): Method? = toList().singleOrNull { it.condition() }
+
+    fun last(condition: Method.() -> Boolean): Method = toList().lastOrNull { it.condition() }
+        ?: throw NoSuchMethodError("Method not found in ${clazz.name}")
+
     fun firstOrNull(): Method? = toList().firstOrNull()
 
     fun single(): Method = toList().singleOrNull()
@@ -106,8 +119,20 @@ class MethodFinderSeq internal constructor(private val clazz: Class<*>) {
     fun count(): Int = toList().size
 }
 
-/** `Class<*>.methodFinder()` 扩展入口。 */
+/** `Class<*>.methodFinder()` / `MethodFinder.fromClass()` 入口。 */
 object MethodFinder {
+
+    @JvmStatic
+    fun fromClass(clazz: Class<*>): MethodFinderSeq = MethodFinderSeq(clazz)
+
+    @JvmStatic
+    fun fromClass(className: String): MethodFinderSeq =
+        MethodFinderSeq(com.github.kyuubiran.ezxhelper.ClassUtils.loadClass(className))
+
+    @JvmStatic
+    fun fromClass(className: String, classLoader: ClassLoader): MethodFinderSeq =
+        MethodFinderSeq(com.github.kyuubiran.ezxhelper.ClassUtils.loadClass(className, classLoader))
+
     object `-Static` {
         fun Class<*>.methodFinder(): MethodFinderSeq = MethodFinderSeq(this)
     }
@@ -158,11 +183,70 @@ class ConstructorFinderSeq internal constructor(private val clazz: Class<*>) {
         ?: throw NoSuchMethodError("Constructor not found in ${clazz.name}")
 }
 
-/** `Class<*>.constructorFinder()` 扩展入口。 */
+/** `Class<*>.constructorFinder()` / `ConstructorFinder.fromClass()` 入口。 */
 object ConstructorFinder {
+
+    @JvmStatic
+    fun fromClass(clazz: Class<*>): ConstructorFinderSeq = ConstructorFinderSeq(clazz)
+
+    @JvmStatic
+    fun fromClass(className: String): ConstructorFinderSeq =
+        ConstructorFinderSeq(com.github.kyuubiran.ezxhelper.ClassUtils.loadClass(className))
+
+    /** 从已有构造器集合继续筛选。 */
+    fun from(constructors: Array<out Constructor<*>>): ConstructorListFinder =
+        ConstructorListFinder(constructors.toList())
+
+    fun from(constructors: Iterable<Constructor<*>>): ConstructorListFinder =
+        ConstructorListFinder(constructors.toList())
+
     object `-Static` {
         fun Class<*>.constructorFinder(): ConstructorFinderSeq = ConstructorFinderSeq(this)
+        fun Array<out Constructor<*>>.constructorFinder(): ConstructorListFinder =
+            ConstructorListFinder(toList())
     }
+}
+
+/**
+ * 基于已有构造器列表的筛选器，语义与 [ConstructorFinderSeq] 一致。
+ */
+class ConstructorListFinder(private val source: List<Constructor<*>>) {
+
+    private val filters = mutableListOf<Constructor<*>.() -> Boolean>()
+
+    fun filter(condition: Constructor<*>.() -> Boolean): ConstructorListFinder {
+        filters += condition
+        return this
+    }
+
+    fun filterByParamCount(count: Int): ConstructorListFinder = filter { parameterCount == count }
+
+    fun filterByParamTypes(condition: (Array<Class<*>>) -> Boolean): ConstructorListFinder =
+        filter { condition(parameterTypes) }
+
+    fun filterByParamTypes(vararg types: Class<*>): ConstructorListFinder =
+        filter { parameterTypes.contentEquals(types) }
+
+    fun filterEmptyParam(): ConstructorListFinder = filter { parameterCount == 0 }
+
+    fun filterNotEmptyParam(): ConstructorListFinder = filter { parameterCount != 0 }
+
+    fun filterPublic(): ConstructorListFinder = filter { java.lang.reflect.Modifier.isPublic(modifiers) }
+
+    private fun candidates(): List<Constructor<*>> =
+        source.filter { c -> filters.all { condition -> c.condition() } }
+
+    fun toList(): List<Constructor<*>> = candidates()
+
+    fun first(): Constructor<*> = toList().firstOrNull()
+        ?: throw NoSuchMethodError("Constructor not found.")
+
+    fun firstOrNull(): Constructor<*>? = toList().firstOrNull()
+
+    fun single(): Constructor<*> = toList().singleOrNull()
+        ?: throw NoSuchMethodError("Constructor not found or not single.")
+
+    fun singleOrNull(): Constructor<*>? = toList().singleOrNull()
 }
 
 /**
@@ -219,10 +303,28 @@ class FieldFinderSeq internal constructor(private val clazz: Class<*>) {
         ?: throw NoSuchFieldError("Field not found or not single in ${clazz.name}")
 
     fun singleOrNull(): Field? = toList().singleOrNull()
+
+    fun first(condition: Field.() -> Boolean): Field = toList().firstOrNull { it.condition() }
+        ?: throw NoSuchFieldError("Field not found in ${clazz.name}")
+
+    fun firstOrNull(condition: Field.() -> Boolean): Field? = toList().firstOrNull { it.condition() }
+
+    fun single(condition: Field.() -> Boolean): Field = toList().singleOrNull { it.condition() }
+        ?: throw NoSuchFieldError("Field not found or not single in ${clazz.name}")
+
+    fun singleOrNull(condition: Field.() -> Boolean): Field? = toList().singleOrNull { it.condition() }
 }
 
-/** `Class<*>.fieldFinder()` 扩展入口。 */
+/** `Class<*>.fieldFinder()` / `FieldFinder.fromClass()` 入口。 */
 object FieldFinder {
+
+    @JvmStatic
+    fun fromClass(clazz: Class<*>): FieldFinderSeq = FieldFinderSeq(clazz)
+
+    @JvmStatic
+    fun fromClass(className: String): FieldFinderSeq =
+        FieldFinderSeq(com.github.kyuubiran.ezxhelper.ClassUtils.loadClass(className))
+
     object `-Static` {
         fun Class<*>.fieldFinder(): FieldFinderSeq = FieldFinderSeq(this)
     }

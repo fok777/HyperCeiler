@@ -14,8 +14,8 @@ object EzXHelper {
 
     var toastTag: String = "HyperCeiler"
 
-    val appContext: Context?
-        get() = EzXposed.appContextOrNull
+    val appContext: Context
+        get() = EzXposed.appContext
 
     val classLoader: ClassLoader
         get() = EzXposed.safeClassLoader
@@ -27,7 +27,7 @@ object EzXHelper {
         get() = EzXposed.processName
 
     @JvmStatic
-    fun getAppContext(): Context? = appContext
+    fun getAppContext(): Context = appContext
 
     @JvmStatic
     fun getClassLoader(): ClassLoader = classLoader

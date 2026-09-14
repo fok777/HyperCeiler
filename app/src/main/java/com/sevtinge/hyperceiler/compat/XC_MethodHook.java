@@ -38,6 +38,16 @@ public abstract class XC_MethodHook {
     protected void after(MethodHookParam param) throws Throwable {
     }
 
+    /** legacy 命名：默认转发到 {@link #before}。 */
+    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+        before(param);
+    }
+
+    /** legacy 命名：默认转发到 {@link #after}。 */
+    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+        after(param);
+    }
+
     /** 转成 EzHookTool 的回调。 */
     public IMethodHook asHook() {
         return new IMethodHook() {
@@ -45,7 +55,7 @@ public abstract class XC_MethodHook {
             public void before(HookParam hookParam) {
                 MethodHookParam param = new MethodHookParam(hookParam);
                 try {
-                    XC_MethodHook.this.before(param);
+                    XC_MethodHook.this.beforeHookedMethod(param);
                 } catch (Throwable t) {
                     HookBridgeCompat.logHookError("before", t);
                 }
@@ -55,7 +65,7 @@ public abstract class XC_MethodHook {
             public void after(HookParam hookParam) {
                 MethodHookParam param = new MethodHookParam(hookParam);
                 try {
-                    XC_MethodHook.this.after(param);
+                    XC_MethodHook.this.afterHookedMethod(param);
                 } catch (Throwable t) {
                     HookBridgeCompat.logHookError("after", t);
                 }

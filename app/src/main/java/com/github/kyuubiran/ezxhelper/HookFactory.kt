@@ -137,13 +137,13 @@ object HookFactory {
     fun before(callback: IMethodHookCallback) {
         val scope = javaScope.get()
             ?: error("HookFactory.before must be called inside createMethodHook.")
-        scope.beforeBlock = { callback.onMethodHooked(this) }
+        scope.beforeBlock = { param -> callback.onMethodHooked(param) }
     }
 
     fun after(callback: IMethodHookCallback) {
         val scope = javaScope.get()
             ?: error("HookFactory.after must be called inside createMethodHook.")
-        scope.afterBlock = { callback.onMethodHooked(this) }
+        scope.afterBlock = { param -> callback.onMethodHooked(param) }
     }
 
     fun returnConstant(value: Any?) {
@@ -206,6 +206,20 @@ object HookFactory {
         }
 
         fun Array<Method>.createHooks(
+            block: HookScope.() -> Unit = {}
+        ): List<XposedInterface.HookHandle> {
+            val scope = HookScope().apply(block)
+            return map { install(it, scope) }
+        }
+
+        fun Iterable<Constructor<*>>.createConstructorHooks(
+            block: HookScope.() -> Unit = {}
+        ): List<XposedInterface.HookHandle> {
+            val scope = HookScope().apply(block)
+            return map { install(it, scope) }
+        }
+
+        fun Array<Constructor<*>>.createHooks(
             block: HookScope.() -> Unit = {}
         ): List<XposedInterface.HookHandle> {
             val scope = HookScope().apply(block)
