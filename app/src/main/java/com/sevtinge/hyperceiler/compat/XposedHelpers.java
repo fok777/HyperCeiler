@@ -252,7 +252,12 @@ public final class XposedHelpers {
     public static Method findMethodExactIfExists(String className, ClassLoader classLoader, String methodName, Object... parameterTypes) {
         Class<?> clazz = loadClassOrNull(className, classLoader);
         if (clazz == null) return null;
-        return findMethodExactIfExists(clazz, methodName, parameterTypes);
+        Class<?>[] types = new Class<?>[parameterTypes.length];
+        for (int i = 0; i < types.length; i++) {
+            types[i] = (parameterTypes[i] instanceof Class) ? (Class<?>) parameterTypes[i]
+                : loadClassOrNull(parameterTypes[i].toString(), classLoader);
+        }
+        return findMethodExactIfExistsTyped(clazz, methodName, types);
     }
 
     public static Method findMethodExactIfExists(Class<?> clazz, String methodName, Object... parameterTypes) {

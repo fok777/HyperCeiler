@@ -38,7 +38,7 @@ public class XposedInitEntry extends XposedModule {
         try {
             mXposedInit.initZygote(new StartupParam(EzXposed.getModulePath()));
         } catch (Throwable t) {
-            log("XposedInitEntry: initZygote failed: " + t);
+            android.util.Log.e(TAG, "XposedInitEntry: initZygote failed: " + t);
         }
 
         // 所有包级 hook 统一注册到目标就绪回调，保证首次加载与热重载走同一条路径。
@@ -100,12 +100,12 @@ public class XposedInitEntry extends XposedModule {
         try {
             mXposedInit.handleLoadPackage(lpparam);
         } catch (Throwable t) {
-            log("XposedInitEntry: handleLoadPackage failed for " + packageName + ": " + t);
+            android.util.Log.e(TAG, "XposedInitEntry: handleLoadPackage failed for " + packageName + ": " + t);
         }
     }
 
     /** 模块资源工具，供 BaseHook / BaseModule 访问。 */
     public static ResourcesTool resourcesTool() {
-        return XposedInit.mResHook;
+        return com.sevtinge.hyperceiler.XposedInit.mResHook;
     }
 }

@@ -6,6 +6,7 @@ import com.hchen.hooktool.hook.IHook;
 import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
@@ -162,6 +163,20 @@ public abstract class BaseHC {
      * @param methodName 方法名
      * @param args       参数类型列表，最后一项必须是 {@link IHook}
      */
+    public XposedInterface.HookHandle hook(Method method, IHook hook) {
+        return Hooks.createHook(method, asMethodHook(hook));
+    }
+
+    public XposedInterface.HookHandle hook(Member member, IHook hook) {
+        if (member instanceof Method) return hook((Method) member, hook);
+        if (member instanceof Constructor) return Hooks.createHook((Constructor<?>) member, asMethodHook(hook));
+        return null;
+    }
+
+    public XposedInterface.HookHandle hook(Constructor<?> constructor, IHook hook) {
+        return Hooks.createHook(constructor, asMethodHook(hook));
+    }
+
     public XposedInterface.HookHandle hookMethod(Class<?> clazz, String methodName, Object... args) {
         if (args == null || args.length == 0 || !(args[args.length - 1] instanceof IHook hook)) {
             throw new IllegalArgumentException("hookMethod: last argument must be IHook.");
@@ -172,6 +187,28 @@ public abstract class BaseHC {
         }
         Method method = io.github.lingqiqi5211.ezhooktool.core.BestMatchUtils.findMethodBestMatch(clazz, methodName, parameterTypes);
         return Hooks.createHook(method, asMethodHook(hook));
+    }
+
+    public XposedInterface.HookHandle hookMethod(String className, ClassLoader classLoader, String methodName, Object... args) {
+        if (args == null || args.length == 0 || !(args[args.length - 1] instanceof IHook hook)) {
+            throw new IllegalArgumentException("hookMethod: last argument must be IHook.");
+        }
+        Class<?> clazz = io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassOrNull(className, classLoader);
+        if (clazz == null) return null;
+        Object[] rest = new Object[args.length - 1];
+        System.arraycopy(args, 0, rest, 0, args.length - 1);
+        Class<?>[] parameterTypes = toTypes(rest, classLoader);
+        Method method = io.github.lingqiqi5211.ezhooktool.core.BestMatchUtils.findMethodBestMatch(clazz, methodName, parameterTypes);
+        return Hooks.createHook(method, asMethodHook(hook));
+    }
+
+    private Class<?>[] toTypes(Object[] args, ClassLoader classLoader) {
+        Class<?>[] types = new Class<?>[args.length];
+        for (int i = 0; i < types.length; i++) {
+            types[i] = (args[i] instanceof Class) ? (Class<?>) args[i]
+                : io.github.lingqiqi5211.ezhooktool.core.ClassUtils.loadClassOrNull(args[i].toString(), classLoader);
+        }
+        return types;
     }
 
     public XposedInterface.HookHandle hookMethod(String className, String methodName, Object... args) {
