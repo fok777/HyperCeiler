@@ -66,7 +66,7 @@ public class PreventBatteryWitelist extends BaseHook {
             public void accept(HookFactory hookFactory) {
                 hookFactory.before(new IMethodHookCallback() {
                     @Override
-                    public void onMethodHooked(@NonNull com.github.kyuubiran.ezxhelper.MethodHookParam methodHookParam) {
+                    public void onMethodHooked(@NonNull XC_MethodHook.MethodHookParam methodHookParam) {
                         String[] strArr = (String[]) methodHookParam.args[0];
                         if (strArr.length > 1) {
                             methodHookParam.setResult(null);
