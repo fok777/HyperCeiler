@@ -33,8 +33,21 @@ jobs:
         run: |
           chmod +x ./gradlew
           set -o pipefail
-          ./gradlew assembleDebug --stacktrace 2>&1 | tee build.log
-          echo "rc=$?" > build.rc
+          for attempt in 1 2 3; do
+            echo "=== build attempt $attempt ==="
+            if ./gradlew assembleDebug --stacktrace 2>&1 | tee build.log; then
+              echo "rc=0" > build.rc
+              break
+            fi
+            echo "rc=1" > build.rc
+            if grep -qE "Could not resolve|Received status code 5|Could not GET|Could not download" build.log; then
+              echo "网络导致的依赖下载失败，等待后重试"
+              sleep 30
+              continue
+            fi
+            break
+          done
+          test "$(cat build.rc)" = "rc=0"
 
       - name: Publish build log to ci-logs branch
         if: always()
