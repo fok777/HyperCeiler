@@ -67,6 +67,7 @@ import com.sevtinge.hyperceiler.compat.IXposedHookZygoteInit;
 import com.sevtinge.hyperceiler.compat.XSharedPreferences;
 import com.sevtinge.hyperceiler.compat.XposedBridge;
 import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.StartupParam;
 import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
 
 public class XposedInit {
