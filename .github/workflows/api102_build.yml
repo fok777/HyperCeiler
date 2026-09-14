@@ -2,7 +2,7 @@ name: API 102 Build
 
 on:
   push:
-    branches: [a13_eol_api102]
+    branches: [a13_eol, a13_eol_api102]
   workflow_dispatch:
 
 permissions:
