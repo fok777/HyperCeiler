@@ -18,9 +18,9 @@
  */
 package com.sevtinge.hyperceiler.module.hook.home.navigation;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.setBooleanField;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.callMethod;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.getBooleanField;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.setBooleanField;
 
 import android.content.res.Configuration;
 import android.provider.Settings;

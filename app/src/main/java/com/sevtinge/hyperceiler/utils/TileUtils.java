@@ -35,8 +35,8 @@ import com.sevtinge.hyperceiler.R;
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 import com.sevtinge.hyperceiler.module.base.tool.ResourcesTool;
 
-import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public abstract class TileUtils extends BaseHook {
     private static final String mQSFactoryClsName = "com.android.systemui.qs.tileimpl.MiuiQSFactory";

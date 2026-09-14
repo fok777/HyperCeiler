@@ -28,9 +28,9 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.sevtinge.hyperceiler.module.base.BaseHook
 import com.sevtinge.hyperceiler.utils.devicesdk.isMoreAndroidVersion
-import de.robv.android.xposed.XposedHelpers
-import de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField
-import de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField
+import com.sevtinge.hyperceiler.compat.XposedHelpers
+import com.sevtinge.hyperceiler.compat.XposedHelpers.getAdditionalInstanceField
+import com.sevtinge.hyperceiler.compat.XposedHelpers.setAdditionalInstanceField
 
 object LockScreenDoubleTapToSleep : BaseHook() {
     private val className by lazy {

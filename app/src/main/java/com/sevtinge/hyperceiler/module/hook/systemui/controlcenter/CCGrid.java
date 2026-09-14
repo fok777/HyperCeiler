@@ -35,7 +35,7 @@ import com.sevtinge.hyperceiler.module.base.BaseHook;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class CCGrid extends BaseHook {
     private static final int cols = mPrefsMap.getInt("system_control_center_cc_columns", 4); // 列数

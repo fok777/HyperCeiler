@@ -25,7 +25,11 @@ import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinde
 import com.sevtinge.hyperceiler.module.base.tool.*
 import com.sevtinge.hyperceiler.utils.*
 import com.sevtinge.hyperceiler.utils.log.XposedLogUtils
-import de.robv.android.xposed.*
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedBridge;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
+import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
 
 object NewBrightnessPct {
     fun initLoaderHook(classLoader: ClassLoader) {
@@ -53,7 +57,7 @@ object NewBrightnessPct {
     }
 
     private fun getView(str: String, cl: ClassLoader?): Any? {
-        val cl2 = loadClass(str, cl)
+        val cl2 = loadClass(str, cl!!)
         val controlCenterWindowView = cl2.callStaticMethod("getInstance")!!
             .callMethod("getPluginComponent")!!
             .getObjectField("controlCenterWindowViewCreatorProvider")!!

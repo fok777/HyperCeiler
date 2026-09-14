@@ -37,7 +37,7 @@ import com.sevtinge.hyperceiler.module.base.BaseHook;
 import com.sevtinge.hyperceiler.utils.log.AndroidLogUtils;
 import com.sevtinge.hyperceiler.utils.prefs.PrefsUtils;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 @SuppressLint("UnspecifiedRegisterReceiverFlag")
 public class GlobalActions extends BaseHook {

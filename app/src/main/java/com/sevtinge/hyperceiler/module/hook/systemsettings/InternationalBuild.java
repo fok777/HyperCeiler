@@ -20,7 +20,7 @@ package com.sevtinge.hyperceiler.module.hook.systemsettings;
 
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class InternationalBuild extends BaseHook {
     @Override

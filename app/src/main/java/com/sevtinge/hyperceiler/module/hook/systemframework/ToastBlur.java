@@ -19,15 +19,17 @@
 package com.sevtinge.hyperceiler.module.hook.systemframework;
 
 import static com.sevtinge.hyperceiler.module.hook.systemframework.corepatch.XposedHelper.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.findClassIfExists;
 
 import android.content.Context;
 import android.view.View;
 
-import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.IXposedHookZygoteInit;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
+import com.sevtinge.hyperceiler.compat.XposedBridge;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.StartupParam;
 
 public class ToastBlur implements IXposedHookZygoteInit {
     private static final String TAG = "ToastBlur";

@@ -23,7 +23,7 @@ import android.view.MotionEvent;
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 import com.sevtinge.hyperceiler.utils.log.AndroidLogUtils;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class SwitchControlPanel extends BaseHook {
 

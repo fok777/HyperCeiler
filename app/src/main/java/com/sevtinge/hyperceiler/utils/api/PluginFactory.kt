@@ -1,7 +1,10 @@
 package com.sevtinge.hyperceiler.utils.api
 
 import android.content.*
-import de.robv.android.xposed.*
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedBridge;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
 import java.lang.ref.*
 
 

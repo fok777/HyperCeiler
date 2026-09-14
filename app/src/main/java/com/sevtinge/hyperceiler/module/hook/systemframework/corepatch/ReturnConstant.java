@@ -18,8 +18,9 @@
 */
 package com.sevtinge.hyperceiler.module.hook.systemframework.corepatch;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XSharedPreferences;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
+import com.sevtinge.hyperceiler.compat.XSharedPreferences;
 
 public class ReturnConstant extends XC_MethodHook {
     private final XSharedPreferences prefs;

@@ -28,7 +28,7 @@ import android.widget.TextView;
 
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class IconScaleHook extends BaseHook {
     @Override

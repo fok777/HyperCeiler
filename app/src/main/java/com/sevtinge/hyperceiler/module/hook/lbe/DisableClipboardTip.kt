@@ -26,8 +26,11 @@ import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.sevtinge.hyperceiler.*
 import com.sevtinge.hyperceiler.module.base.*
 import com.sevtinge.hyperceiler.module.base.tool.OtherTool.*
-import de.robv.android.xposed.*
-import de.robv.android.xposed.callbacks.*
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedBridge;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
+import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
 
 
 object DisableClipboardTip : BaseHook() {

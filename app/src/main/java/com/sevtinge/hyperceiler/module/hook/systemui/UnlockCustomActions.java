@@ -24,7 +24,7 @@ import com.sevtinge.hyperceiler.module.base.BaseHook;
 
 import java.util.ArrayList;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class UnlockCustomActions extends BaseHook {
 

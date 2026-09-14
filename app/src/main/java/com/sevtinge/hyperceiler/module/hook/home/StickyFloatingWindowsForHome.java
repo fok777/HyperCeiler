@@ -26,7 +26,7 @@ import android.content.IntentFilter;
 
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class StickyFloatingWindowsForHome extends BaseHook {
 

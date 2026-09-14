@@ -20,7 +20,8 @@ package com.sevtinge.hyperceiler.module.hook.milink;
 
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 
-import de.robv.android.xposed.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
 
 public class UnlockMiShare extends BaseHook {
     @Override

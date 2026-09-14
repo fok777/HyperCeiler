@@ -20,7 +20,7 @@ package com.sevtinge.hyperceiler.module.hook.home.navigation;
 
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class BackGestureAreaWidth extends BaseHook {
     @Override

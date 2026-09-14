@@ -22,7 +22,7 @@ import static com.sevtinge.hyperceiler.utils.devicesdk.SystemSDKKt.isMoreAndroid
 
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class NotificationFix extends BaseHook {
     @Override

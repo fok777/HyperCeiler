@@ -22,7 +22,7 @@ import android.view.MotionEvent;
 
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 import kotlin.jvm.internal.Intrinsics;
 
 // from MIUI-EXTRA by Art-Chen

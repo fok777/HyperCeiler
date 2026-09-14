@@ -31,7 +31,7 @@ import com.sevtinge.hyperceiler.module.base.BaseHook;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class VolumeSeparateControlForSettings extends BaseHook {
 

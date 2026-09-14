@@ -18,13 +18,13 @@
 */
 package com.sevtinge.hyperceiler.module.hook.systemui;
 
-import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.findClassIfExists;
 
 import com.sevtinge.hyperceiler.R;
 import com.sevtinge.hyperceiler.XposedInit;
 import com.sevtinge.hyperceiler.module.base.tool.HookTool;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class NotificationVolumeSeparateSlider {
     public static void initHideDeviceControlEntry(ClassLoader pluginLoader) {

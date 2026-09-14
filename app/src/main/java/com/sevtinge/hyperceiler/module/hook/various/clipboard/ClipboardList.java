@@ -47,7 +47,7 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
 import java.util.Set;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class ClipboardList extends BaseHook {
     public static ArrayList<?> lastArray = new ArrayList<>();

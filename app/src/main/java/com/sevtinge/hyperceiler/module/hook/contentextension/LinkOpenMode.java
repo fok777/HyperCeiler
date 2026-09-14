@@ -30,7 +30,7 @@ import com.sevtinge.hyperceiler.module.base.BaseHook;
 
 import java.util.List;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class LinkOpenMode extends BaseHook {
 

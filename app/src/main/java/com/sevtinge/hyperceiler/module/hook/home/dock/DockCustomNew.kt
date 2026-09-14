@@ -36,7 +36,10 @@ import com.sevtinge.hyperceiler.utils.blur.MiBlurUtilsKt.setMiBackgroundBlurRadi
 import com.sevtinge.hyperceiler.utils.blur.MiBlurUtilsKt.setMiViewBlurMode
 import com.sevtinge.hyperceiler.utils.blur.MiBlurUtilsKt.setPassWindowBlurEnabled
 import com.sevtinge.hyperceiler.utils.devicesdk.DisplayUtils.*
-import de.robv.android.xposed.*
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedBridge;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
 import java.lang.reflect.*
 import java.util.function.*
 

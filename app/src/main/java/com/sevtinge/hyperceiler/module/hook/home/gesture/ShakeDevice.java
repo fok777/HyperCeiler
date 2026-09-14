@@ -26,7 +26,7 @@ import android.hardware.SensorManager;
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 import com.sevtinge.hyperceiler.utils.ShakeManager;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class ShakeDevice extends BaseHook {
     @Override

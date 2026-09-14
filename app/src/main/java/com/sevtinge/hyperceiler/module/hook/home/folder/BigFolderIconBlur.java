@@ -33,7 +33,7 @@ import com.sevtinge.hyperceiler.utils.devicesdk.DisplayUtils;
 
 import java.lang.reflect.Method;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class BigFolderIconBlur extends BaseHook {
 

@@ -20,7 +20,7 @@ package com.sevtinge.hyperceiler.utils.log;
 
 import static com.sevtinge.hyperceiler.utils.log.LogManager.logLevel;
 
-import de.robv.android.xposed.XposedBridge;
+import com.sevtinge.hyperceiler.compat.XposedBridge;
 
 
 public class XposedLogUtils {

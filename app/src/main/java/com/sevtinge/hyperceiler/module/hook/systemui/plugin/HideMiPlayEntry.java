@@ -20,8 +20,8 @@ package com.sevtinge.hyperceiler.module.hook.systemui.plugin;
 
 import static com.sevtinge.hyperceiler.module.base.BaseHook.mPrefsMap;
 
-import de.robv.android.xposed.XC_MethodReplacement;
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XC_MethodReplacement;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class HideMiPlayEntry {
     public static void initHideMiPlayEntry(ClassLoader classLoader) {

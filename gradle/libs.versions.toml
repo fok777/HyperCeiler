@@ -1,6 +1,6 @@
 [versions]
 agp = "8.8.0"
-kotlin-android = "2.1.0"
+kotlin-android = "2.4.10"
 lsparanoid = "0.6.0"
 autoService = "1.1.1"
 
@@ -14,13 +14,12 @@ lifecycle-common = "2.8.7"
 coordinatorlayout = "1.2.0"
 constraintlayout = "2.2.0"
 
-xposed-api = "82"
+xposed-api = "102.0.0"
+xposed-service = "102.0.0"
 
 gson = "2.11.0"
 dexkit = "2.0.3"
-ezxhelper = "2.2.0"
 hiddenapibypass = "4.3"
-hooktool = "v.1.1.6.2"
 lyricGetterApi = "6.0.0"
 mmkv = "2.0.2"
 
@@ -29,7 +28,6 @@ annotation = { module = "androidx.annotation:annotation", version.ref = "annotat
 core = { group = "androidx.core", name = "core", version.ref = "core" }
 collection = { group = "androidx.collection", name = "collection", version.ref = "collection" }
 fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
-hooktool = { module = "com.github.HChenX:HookTool", version.ref = "hooktool" }
 lunarcalendar = { module = "com.xhinliang:LunarCalendar", version.ref = "lunarcalendar" }
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 lifecycle-common = { group = "androidx.lifecycle", name = "lifecycle-common", version.ref = "lifecycle-common" }
@@ -38,11 +36,11 @@ auto-service = { module = "com.google.auto.service:auto-service", version.ref = 
 coordinatorlayout = { group = "androidx.coordinatorlayout", name = "coordinatorlayout", version.ref = "coordinatorlayout" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
-xposed-api = { group = "de.robv.android.xposed", name = "api", version.ref = "xposed-api" }
+libxposed-api = { module = "io.github.libxposed:api", version.ref = "xposed-api" }
+libxposed-service = { module = "io.github.libxposed:service", version.ref = "xposed-service" }
 
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 dexkit = { group = "org.luckypray", name = "dexkit", version.ref = "dexkit" }
-ezxhelper = { group = "com.github.kyuubiran", name = "EzXHelper", version.ref = "ezxhelper" }
 hiddenapibypass = { group = "org.lsposed.hiddenapibypass", name = "hiddenapibypass", version.ref = "hiddenapibypass" }
 lyric-getter-api = { module = "com.github.xiaowine:Lyric-Getter-Api", version.ref = "lyricGetterApi" }
 mmkv = { group = "com.tencent", name = "mmkv", version.ref = "mmkv" }

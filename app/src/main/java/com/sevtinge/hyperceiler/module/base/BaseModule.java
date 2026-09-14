@@ -32,7 +32,7 @@ import com.sevtinge.hyperceiler.utils.prefs.PrefsUtils;
 
 import java.util.HashMap;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
+import com.sevtinge.hyperceiler.compat.XC_LoadPackage.LoadPackageParam;
 
 public abstract class BaseModule {
     public LoadPackageParam mLoadPackageParam = null;

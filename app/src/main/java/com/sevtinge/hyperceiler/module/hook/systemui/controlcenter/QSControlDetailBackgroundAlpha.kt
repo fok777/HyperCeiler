@@ -22,9 +22,10 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import com.sevtinge.hyperceiler.module.base.BaseHook
 import com.sevtinge.hyperceiler.utils.getValueByField
-import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.XposedBridge
-import de.robv.android.xposed.XposedHelpers
+import com.sevtinge.hyperceiler.compat.XC_MethodHook
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam
+import com.sevtinge.hyperceiler.compat.XposedBridge
+import com.sevtinge.hyperceiler.compat.XposedHelpers
 
 object QSControlDetailBackgroundAlpha : BaseHook() {
     override fun init() {

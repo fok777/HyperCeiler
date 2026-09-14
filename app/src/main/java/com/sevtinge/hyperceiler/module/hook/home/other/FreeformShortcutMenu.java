@@ -20,7 +20,7 @@ package com.sevtinge.hyperceiler.module.hook.home.other;
 
 import static com.sevtinge.hyperceiler.module.base.tool.OtherTool.getModuleRes;
 import static com.sevtinge.hyperceiler.utils.devicesdk.MiDeviceAppUtilsKt.isPad;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.callMethod;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -39,8 +39,9 @@ import com.sevtinge.hyperceiler.module.base.BaseHook;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class FreeformShortcutMenu extends BaseHook {
 

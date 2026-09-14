@@ -62,14 +62,15 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
-import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.XSharedPreferences;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import com.sevtinge.hyperceiler.compat.IXposedHookLoadPackage;
+import com.sevtinge.hyperceiler.compat.IXposedHookZygoteInit;
+import com.sevtinge.hyperceiler.compat.XSharedPreferences;
+import com.sevtinge.hyperceiler.compat.XposedBridge;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.StartupParam;
+import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
 
-public class XposedInit implements IXposedHookZygoteInit, IXposedHookLoadPackage {
+public class XposedInit {
     private static final String TAG = "HyperCeiler";
     public static String mModulePath = null;
     public static ResourcesTool mResHook;
@@ -77,7 +78,6 @@ public class XposedInit implements IXposedHookZygoteInit, IXposedHookLoadPackage
     // public static XmlTool mXmlTool;
     public final VariousThirdApps mVariousThirdApps = new VariousThirdApps();
 
-    @Override
     public void initZygote(StartupParam startupParam) throws Throwable {
         // load ResourcesTool
         mResHook = new ResourcesTool(startupParam.modulePath);
@@ -105,7 +105,6 @@ public class XposedInit implements IXposedHookZygoteInit, IXposedHookLoadPackage
         loadZygoteHook(startupParam);
     }
 
-    @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (isInSafeMode(lpparam.packageName)) return;
 
@@ -168,7 +167,7 @@ public class XposedInit implements IXposedHookZygoteInit, IXposedHookLoadPackage
         }
     }
 
-    private void init(XC_LoadPackage.LoadPackageParam lpparam) {
+    public void init(XC_LoadPackage.LoadPackageParam lpparam) {
         String packageName = lpparam.packageName;
         if (Objects.equals(packageName, "android"))
             logI(packageName, "androidVersion = " + getAndroidVersion() + ", miuiVersion = " + getMiuiVersion() + ", hyperosVersion = " + getHyperOSVersion());
@@ -261,6 +260,12 @@ public class XposedInit implements IXposedHookZygoteInit, IXposedHookLoadPackage
     public void moduleActiveHook(XC_LoadPackage.LoadPackageParam lpparam) {
         Class<?> AppsTool = XposedHelpers.findClassIfExists(ProjectApi.mAppModulePkg + ".module.base.tool.AppsTool", lpparam.classLoader);
 
+        if (AppsTool == null) {
+            // API 102 不再把模块注入自身进程，激活状态由 Application 通过
+            // XposedServiceHelper 回调维护，这里不再需要自 hook。
+            logI(TAG, "Module self-hook is unavailable on API 102; activation state is driven by XposedService.");
+            return;
+        }
         XposedHelpers.setStaticBooleanField(AppsTool, "isModuleActive", true);
         XposedHelpers.setStaticIntField(AppsTool, "XposedVersion", XposedBridge.getXposedVersion());
         XposedBridge.log("[HyperCeiler][I]: Log level is " + logLevelDesc());

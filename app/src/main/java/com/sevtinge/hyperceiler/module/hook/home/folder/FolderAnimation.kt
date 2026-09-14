@@ -24,7 +24,7 @@ import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinde
 import com.sevtinge.hyperceiler.module.base.BaseHook
 import com.sevtinge.hyperceiler.utils.hookAfterMethod
 import com.sevtinge.hyperceiler.utils.hookBeforeMethod
-import de.robv.android.xposed.XC_MethodHook
+import com.sevtinge.hyperceiler.compat.XC_MethodHook
 import kotlin.math.abs
 
 class FolderAnimation : BaseHook() {
@@ -66,8 +66,8 @@ class FolderAnimation : BaseHook() {
                                                     it[1] == Float::class.javaPrimitiveType
                                             }.single().createHook {
                                                 before {
-                                                    it.args[0] = value1
-                                                    it.args[1] = value2
+                                                    it.args[0] = value1!!
+                                                    it.args[1] = value2!!
                                                 }
                                             }
                                     }

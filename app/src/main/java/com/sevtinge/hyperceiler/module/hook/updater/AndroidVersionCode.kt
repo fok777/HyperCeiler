@@ -20,7 +20,7 @@ package com.sevtinge.hyperceiler.module.hook.updater
 
 import android.os.Build
 import com.sevtinge.hyperceiler.module.base.BaseHook
-import de.robv.android.xposed.XposedHelpers
+import com.sevtinge.hyperceiler.compat.XposedHelpers
 
 object AndroidVersionCode : BaseHook() {
     private val mAndroidVersionCode =

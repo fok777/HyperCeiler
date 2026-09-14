@@ -25,9 +25,10 @@ import android.net.Uri;
 
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
+import com.sevtinge.hyperceiler.compat.XC_MethodReplacement;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 
 public class UseThirdPartyBrowser extends BaseHook {

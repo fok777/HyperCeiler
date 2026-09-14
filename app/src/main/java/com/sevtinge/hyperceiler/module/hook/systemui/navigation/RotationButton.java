@@ -39,7 +39,7 @@ import com.sevtinge.hyperceiler.utils.devicesdk.SystemSDKKt;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class RotationButton extends BaseHook {
     boolean isListen = false;

@@ -20,7 +20,7 @@ package com.sevtinge.hyperceiler.module.hook.home.drawer;
 
 import static com.sevtinge.hyperceiler.utils.devicesdk.DisplayUtils.dp2px;
 
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.getObjectField;
 
 import android.graphics.Color;
 import android.view.View;

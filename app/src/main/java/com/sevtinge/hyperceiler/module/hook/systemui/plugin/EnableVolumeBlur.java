@@ -18,8 +18,8 @@
 */
 package com.sevtinge.hyperceiler.module.hook.systemui.plugin;
 
-import de.robv.android.xposed.XC_MethodReplacement;
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XC_MethodReplacement;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class EnableVolumeBlur {
     public static void initEnableVolumeBlur(ClassLoader classLoader) {

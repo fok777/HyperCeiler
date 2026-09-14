@@ -64,7 +64,8 @@ public class NewUnlockIme extends BaseHC implements LoadInputMethodDex.OnInputMe
         }
     }
 
-    private void startHook() {
+    @Override
+    public void startHook() {
         // 检查是否为小米定制输入法
         if (Arrays.stream(miuiImeList).anyMatch(s -> s.equals(lpparam.packageName))) return;
         shouldHook = true;

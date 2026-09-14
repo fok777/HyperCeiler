@@ -31,3 +31,16 @@
 -dontwarn miui.util.HapticFeedbackUtil
 -allowaccessmodification
 -overloadaggressively
+
+# ---------- libxposed API 102 ----------
+-dontwarn io.github.libxposed.**
+-keep class io.github.libxposed.api.** { *; }
+-keep class io.github.libxposed.service.** { *; }
+
+# 模块入口类不能被移除或重命名，同时重写 java_init.list 以匹配混淆后的类名
+-keep,allowoptimization,allowobfuscation public class * extends io.github.libxposed.api.XposedModule { public <init>(); }
+-adaptresourcefilecontents META-INF/xposed/java_init.list
+
+# EzHookTool 反射入口
+-keep class io.github.lingqiqi5211.ezhooktool.** { *; }
+-dontwarn io.github.lingqiqi5211.ezhooktool.**

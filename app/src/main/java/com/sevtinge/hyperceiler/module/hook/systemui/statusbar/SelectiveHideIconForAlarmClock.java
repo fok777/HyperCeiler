@@ -44,7 +44,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class SelectiveHideIconForAlarmClock extends BaseHook {
 

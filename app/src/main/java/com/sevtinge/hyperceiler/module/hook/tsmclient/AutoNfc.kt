@@ -18,6 +18,8 @@
 */
 package com.sevtinge.hyperceiler.module.hook.tsmclient
 
+import android.app.AndroidAppHelper
+
 import android.annotation.*
 import android.app.*
 import android.content.*
@@ -30,7 +32,7 @@ import com.github.kyuubiran.ezxhelper.finders.FieldFinder.`-Static`.fieldFinder
 import com.sevtinge.hyperceiler.*
 import com.sevtinge.hyperceiler.module.base.*
 import com.sevtinge.hyperceiler.utils.*
-import de.robv.android.xposed.XC_MethodHook.MethodHookParam
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam
 import kotlinx.coroutines.*
 import org.lsposed.hiddenapibypass.*
 
@@ -98,8 +100,7 @@ object AutoNfc : BaseHook() {
     }*/
 
     private fun createHook (param: MethodHookParam) {
-        if (!EzXHelper.isHostPackageNameInited)
-            EzXHelper.initAppContext()
+        runCatching { EzXHelper.initAppContext(AndroidAppHelper.currentApplication()) }
         NfcAdapter.getDefaultAdapter(EzXHelper.appContext).let { nfcAdapter ->
             if (nfcAdapter.isEnabled) return
             HiddenApiBypass.invoke(NfcAdapter::class.java, nfcAdapter, "enable")
@@ -109,7 +110,7 @@ object AutoNfc : BaseHook() {
                 waitNFCEnable(EzXHelper.appContext, nfcAdapter)
                 param.thisObject.javaClass.fieldFinder().filter {
                     type == Boolean::class.java
-                }.last().setBoolean(param.thisObject, false)
+                }.toList().lastOrNull()?.setBoolean(param.thisObject, false)
                 val ctaHelperClazz = findClass("com.miui.tsmclient.entity.CTAHelper")
                 param.thisObject.javaClass.fieldFinder().filterByType(ctaHelperClazz)
                     .first()[param.thisObject]!!.callMethod("check")

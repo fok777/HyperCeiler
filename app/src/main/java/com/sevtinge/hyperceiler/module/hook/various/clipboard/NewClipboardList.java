@@ -40,8 +40,9 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 /**
  * 解除常用语剪贴板时间限制，条数限制和字数限制。

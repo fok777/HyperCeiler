@@ -22,7 +22,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 
 import dalvik.system.PathClassLoader;
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 /**
  * 调用 Miui 的 MiuiDialog，

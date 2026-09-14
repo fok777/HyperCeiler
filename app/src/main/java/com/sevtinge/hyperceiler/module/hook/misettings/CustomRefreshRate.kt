@@ -20,8 +20,8 @@ package com.sevtinge.hyperceiler.module.hook.misettings
 
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.MemberExtensions.isFinal
-import com.github.kyuubiran.ezxhelper.MemberExtensions.isStatic
+import com.github.kyuubiran.ezxhelper.isFinal
+import com.github.kyuubiran.ezxhelper.isStatic
 import com.sevtinge.hyperceiler.module.base.*
 import com.sevtinge.hyperceiler.module.base.dexkit.*
 import java.lang.reflect.*

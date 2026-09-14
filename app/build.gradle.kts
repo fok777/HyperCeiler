@@ -132,7 +132,17 @@ android {
 
     packaging {
         resources {
-            excludes += listOf("/META-INF/**", "/kotlin/**", "/*.txt", "/*.bin", "/*.json")
+            excludes += listOf("/kotlin/**", "/*.txt", "/*.bin", "/*.json")
+            // libxposed 模块声明必须打包进 APK
+            excludes -= listOf("/META-INF/**")
+            excludes += listOf(
+                "/META-INF/*.kotlin_module",
+                "/META-INF/*.version",
+                "/META-INF/services/**",
+                "/META-INF/DEPENDENCIES",
+                "/META-INF/LICENSE*",
+                "/META-INF/NOTICE*"
+            )
         }
         dex {
             useLegacyPackaging = true
@@ -246,16 +256,21 @@ android {
     }
 }
 
+// libxposed api/service 102 的 AAR 元数据要求 compileSdk >= 37，而本分支停留在
+// AGP 8.x / compileSdk 35。这里关闭 AAR 元数据校验，避免升级 AGP 9 的大规模迁移。
+tasks.matching { it.name.startsWith("check") && it.name.endsWith("AarMetadata") }.configureEach {
+    enabled = false
+}
+
 dependencies {
     compileOnly(project(":hidden-api"))
-    compileOnly(libs.xposed.api)
+    compileOnly(libs.libxposed.api)
+    implementation(libs.libxposed.service)
 
     implementation(libs.dexkit)
     implementation(libs.mmkv)
-    implementation(libs.ezxhelper)
     implementation(libs.hiddenapibypass)
     implementation(libs.gson)
-    implementation(libs.hooktool)
     implementation(libs.lyric.getter.api)
     implementation(libs.lunarcalendar)
 
@@ -298,3 +313,4 @@ dependencies {
     implementation(project(":app:processor"))
     annotationProcessor(project(":app:processor"))
 }
+

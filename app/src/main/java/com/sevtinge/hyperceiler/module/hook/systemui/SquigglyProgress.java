@@ -23,7 +23,7 @@ import android.widget.SeekBar;
 
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class SquigglyProgress extends BaseHook {
     @Override

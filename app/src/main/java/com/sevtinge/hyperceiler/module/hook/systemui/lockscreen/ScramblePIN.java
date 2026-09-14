@@ -26,7 +26,7 @@ import com.sevtinge.hyperceiler.module.base.BaseHook;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class ScramblePIN extends BaseHook {
 

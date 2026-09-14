@@ -20,7 +20,7 @@ package com.sevtinge.hyperceiler.module.hook.mediaeditor
 
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.MemberExtensions.paramCount
+import com.github.kyuubiran.ezxhelper.paramCount
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.sevtinge.hyperceiler.module.base.*
 import com.sevtinge.hyperceiler.module.base.dexkit.*

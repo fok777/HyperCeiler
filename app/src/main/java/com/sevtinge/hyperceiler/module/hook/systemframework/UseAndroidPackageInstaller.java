@@ -24,7 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 
-import de.robv.android.xposed.XposedBridge;
+import com.sevtinge.hyperceiler.compat.XposedBridge;
 
 public class UseAndroidPackageInstaller extends BaseHook {
     static boolean fakeCts = false;

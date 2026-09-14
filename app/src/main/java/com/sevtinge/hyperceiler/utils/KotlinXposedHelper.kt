@@ -21,16 +21,16 @@
 package com.sevtinge.hyperceiler.utils
 
 import android.annotation.SuppressLint
-import android.content.res.XResources
+import com.sevtinge.hyperceiler.compat.XResources
 import com.github.kyuubiran.ezxhelper.EzXHelper.classLoader
 import com.github.kyuubiran.ezxhelper.Log
 import dalvik.system.BaseDexClassLoader
-import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.XC_MethodHook.MethodHookParam
-import de.robv.android.xposed.XC_MethodReplacement
-import de.robv.android.xposed.XposedBridge.*
-import de.robv.android.xposed.XposedHelpers.*
-import de.robv.android.xposed.callbacks.XC_LayoutInflated
+import com.sevtinge.hyperceiler.compat.XC_MethodHook
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam
+import com.sevtinge.hyperceiler.compat.XC_MethodReplacement
+import com.sevtinge.hyperceiler.compat.XposedBridge.*
+import com.sevtinge.hyperceiler.compat.XposedHelpers.*
+import com.sevtinge.hyperceiler.compat.XC_LayoutInflated
 import java.lang.reflect.Field
 import java.lang.reflect.Member
 import java.lang.reflect.Modifier
@@ -428,17 +428,25 @@ fun <T> T.setObjectField(field: String?, value: Any?) = apply {
     setObjectField(this, field, value)
 }
 
+fun XResources.hookLayout(id: Int, callback: XC_LayoutInflated) {
+    // libxposed API 102 不提供资源 hook，这里仅保留签名以兼容旧调用点。
+    Log.w("hookLayout is not supported on API 102 (id=$id)")
+}
+
 inline fun XResources.hookLayout(
     id: Int, crossinline hooker: (XC_LayoutInflated.LayoutInflatedParam) -> Unit
 ) {
     try {
         hookLayout(id, object : XC_LayoutInflated() {
-            override fun handleLayoutInflated(liparam: LayoutInflatedParam) {
+            override fun handleLayoutInflated(liparam: XC_LayoutInflated.LayoutInflatedParam) {
                 try {
                     hooker(liparam)
                 } catch (e: Throwable) {
                     Log.e(e)
                 }
+            }
+
+            override fun onLayoutInflated(layoutInfo: Any?) {
             }
         })
     } catch (e: Throwable) {

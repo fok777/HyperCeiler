@@ -21,7 +21,7 @@ package com.sevtinge.hyperceiler.module.hook.systemsettings;
 
 import static com.sevtinge.hyperceiler.utils.devicesdk.SystemSDKKt.isMoreAndroidVersion;
 
-import static de.robv.android.xposed.XposedHelpers.setStaticObjectField;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.setStaticObjectField;
 
 import com.sevtinge.hyperceiler.R;
 import com.sevtinge.hyperceiler.module.base.BaseHook;

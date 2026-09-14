@@ -30,9 +30,10 @@ import com.sevtinge.hyperceiler.utils.*
 import com.sevtinge.hyperceiler.utils.blur.BlurUtils.createBlurDrawable
 import com.sevtinge.hyperceiler.utils.blur.BlurUtils.isBlurDrawable
 import com.sevtinge.hyperceiler.utils.devicesdk.isAndroidVersion
-import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.XposedBridge
-import de.robv.android.xposed.XposedHelpers
+import com.sevtinge.hyperceiler.compat.XC_MethodHook
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam
+import com.sevtinge.hyperceiler.compat.XposedBridge
+import com.sevtinge.hyperceiler.compat.XposedHelpers
 
 @SuppressLint("NewApi")
 object AddBlurEffectToNotificationView : BaseHook() {

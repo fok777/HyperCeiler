@@ -21,7 +21,7 @@ package com.sevtinge.hyperceiler.module.hook.systemui.statusbar.device;
 import static com.sevtinge.hyperceiler.utils.api.OldFunApisKt.isNewNetworkStyle;
 import static com.sevtinge.hyperceiler.utils.devicesdk.DisplayUtils.dp2px;
 import static com.sevtinge.hyperceiler.utils.devicesdk.SystemSDKKt.isMoreAndroidVersion;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.callMethod;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -52,7 +52,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Properties;
 
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class DisplayHardwareDetail extends BaseHook {
     boolean showDeviceTemp;

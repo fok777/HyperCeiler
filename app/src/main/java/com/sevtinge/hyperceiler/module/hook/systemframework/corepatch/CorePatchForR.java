@@ -19,8 +19,8 @@
 package com.sevtinge.hyperceiler.module.hook.systemframework.corepatch;
 
 import static com.sevtinge.hyperceiler.BuildConfig.DEBUG;
-import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
-import static de.robv.android.xposed.XposedHelpers.findMethodExactIfExists;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.findClassIfExists;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.findMethodExactIfExists;
 
 import android.app.AndroidAppHelper;
 import android.content.pm.ApplicationInfo;
@@ -46,14 +46,16 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.zip.ZipEntry;
 
-import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
-import de.robv.android.xposed.XSharedPreferences;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import com.sevtinge.hyperceiler.compat.IXposedHookLoadPackage;
+import com.sevtinge.hyperceiler.compat.IXposedHookZygoteInit;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook;
+import com.sevtinge.hyperceiler.compat.XC_MethodHook.MethodHookParam;
+import com.sevtinge.hyperceiler.compat.XC_MethodReplacement;
+import com.sevtinge.hyperceiler.compat.XSharedPreferences;
+import com.sevtinge.hyperceiler.compat.XposedBridge;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
+import com.sevtinge.hyperceiler.compat.StartupParam;
 
 public class CorePatchForR extends XposedHelper implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     private final static Method deoptimizeMethod;
@@ -412,14 +414,10 @@ public class CorePatchForR extends XposedHelper implements IXposedHookLoadPackag
         try {
             var method = XposedHelpers.findMethodBestMatch(obj.getClass(), methodName, args);
             return XposedBridge.invokeOriginalMethod(method, obj, args);
-        } catch (IllegalAccessException e) {
+        } catch (Throwable e) {
             // should not happen
             XposedBridge.log(e);
             throw new IllegalAccessError(e.getMessage());
-        } catch (IllegalArgumentException e) {
-            throw e;
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e.getCause());
         }
     }
 

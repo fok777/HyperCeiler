@@ -19,8 +19,8 @@
 
 package com.sevtinge.hyperceiler.module.hook.mediaeditor;
 
-import static de.robv.android.xposed.XposedHelpers.getStaticBooleanField;
-import static de.robv.android.xposed.XposedHelpers.setStaticObjectField;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.getStaticBooleanField;
+import static com.sevtinge.hyperceiler.compat.XposedHelpers.setStaticObjectField;
 
 import com.sevtinge.hyperceiler.module.base.BaseHook;
 

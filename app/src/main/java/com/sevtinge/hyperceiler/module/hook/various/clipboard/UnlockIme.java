@@ -24,8 +24,8 @@ import com.sevtinge.hyperceiler.module.base.BaseHook;
 
 import java.util.List;
 
-import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.XC_LoadPackage;
 
 public class UnlockIme extends BaseHook {
 

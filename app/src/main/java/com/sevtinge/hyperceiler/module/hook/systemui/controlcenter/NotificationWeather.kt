@@ -18,6 +18,8 @@
 */
 package com.sevtinge.hyperceiler.module.hook.systemui.controlcenter
 
+import java.lang.reflect.Method
+
 import android.annotation.*
 import android.content.*
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
@@ -36,7 +38,7 @@ import com.sevtinge.hyperceiler.utils.api.LazyClass.miuiConfigs
 import com.sevtinge.hyperceiler.utils.devicesdk.*
 import com.sevtinge.hyperceiler.utils.devicesdk.DisplayUtils.*
 import com.sevtinge.hyperceiler.view.*
-import de.robv.android.xposed.XposedHelpers.findMethodExactIfExists
+import com.sevtinge.hyperceiler.compat.XposedHelpers.findMethodExactIfExists
 
 @SuppressLint("DiscouragedApi", "ServiceCast", "StaticFieldLeak")
 object NotificationWeather : BaseHook() {
@@ -100,7 +102,7 @@ object NotificationWeather : BaseHook() {
     }
 
     private fun updateResources() {
-        var method = findMethodExactIfExists(miuiNotificationHeaderView, "updateHeaderResources")
+        var method: Method? = findMethodExactIfExists(miuiNotificationHeaderView, "updateHeaderResources")
         if (method == null) {
             method = findMethodExactIfExists(miuiNotificationHeaderView, "updateResources")
         }

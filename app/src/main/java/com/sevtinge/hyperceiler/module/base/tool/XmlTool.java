@@ -26,8 +26,9 @@ import com.sevtinge.hyperceiler.utils.ContextUtils;
 import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
 
-import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.IXposedHookZygoteInit;
+import com.sevtinge.hyperceiler.compat.XposedHelpers;
+import com.sevtinge.hyperceiler.compat.StartupParam;
 
 /**
  * Xml 钩子
@@ -36,7 +37,7 @@ import de.robv.android.xposed.XposedHelpers;
  */
 public class XmlTool {
     private static final String TAG = "XmlTool";
-    private IXposedHookZygoteInit.StartupParam startupParam = null;
+    private StartupParam startupParam = null;
     private boolean hooksApplied = false;
     private int index = -1;
 
@@ -55,7 +56,7 @@ public class XmlTool {
     public static final String TAG_STRING = "string";
     public static final String TAG_STRING_ARRAY = "string-array";
 
-    public XmlTool(IXposedHookZygoteInit.StartupParam startupParam) {
+    public XmlTool(StartupParam startupParam) {
         this.startupParam = startupParam;
         applyHook();
     }
