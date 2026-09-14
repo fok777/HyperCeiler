@@ -428,6 +428,11 @@ fun <T> T.setObjectField(field: String?, value: Any?) = apply {
     setObjectField(this, field, value)
 }
 
+fun XResources.hookLayout(id: Int, callback: XC_LayoutInflated) {
+    // libxposed API 102 不提供资源 hook，这里仅保留签名以兼容旧调用点。
+    Log.w("hookLayout is not supported on API 102 (id=$id)")
+}
+
 inline fun XResources.hookLayout(
     id: Int, crossinline hooker: (XC_LayoutInflated.LayoutInflatedParam) -> Unit
 ) {
@@ -439,6 +444,9 @@ inline fun XResources.hookLayout(
                 } catch (e: Throwable) {
                     Log.e(e)
                 }
+            }
+
+            override fun onLayoutInflated(layoutInfo: Any?) {
             }
         })
     } catch (e: Throwable) {

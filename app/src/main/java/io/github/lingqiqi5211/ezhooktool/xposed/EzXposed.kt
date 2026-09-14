@@ -86,12 +86,12 @@ object EzXposed {
 
     @JvmStatic
     fun initOnPackageLoaded(param: XposedModuleInterface.PackageLoadedParam) {
-        HookRuntime.attachPackage(param.packageName, param.classLoader)
+        HookRuntime.attachPackage(param.packageName, param.defaultClassLoader)
     }
 
     @JvmStatic
     fun initOnPackageReady(param: XposedModuleInterface.PackageReadyParam) {
-        HookRuntime.attachPackage(param.packageName, param.classLoader)
+        HookRuntime.attachPackage(param.packageName, param.defaultClassLoader)
     }
 
     @JvmStatic

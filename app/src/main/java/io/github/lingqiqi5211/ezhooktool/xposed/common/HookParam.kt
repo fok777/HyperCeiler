@@ -37,7 +37,7 @@ open class HookParam internal constructor(
 
     /** 当前调用参数；原地修改下标生效。 */
     val args: Array<Any?>
-        get() = chain.args
+        get() = chain.args.toTypedArray()
 
     /** 当前返回值。before 阶段写入会跳过原方法；after 阶段可读写。 */
     var result: Any?

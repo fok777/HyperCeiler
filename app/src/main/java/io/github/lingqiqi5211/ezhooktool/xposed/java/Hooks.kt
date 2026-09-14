@@ -26,13 +26,15 @@ object Hooks {
 
         override fun intercept(chain: XposedInterface.Chain): Any? {
             val param = HookParam(chain)
-            if (replaceBlock != null) {
-                return runCatching { replaceBlock.invoke(param) }
+            val replace = replaceBlock
+            if (replace != null) {
+                return runCatching { replace.invoke(param) }
                     .onFailure { android.util.Log.e(TAG, "replace hook failed", it) }
                     .getOrNull()
             }
-            if (beforeBlock != null) {
-                runCatching { beforeBlock.invoke(param) }
+            val before = beforeBlock
+            if (before != null) {
+                runCatching { before.invoke(param) }
                     .onFailure { android.util.Log.e(TAG, "before hook failed", it) }
             }
             if (param.isSkipped) return param.result

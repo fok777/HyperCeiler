@@ -174,6 +174,11 @@ public final class XposedHelpers {
         return ExtraFields.removeInstanceField(obj, key);
     }
 
+    public static Object setAdditionalStaticField(Object object, String key, Object value) {
+        if (object instanceof Class) return setAdditionalStaticField((Class<?>) object, key, value);
+        return setAdditionalStaticField(object.getClass(), key, value);
+    }
+
     public static Object setAdditionalStaticField(Class<?> clazz, String key, Object value) {
         return ExtraFields.setStaticField(clazz, key, value);
     }

@@ -1,5 +1,7 @@
 package io.github.lingqiqi5211.ezhooktool.core
 
+import io.github.lingqiqi5211.ezhooktool.core.java.Fields
+
 /** Java 侧使用的静态入口。 */
 object ClassUtils {
 
@@ -25,5 +27,5 @@ object ClassUtils {
 
     @JvmStatic
     fun getStaticObjectOrNull(clazz: Class<*>, fieldName: String): Any? =
-        runCatching { java.Fields.getStaticObjectField(clazz, fieldName) }.getOrNull()
+        runCatching { Fields.getStaticObjectField(clazz, fieldName) }.getOrNull()
 }
