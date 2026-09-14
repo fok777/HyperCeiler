@@ -36,7 +36,7 @@ import com.sevtinge.hyperceiler.compat.XposedHelpers;
  */
 public class XmlTool {
     private static final String TAG = "XmlTool";
-    private IXposedHookZygoteInit.StartupParam startupParam = null;
+    private StartupParam startupParam = null;
     private boolean hooksApplied = false;
     private int index = -1;
 
@@ -55,7 +55,7 @@ public class XmlTool {
     public static final String TAG_STRING = "string";
     public static final String TAG_STRING_ARRAY = "string-array";
 
-    public XmlTool(IXposedHookZygoteInit.StartupParam startupParam) {
+    public XmlTool(StartupParam startupParam) {
         this.startupParam = startupParam;
         applyHook();
     }

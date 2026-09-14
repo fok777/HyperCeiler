@@ -27,7 +27,7 @@ import com.sevtinge.hyperceiler.compat.XposedBridge
 import com.sevtinge.hyperceiler.compat.XposedHelpers
 
 class BackgroundBlurDrawable : IXposedHookZygoteInit {
-    override fun initZygote(startupParam: IXposedHookZygoteInit.StartupParam) {
+    override fun initZygote(startupParam: StartupParam) {
         val classLoader = startupParam.javaClass.classLoader
         val mBackgroundBlurDrawableClass = classLoader?.let {
             XposedHelpers.findClassIfExists(

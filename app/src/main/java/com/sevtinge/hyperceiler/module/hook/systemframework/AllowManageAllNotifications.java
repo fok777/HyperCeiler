@@ -27,7 +27,7 @@ import com.sevtinge.hyperceiler.compat.XposedHelpers;
 
 public class AllowManageAllNotifications implements IXposedHookZygoteInit  {
     @Override
-    public void initZygote(IXposedHookZygoteInit.StartupParam startupParam) throws NoSuchMethodException {
+    public void initZygote(StartupParam startupParam) throws NoSuchMethodException {
 
         XposedHelpers.findAndHookMethod("android.app.NotificationChannel", startupParam.getClass().getClassLoader(), "isBlockable", HookTool.MethodHook.returnConstant(true));
 

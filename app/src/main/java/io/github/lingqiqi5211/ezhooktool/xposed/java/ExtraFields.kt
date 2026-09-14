@@ -15,9 +15,12 @@ object ExtraFields {
     private fun keyOf(target: Any?): Int = System.identityHashCode(target)
 
     @JvmStatic
-    fun setInstanceField(target: Any?, key: String, value: Any?) {
-        if (target == null) return
-        instanceMap.getOrPut(keyOf(target)) { ConcurrentHashMap() }[key] = value
+    fun setInstanceField(target: Any?, key: String, value: Any?): Any? {
+        if (target == null) return null
+        val map = instanceMap.getOrPut(keyOf(target)) { ConcurrentHashMap() }
+        val old = map[key]
+        map[key] = value
+        return old
     }
 
     @JvmStatic
@@ -33,9 +36,12 @@ object ExtraFields {
     }
 
     @JvmStatic
-    fun setStaticField(target: Any?, key: String, value: Any?) {
-        if (target == null) return
-        staticMap.getOrPut(keyOf(target)) { ConcurrentHashMap() }[key] = value
+    fun setStaticField(target: Any?, key: String, value: Any?): Any? {
+        if (target == null) return null
+        val map = staticMap.getOrPut(keyOf(target)) { ConcurrentHashMap() }
+        val old = map[key]
+        map[key] = value
+        return old
     }
 
     @JvmStatic
