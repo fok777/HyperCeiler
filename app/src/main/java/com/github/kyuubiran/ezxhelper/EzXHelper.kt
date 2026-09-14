@@ -20,6 +20,9 @@ object EzXHelper {
     val classLoader: ClassLoader
         get() = EzXposed.safeClassLoader
 
+    val isHostPackageNameInited: Boolean
+        get() = EzXposed.packageName.isNotEmpty()
+
     val hostPackageName: String
         get() = EzXposed.packageName
 

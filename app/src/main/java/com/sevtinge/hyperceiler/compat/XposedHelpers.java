@@ -178,6 +178,12 @@ public final class XposedHelpers {
         return ExtraFields.setStaticField(clazz, key, value);
     }
 
+    public static Object getAdditionalStaticField(Object object, String key) {
+        if (object == null) return null;
+        if (object instanceof Class) return getAdditionalStaticField((Class<?>) object, key);
+        return getAdditionalStaticField(object.getClass(), key);
+    }
+
     public static Object getAdditionalStaticField(Class<?> clazz, String key) {
         return ExtraFields.getStaticField(clazz, key);
     }

@@ -22,21 +22,26 @@ import com.sevtinge.hyperceiler.compat.XC_MethodHook
  * 传给期望 legacy 类型的方法时可以正常编译；`args` / `thisObject` / `result` 全部转发到
  * 底层 HookParam。</p>
  */
-class MethodHookParam internal constructor(raw: HookParam) : XC_MethodHook.MethodHookParam(raw) {
+class MethodHookParam internal constructor(private val delegate: HookParam) :
+    XC_MethodHook.MethodHookParam(delegate) {
 
     /** 当前调用参数；下标赋值生效，整体替换数组不生效。 */
     val argsArray: Array<Any?>
-        get() = raw.args
+        get() = delegate.args
 
-    fun args(index: Int): Any? = raw.arg(index)
+    /** 当前实例；静态方法返回 null。 */
+    val thisObjectOrNullCompat: Any?
+        get() = delegate.thisObjectOrNull
 
-    fun <T> argsAs(index: Int): T = raw.argAs<T>(index)
+    fun args(index: Int): Any? = delegate.arg(index)
 
-    fun <T> resultAs(): T = raw.result as T
+    fun <T> argsAs(index: Int): T = delegate.argAs<T>(index)
+
+    fun <T> resultAs(): T = delegate.result as T
 
     @Throws(Throwable::class)
     fun getResultOrThrowableCompat(): Any? =
-        if (raw.hasThrowable) throw raw.throwable!! else raw.result
+        if (delegate.hasThrowable) throw delegate.throwable!! else delegate.result
 }
 
 typealias MethodHookBlock = (MethodHookParam) -> Unit

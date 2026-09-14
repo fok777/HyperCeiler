@@ -18,6 +18,8 @@
 */
 package com.sevtinge.hyperceiler.module.hook.systemui.controlcenter
 
+import java.lang.reflect.Method
+
 import android.annotation.*
 import android.content.*
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
@@ -100,7 +102,7 @@ object NotificationWeather : BaseHook() {
     }
 
     private fun updateResources() {
-        var method = findMethodExactIfExists(miuiNotificationHeaderView, "updateHeaderResources")
+        var method: Method? = findMethodExactIfExists(miuiNotificationHeaderView, "updateHeaderResources")
         if (method == null) {
             method = findMethodExactIfExists(miuiNotificationHeaderView, "updateResources")
         }

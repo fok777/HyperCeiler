@@ -57,7 +57,7 @@ object NewBrightnessPct {
     }
 
     private fun getView(str: String, cl: ClassLoader?): Any? {
-        val cl2 = loadClass(str, cl)
+        val cl2 = loadClass(str, cl!!)
         val controlCenterWindowView = cl2.callStaticMethod("getInstance")!!
             .callMethod("getPluginComponent")!!
             .getObjectField("controlCenterWindowViewCreatorProvider")!!

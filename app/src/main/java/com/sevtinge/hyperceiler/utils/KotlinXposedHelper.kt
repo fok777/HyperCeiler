@@ -21,7 +21,7 @@
 package com.sevtinge.hyperceiler.utils
 
 import android.annotation.SuppressLint
-import android.content.res.XResources
+import com.sevtinge.hyperceiler.compat.XResources
 import com.github.kyuubiran.ezxhelper.EzXHelper.classLoader
 import com.github.kyuubiran.ezxhelper.Log
 import dalvik.system.BaseDexClassLoader
@@ -433,7 +433,7 @@ inline fun XResources.hookLayout(
 ) {
     try {
         hookLayout(id, object : XC_LayoutInflated() {
-            override fun handleLayoutInflated(liparam: LayoutInflatedParam) {
+            override fun handleLayoutInflated(liparam: XC_LayoutInflated.LayoutInflatedParam) {
                 try {
                     hooker(liparam)
                 } catch (e: Throwable) {
