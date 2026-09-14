@@ -259,6 +259,7 @@ android {
 dependencies {
     compileOnly(project(":hidden-api"))
     compileOnly(libs.libxposed.api)
+    implementation(libs.libxposed.service)
 
     implementation(libs.dexkit)
     implementation(libs.mmkv)

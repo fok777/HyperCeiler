@@ -261,8 +261,9 @@ public class XposedInit {
         Class<?> AppsTool = XposedHelpers.findClassIfExists(ProjectApi.mAppModulePkg + ".module.base.tool.AppsTool", lpparam.classLoader);
 
         if (AppsTool == null) {
-            // libxposed API 102 不再把模块注入自身进程，激活状态改由框架服务确认。
-            logI(TAG, "Module self-hook is unavailable on API 102; skip activation flag.");
+            // API 102 不再把模块注入自身进程，激活状态由 Application 通过
+            // XposedServiceHelper 回调维护，这里不再需要自 hook。
+            logI(TAG, "Module self-hook is unavailable on API 102; activation state is driven by XposedService.");
             return;
         }
         XposedHelpers.setStaticBooleanField(AppsTool, "isModuleActive", true);
