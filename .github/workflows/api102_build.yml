@@ -5,6 +5,9 @@ on:
     branches: [a13_eol_api102]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build_app:
     runs-on: ubuntu-latest
@@ -25,12 +28,34 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build with Gradle (Debug)
+        id: gradle
         shell: bash
         run: |
           chmod +x ./gradlew
-          ./gradlew assembleDebug --stacktrace
+          set -o pipefail
+          ./gradlew assembleDebug --stacktrace 2>&1 | tee build.log
+          echo "rc=$?" > build.rc
+
+      - name: Publish build log to ci-logs branch
+        if: always()
+        shell: bash
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "ci-bot"
+          git config user.email "ci-bot@users.noreply.github.com"
+          git checkout --orphan ci-logs
+          git rm -rf . --quiet || true
+          mkdir -p logs
+          tail -n 3000 build.log > logs/full.log
+          grep -nE "^e: |error:|FAILURE:|What went wrong|Caused by|Could not resolve|Could not find" build.log | head -n 300 > logs/errors.log || true
+          cat build.rc >> logs/errors.log || true
+          git add logs
+          git commit -m "build log for run ${{ github.run_number }}"
+          git push -f https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git ci-logs
 
       - name: Locate APK
+        if: success()
         shell: bash
         run: |
           APK_FILE=$(find app/build/outputs/apk/debug -name '*.apk' | head -n 1)
@@ -38,6 +63,7 @@ jobs:
           echo "APK_FILE_NAME=$(basename "$APK_FILE" .apk)" >> $GITHUB_ENV
 
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APK_FILE_NAME }}
