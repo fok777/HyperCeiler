@@ -240,7 +240,7 @@ public final class XposedHelpers {
         return BestMatchUtils.findMethodBestMatch(clazz, methodName, args);
     }
 
-    public static Method findMethodExactIfExists(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
+    public static Method findMethodExactIfExistsTyped(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
         return Methods.find(clazz).filterByName(methodName).filterByParamTypes(parameterTypes).firstOrNull();
     }
 

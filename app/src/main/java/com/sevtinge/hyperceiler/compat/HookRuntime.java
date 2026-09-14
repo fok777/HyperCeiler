@@ -28,7 +28,7 @@ public final class HookRuntime {
 
     public static void attach(@Nullable XposedInterface xposed, String modulePath, String processName) {
         sXposed = xposed;
-        sModulePath = modulePath;
+        if (modulePath != null && !modulePath.isEmpty()) sModulePath = modulePath;
         if (processName != null) sProcessName = processName;
     }
 
