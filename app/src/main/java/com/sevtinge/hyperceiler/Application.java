@@ -150,6 +150,32 @@ public class Application extends android.app.Application
         if (activated) AppsTool.XposedVersion = 102;
     }
 
+    /**
+     * 放宽自身 SharedPreferences 文件权限，作为 RemotePreferences 之外的兜底。
+     *
+     * <p>legacy 模块依赖框架把 sp 文件放宽为全局可读；libxposed API 102 下若框架未做，
+     * hook 进程直接读文件会因权限失败。这里对自身文件 chmod（同 uid，无需 root）。</p>
+     */
+    private static void relaxPrefsPermission() {
+        try {
+            String path = PrefsUtils.getSharedPrefsFile();
+            if (path == null) return;
+            File f = new File(path);
+            File dir = f.getParentFile();
+            if (dir != null && dir.exists()) {
+                dir.setExecutable(true, false);
+                dir.setReadable(true, false);
+            }
+            if (f.exists()) {
+                f.setReadable(true, false);
+                Log.i(TAG, "relaxPrefsPermission: " + f.getAbsolutePath()
+                    + " readable=" + f.canRead());
+            }
+        } catch (Throwable t) {
+            Log.w(TAG, "relaxPrefsPermission failed: " + t);
+        }
+    }
+
     /** 把未捕获异常写入外部存储，便于无 adb 时定位启动崩溃。 */
     private void setupCrashHandler() {
         final Thread.UncaughtExceptionHandler defaultHandler =
