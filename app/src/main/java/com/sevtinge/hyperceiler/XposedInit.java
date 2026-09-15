@@ -84,6 +84,9 @@ public class XposedInit {
         mModulePath = startupParam.modulePath;
         // mXmlTool = new XmlTool(startupParam);
 
+        // 尽早加载配置：后续任一初始化抛异常都不会影响模块设置读取。
+        setXSharedPrefs();
+
         // load EzXHelper and set log tag
         EzXHelper.initZygote(startupParam);
         EzXHelper.setLogTag(TAG);
@@ -97,8 +100,6 @@ public class XposedInit {
         );
         HCInit.initStartupParam(startupParam);
 
-        // load New XSPrefs
-        setXSharedPrefs();
         // load CorePatch
         new SystemFrameworkForCorePatch().initZygote(startupParam);
         // load ZygoteHook
@@ -107,6 +108,10 @@ public class XposedInit {
 
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (isInSafeMode(lpparam.packageName)) return;
+
+        // 必须最先加载：包级 hook 全部依赖 mPrefsMap，不能依赖 initZygote 是否成功。
+        // 方法内部有 isEmpty 保护，重复调用无副作用。
+        setXSharedPrefs();
 
         // load EzXHelper and set log tag
         EzXHelper.initHandleLoadPackage(lpparam);
