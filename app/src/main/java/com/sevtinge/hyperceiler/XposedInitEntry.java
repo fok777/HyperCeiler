@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.sevtinge.hyperceiler.compat.HookRuntime;
 import com.sevtinge.hyperceiler.compat.StartupParam;
@@ -26,6 +27,9 @@ public class XposedInitEntry extends XposedModule {
     private static final String TAG = "HyperCeiler";
 
     private final XposedInit mXposedInit = new XposedInit();
+
+    @Nullable
+    private volatile ApplicationInfo mAppInfo;
 
     public XposedInitEntry() {
         super();
@@ -86,7 +90,8 @@ public class XposedInitEntry extends XposedModule {
         diag("ready", param.getPackageName() + "|first=" + param.isFirstPackage());
         if (!param.isFirstPackage()) return;
         EzXposed.initOnPackageReady(param);
-        dispatch(param.getPackageName(), param.getClassLoader(), null,
+        mAppInfo = appInfoOf(param);
+        dispatch(param.getPackageName(), param.getClassLoader(), mAppInfo,
             EzXposed.getProcessName());
     }
 
@@ -112,7 +117,7 @@ public class XposedInitEntry extends XposedModule {
         }
         String packageName = EzXposed.getPackageName();
         if (packageName == null || packageName.isEmpty()) return;
-        dispatch(packageName, EzXposed.getClassLoader(), null, EzXposed.getProcessName());
+        dispatch(packageName, EzXposed.getClassLoader(), mAppInfo, EzXposed.getProcessName());
     }
 
     /**
@@ -135,6 +140,24 @@ public class XposedInitEntry extends XposedModule {
         } catch (Throwable ignored) {
         }
         android.util.Log.i(TAG, "HyperCeilerBoot[" + stage + "] " + info);
+    }
+
+    /**
+     * 反射获取 ApplicationInfo。
+     *
+     * <p>部分 LSPosed 版本的 PackageReadyParam 未直接暴露 getApplicationInfo()，
+     * 而 DexKit 与包信息读取依赖 dataDir / sourceDir，缺失会导致相关 hook 失败。</p>
+     */
+    @Nullable
+    private static ApplicationInfo appInfoOf(Object param) {
+        if (param == null) return null;
+        try {
+            java.lang.reflect.Method method = param.getClass().getMethod("getApplicationInfo");
+            Object info = method.invoke(param);
+            return info instanceof ApplicationInfo ? (ApplicationInfo) info : null;
+        } catch (Throwable ignored) {
+            return null;
+        }
     }
 
     private void dispatch(String packageName, ClassLoader classLoader,

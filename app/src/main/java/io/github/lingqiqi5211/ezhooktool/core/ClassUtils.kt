@@ -8,8 +8,22 @@ import java.lang.reflect.Method
 /** 当前默认 ClassLoader，由模块入口写入。 */
 object EzReflect {
 
+    @Volatile
+    private var explicitClassLoader: ClassLoader? = null
+
+    /**
+     * 当前默认 ClassLoader。
+     *
+     * <p>必须每次动态读取：模块入口只在每个目标进程就绪后才写入宿主 ClassLoader，
+     * 若在 object 初始化时就把字段固定下来，拿到的会是模块自身的 ClassLoader，
+     * 之后所有宿主类查找都会返回 null，表现为“每个 hook 都失败、功能全不生效”。</p>
+     */
     @JvmStatic
-    var classLoader: ClassLoader = HookRuntimeHolder.classLoader()
+    var classLoader: ClassLoader
+        get() = explicitClassLoader ?: HookRuntimeHolder.classLoader()
+        set(value) {
+            explicitClassLoader = value
+        }
 
     @JvmStatic
     val safeClassLoader: ClassLoader
