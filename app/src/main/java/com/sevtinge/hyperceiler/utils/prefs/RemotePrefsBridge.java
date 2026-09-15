@@ -150,6 +150,52 @@ public final class RemotePrefsBridge {
         }
     }
 
+    /** hook 进程回写状态，供 App 侧调试信息展示。 */
+    public static void markHookSeen(String pkg, String value) {
+        SharedPreferences remote = sRemote;
+        if (remote == null) return;
+        try {
+            remote.edit().putString("__hc_seen_" + pkg, value).commit();
+        } catch (Throwable ignored) {
+        }
+    }
+
+    /** 汇总远端里所有 hook 侧诊断项。 */
+    @NonNull
+    public static String collectDiagnostics() {
+        SharedPreferences remote = sRemote;
+        if (remote == null) return "remote=null";
+        StringBuilder sb = new StringBuilder();
+        try {
+            for (Map.Entry<String, ?> e : remote.getAll().entrySet()) {
+                String k = e.getKey();
+                if (k != null && (k.startsWith("__hc_diag_") || k.startsWith("__hc_seen_"))) {
+                    if (sb.length() > 0) sb.append(" | ");
+                    sb.append(k.replace("__hc_diag_", "").replace("__hc_seen_", ""))
+                        .append("=").append(e.getValue());
+                }
+            }
+        } catch (Throwable t) {
+            return "err:" + t;
+        }
+        return sb.length() == 0 ? "none" : sb.toString();
+    }
+
+    /** 远端偏好键数量（排除诊断键）。 */
+    public static int remoteKeyCount() {
+        SharedPreferences remote = sRemote;
+        if (remote == null) return -1;
+        try {
+            int n = 0;
+            for (String k : remote.getAll().keySet()) {
+                if (k == null || (!k.startsWith("__hc_"))) n++;
+            }
+            return n;
+        } catch (Throwable t) {
+            return -2;
+        }
+    }
+
     public static boolean isReady() {
         return sRemote != null;
     }

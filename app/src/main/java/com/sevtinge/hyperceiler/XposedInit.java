@@ -142,6 +142,7 @@ public class XposedInit {
 
     private void setXSharedPrefs() {
         if (mPrefsMap.isEmpty()) {
+            sPrefLoadLogged = true;
             XSharedPreferences mXSharedPreferences;
             try {
                 mXSharedPreferences = new XSharedPreferences(ProjectApi.mAppModulePkg, PrefsUtils.mPrefsName);
@@ -164,6 +165,35 @@ public class XposedInit {
             } catch (Throwable t) {
                 logE("setXSharedPrefs", t);
             }
+        }
+        reportHookDiagnostics();
+    }
+
+    private boolean sPrefLoadLogged = false;
+
+    /**
+     * 把 hook 侧的关键状态写回远程偏好，便于在模块 App 的调试信息页查看。
+     * hook 进程与 App 进程唯一可靠的共享通道就是 RemotePreferences。
+     */
+    private void reportHookDiagnostics() {
+        String pkg = ProjectApi.mAppModulePkg;
+        String lp = (lpparam != null && lpparam.packageName != null) ? lpparam.packageName : "null";
+        int keys = mPrefsMap.size();
+        int ok = io.github.lingqiqi5211.ezhooktool.xposed.java.Hooks.sOk.get();
+        int fail = io.github.lingqiqi5211.ezhooktool.xposed.java.Hooks.sFail.get();
+        String value = "keys=" + keys + ",hookOk=" + ok + ",hookFail=" + fail;
+        logI(TAG, "HyperCeilerDiag[" + lp + "] " + value);
+        try {
+            android.content.SharedPreferences remote =
+                com.sevtinge.hyperceiler.compat.HookRuntime.remotePreferences(PrefsUtils.mPrefsName);
+            if (remote != null) {
+                remote.edit().putString("__hc_diag_" + lp, value).commit();
+            }
+        } catch (Throwable t) {
+            logE("reportHookDiagnostics", t);
+        }
+        if (sPrefLoadLogged) {
+            com.sevtinge.hyperceiler.utils.prefs.RemotePrefsBridge.markHookSeen(lp, value);
         }
     }
 

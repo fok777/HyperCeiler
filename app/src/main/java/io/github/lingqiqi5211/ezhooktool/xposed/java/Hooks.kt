@@ -19,6 +19,12 @@ object Hooks {
 
     private const val TAG = "HyperCeiler"
 
+    @JvmStatic
+    val sOk = java.util.concurrent.atomic.AtomicInteger()
+
+    @JvmStatic
+    val sFail = java.util.concurrent.atomic.AtomicInteger()
+
     internal class EmulatedHooker(
         private val beforeBlock: ((HookParam) -> Unit)?,
         private val afterBlock: ((HookParam) -> Unit)?,
@@ -64,16 +70,24 @@ object Hooks {
     fun hook(origin: Executable, hooker: XposedInterface.Hooker): XposedInterface.HookHandle? {
         val xposed = HookRuntime.xposed()
         if (xposed == null) {
-            android.util.Log.e(TAG, "XposedInterface not ready, skip hook: $origin")
+            sFail.incrementAndGet()
+            val msg = "HyperCeiler: XposedInterface not ready, skip hook: $origin"
+            android.util.Log.e(TAG, msg)
+            com.sevtinge.hyperceiler.compat.XposedBridge.log(msg)
             return null
         }
         return try {
-            xposed.hook(origin)
+            val handle = xposed.hook(origin)
                 .setPriority(XposedInterface.PRIORITY_DEFAULT)
                 .setExceptionMode(XposedInterface.ExceptionMode.PROTECTIVE)
                 .intercept(hooker)
+            sOk.incrementAndGet()
+            handle
         } catch (t: Throwable) {
-            android.util.Log.e(TAG, "hook failed: $origin", t)
+            sFail.incrementAndGet()
+            val msg = "HyperCeiler: hook failed: $origin -> $t"
+            android.util.Log.e(TAG, msg, t)
+            com.sevtinge.hyperceiler.compat.XposedBridge.log(msg)
             null
         }
     }

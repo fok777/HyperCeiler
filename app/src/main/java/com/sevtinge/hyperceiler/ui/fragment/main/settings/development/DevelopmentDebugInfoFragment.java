@@ -57,6 +57,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import androidx.preference.Preference;
+import com.sevtinge.hyperceiler.utils.prefs.RemotePrefsBridge;
 
 public class DevelopmentDebugInfoFragment extends SettingsPreferenceFragment {
 
@@ -136,6 +137,9 @@ public class DevelopmentDebugInfoFragment extends SettingsPreferenceFragment {
             propertiesCheck.put("WhoAmI", getWhoAmI());
             propertiesCheck.put("LoggerStatus", IS_LOGGER_ALIVE + ", " + LOGGER_CHECKER_ERR_CODE);
             propertiesCheck.put("CurrentUserId", String.valueOf(getCurrentUserId()));
+            propertiesCheck.put("RemotePrefsReady", String.valueOf(RemotePrefsBridge.isReady()));
+            propertiesCheck.put("RemoteKeyCount", String.valueOf(RemotePrefsBridge.remoteKeyCount()));
+            propertiesCheck.put("HookDiag", RemotePrefsBridge.collectDiagnostics());
         } catch (Exception ignored) {
         }
 
