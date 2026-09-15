@@ -207,4 +207,13 @@ object Hooks {
             is Constructor<*> -> createHook(member, callback)
             else -> null
         }
+
+    /** 供 Java 侧按成员分发（整体替换语义）。 */
+    @JvmStatic
+    fun createHook(member: Member, callback: IReplaceHook): XposedInterface.HookHandle? =
+        when (member) {
+            is Method -> createHook(member, callback)
+            is Constructor<*> -> createHook(member, callback)
+            else -> null
+        }
 }

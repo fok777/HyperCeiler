@@ -316,6 +316,15 @@ public final class XposedHelpers {
 
     // ==================== Hook ====================
 
+    /** 直接 hook 已解析出的成员，用于参数类型未知的场景。 */
+    public static XC_MethodHook.Unhook hookMethod(java.lang.reflect.Member method, XC_MethodHook callback) {
+        if (callback instanceof XC_MethodReplacement) {
+            return XC_MethodHook.Unhook.wrap(
+                Hooks.createHook(method, ((XC_MethodReplacement) callback).asReplaceHook()));
+        }
+        return XC_MethodHook.Unhook.wrap(Hooks.createHook(method, callback.asHook()));
+    }
+
     public static XC_MethodHook.Unhook findAndHookMethod(Class<?> clazz, String methodName, Object... parameterTypesAndCallback) {
         Object[] args = HookBridgeCompat.unwrapArgs(parameterTypesAndCallback);
         return XC_MethodHook.Unhook.wrap(Hooks.findAndHookMethod(clazz, methodName, args));
