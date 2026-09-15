@@ -170,7 +170,35 @@ public class XposedInit {
                 logE("setXSharedPrefs", t);
             }
         }
+        logLoadedPrefs();
         reportHookDiagnostics();
+    }
+
+    /**
+     * 输出 hook 进程实际读到的配置。
+     *
+     * <p>判断功能是否可能生效的关键：若这里打印的 keys 很少、或开关值为 false，
+     * 说明 hook 进程没有读到用户在界面上做的设置，功能自然不会生效。</p>
+     */
+    private void logLoadedPrefs() {
+        try {
+            int size = mPrefsMap.size();
+            StringBuilder sb = new StringBuilder();
+            sb.append("[HyperCeiler][I][PREFS] pkg=").append(sCurrentPkg)
+                .append(" keys=").append(size);
+            int shown = 0;
+            for (String key : mPrefsMap.keySet()) {
+                Object value = mPrefsMap.get(key);
+                if (Boolean.TRUE.equals(value)) {
+                    sb.append(" | ON:").append(key);
+                    if (++shown >= 8) break;
+                }
+            }
+            if (shown == 0) sb.append(" | (no switch is ON)");
+            XposedBridge.log(sb.toString());
+        } catch (Throwable t) {
+            logE("logLoadedPrefs", t);
+        }
     }
 
     private static volatile String sCurrentPkg = "null";
