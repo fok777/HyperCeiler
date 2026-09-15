@@ -62,6 +62,9 @@ public class Application extends android.app.Application
     @Nullable
     private static volatile XposedService sService;
 
+    /** 框架名称/版本，用于判断框架是否真的支持 libxposed API 102 模块加载。 */
+    private static volatile String sFrameworkInfo = "unknown";
+
     /** 注册失败（框架不支持 libxposed service），无需再等待。 */
     private static volatile boolean sRegisterFailed;
 
