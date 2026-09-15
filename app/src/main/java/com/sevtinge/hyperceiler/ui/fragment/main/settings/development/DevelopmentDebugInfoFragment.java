@@ -140,6 +140,7 @@ public class DevelopmentDebugInfoFragment extends SettingsPreferenceFragment {
             propertiesCheck.put("RemotePrefsReady", String.valueOf(RemotePrefsBridge.isReady()));
             propertiesCheck.put("RemoteKeyCount", String.valueOf(RemotePrefsBridge.remoteKeyCount()));
             propertiesCheck.put("HookDiag", RemotePrefsBridge.collectDiagnostics());
+            propertiesCheck.put("Framework", com.sevtinge.hyperceiler.Application.getFrameworkInfo());
         } catch (Exception ignored) {
         }
 

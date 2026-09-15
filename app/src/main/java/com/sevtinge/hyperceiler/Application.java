@@ -135,6 +135,35 @@ public class Application extends android.app.Application
         } catch (Throwable t) {
             Log.e(TAG, "attach remote prefs failed.", t);
         }
+        sFrameworkInfo = describeFramework(service);
+        Log.i(TAG, "Framework: " + sFrameworkInfo);
+    }
+
+    /**
+     * 反射读取框架信息。
+     *
+     * <p>注意：服务能绑定成功只说明框架提供了 libxposed service，<b>不代表本模块被
+     * 作为 API 102 模块加载了</b>。这里是区分二者的关键依据。</p>
+     */
+    private static String describeFramework(Object service) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class=").append(service == null ? "null" : service.getClass().getName());
+        for (String name : new String[]{
+            "getFrameworkName", "getFrameworkVersion", "getFrameworkVersionCode", "getApiVersion"}) {
+            sb.append("; ").append(name).append("=");
+            try {
+                Method method = service.getClass().getMethod(name);
+                sb.append(method.invoke(service));
+            } catch (Throwable t) {
+                sb.append("err(").append(t.getClass().getSimpleName()).append(")");
+            }
+        }
+        return sb.toString();
+    }
+
+    /** 框架名称/版本描述。 */
+    public static String getFrameworkInfo() {
+        return sFrameworkInfo;
     }
 
     @Override
