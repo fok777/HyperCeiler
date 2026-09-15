@@ -142,7 +142,6 @@ public class XposedInit {
 
     private void setXSharedPrefs() {
         if (mPrefsMap.isEmpty()) {
-            sPrefLoadLogged = true;
             XSharedPreferences mXSharedPreferences;
             try {
                 mXSharedPreferences = new XSharedPreferences(ProjectApi.mAppModulePkg, PrefsUtils.mPrefsName);
@@ -191,9 +190,7 @@ public class XposedInit {
         } catch (Throwable t) {
             logE("reportHookDiagnostics", t);
         }
-        if (sPrefLoadLogged) {
-            com.sevtinge.hyperceiler.utils.prefs.RemotePrefsBridge.markHookSeen(lp, value);
-        }
+        com.sevtinge.hyperceiler.utils.prefs.RemotePrefsBridge.markHookSeen(lp, value);
     }
 
     public void init(XC_LoadPackage.LoadPackageParam lpparam) {
