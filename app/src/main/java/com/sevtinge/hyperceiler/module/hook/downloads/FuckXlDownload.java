@@ -35,17 +35,29 @@ public class FuckXlDownload extends BaseHook {
 
     @Override
     public void init() {
-        if (!TARGET_PACKAGE.equals(lpparam.packageName)) return;
-        logI(TAG, this.lpparam.packageName, "Target path = " + TARGET_PATH);
-        XposedHelpers.findAndHookMethod(File.class, "mkdirs", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) {
-                final boolean isXlDownload = ((File) param.thisObject).getAbsoluteFile().equals(TARGET_PATH);
-                if (isXlDownload) {
-                    logI(TAG, FuckXlDownload.this.lpparam.packageName, "blocked");
+        logI(TAG, lpparam.packageName, "xlDownload guard installed, target = " + TARGET_PATH);
+        // 同时 hook mkdir 与 mkdirs：两者是彼此独立的 native 调用，
+        // 只拦 mkdirs 会漏掉调用 File.mkdir() 的创建方。
+        hookCreate("mkdirs");
+        hookCreate("mkdir");
+    }
+
+    private void hookCreate(String methodName) {
+        try {
+            XposedHelpers.findAndHookMethod(File.class, methodName, new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) {
+                    Object self = param.thisObject;
+                    if (!(self instanceof File)) return;
+                    File file = (File) self;
+                    if (!file.getAbsoluteFile().equals(TARGET_PATH)) return;
+                    String pkg = FuckXlDownload.this.lpparam.packageName;
+                    logI(TAG, pkg, "blocked " + methodName + " -> " + file.getAbsolutePath());
                     param.setThrowable(new FileNotFoundException("blocked"));
                 }
-            }
-        });
+            });
+        } catch (Throwable t) {
+            logE(TAG, lpparam.packageName, "hook " + methodName + " failed", t);
+        }
     }
 }

@@ -195,6 +195,7 @@ public class XposedInit {
                 }
             }
             if (shown == 0) sb.append(" | (no switch is ON)");
+            sb.append(" | XLDOWNLOAD=").append(mPrefsMap.getBoolean("various_fuck_xlDownload"));
             XposedBridge.log(sb.toString());
         } catch (Throwable t) {
             logE("logLoadedPrefs", t);
