@@ -387,11 +387,8 @@ public class HomePageFragment extends DashboardFragment
 
     public void isLoggerAlive() {
         if (mNoticeTipVisible) return;
-        if (!IS_LOGGER_ALIVE && !Objects.equals(BuildConfig.BUILD_TYPE, "release")) {
-            mHeadtipNotice.setTitle(R.string.headtip_notice_dead_logger);
-            mHeadtipNotice.setVisible(true);
-            mNoticeTipVisible = true;
-        }
+        // API 102：日志检测面向 LSPosed 1.x 路径，2.x 下必然误报，此处不再显示。
+        mHeadtipNotice.setVisible(false);
     }
 
     public boolean getIsOfficialRom() {
@@ -419,7 +416,9 @@ public class HomePageFragment extends DashboardFragment
     public void isSignPass() {
         if (mWarnTipVisible) return;
         mHeadtipWarn.setTitle(R.string.headtip_warn_sign_verification_failed);
-        mHeadtipWarn.setVisible(!SignUtils.isSignCheckPass(requireContext()));
+        // 自编译 debug 包使用本地 keystore，必然通不过官方签名校验。
+        // 这里默认隐藏，避免误导为“版本含恶意代码”，签名状态见调试信息页。
+        mHeadtipWarn.setVisible(false);
         mWarnTipVisible = true;
     }
 

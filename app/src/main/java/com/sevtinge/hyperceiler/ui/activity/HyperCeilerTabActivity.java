@@ -99,9 +99,9 @@ public class HyperCeilerTabActivity extends NaviBaseActivity
 
         AppsTool.checkXposedActivateState(this);
 
-        if (!IS_LOGGER_ALIVE && isModuleActive && BuildConfig.BUILD_TYPE != "release" && !mPrefs.getBoolean("prefs_key_development_close_log_alert_dialog", false)) {
-            handler.post(() -> DialogHelper.showLogServiceWarnDialog(context));
-        }
+        // API 102：日志检测逻辑面向 LSPosed 1.x 的 /data/adb/lspd/log，2.x 下必然误报。
+        // 原条件还存在 BuildConfig.BUILD_TYPE != "release" 的引用比较 bug（恒为 true），
+        // 这里整体关闭，避免每次启动弹窗。
 
         ShellInit.init(this);
         int effectiveLogLevel = ProjectApi.isCanary() ? (logLevel != 3 && logLevel != 4 ? 3 : logLevel) : logLevel;

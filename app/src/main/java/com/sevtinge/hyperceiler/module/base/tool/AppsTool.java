@@ -236,12 +236,9 @@ public class AppsTool {
     }
 
     public static void checkXposedActivateState(Context context) {
-        if (isModuleActive) return;
-        // API 102 下激活状态依赖异步服务回调，等状态可判定后再决定是否提示，
-        // 避免服务尚未绑定时误报“模块未激活”。
-        com.sevtinge.hyperceiler.Application.whenActivationSettled(() -> {
-            if (!isModuleActive) DialogHelper.showXposedActivateDialog(context);
-        });
+        // libxposed API 102 不再把模块注入自身进程，自 hook 检测已不可用；
+        // XposedService 回调在部分框架上不会触发，为避免阻塞使用，这里不再弹窗。
+        // 真实激活状态请在“设置 -> 开发者 -> 调试信息”中查看 ModuleActive 字段。
     }
 
     public static void doRestart(Context context, String[] packageName, boolean isRestartSystem) {
