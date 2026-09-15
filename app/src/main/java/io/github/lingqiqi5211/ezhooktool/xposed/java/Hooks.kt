@@ -19,10 +19,10 @@ object Hooks {
 
     private const val TAG = "HyperCeiler"
 
-    @JvmStatic
+    @JvmField
     val sOk = java.util.concurrent.atomic.AtomicInteger()
 
-    @JvmStatic
+    @JvmField
     val sFail = java.util.concurrent.atomic.AtomicInteger()
 
     internal class EmulatedHooker(

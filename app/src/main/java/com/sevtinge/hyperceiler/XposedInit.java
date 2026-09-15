@@ -169,15 +169,14 @@ public class XposedInit {
         reportHookDiagnostics();
     }
 
-    private boolean sPrefLoadLogged = false;
+    private static volatile String sCurrentPkg = "null";
 
     /**
      * 把 hook 侧的关键状态写回远程偏好，便于在模块 App 的调试信息页查看。
      * hook 进程与 App 进程唯一可靠的共享通道就是 RemotePreferences。
      */
     private void reportHookDiagnostics() {
-        String pkg = ProjectApi.mAppModulePkg;
-        String lp = (lpparam != null && lpparam.packageName != null) ? lpparam.packageName : "null";
+        String lp = sCurrentPkg;
         int keys = mPrefsMap.size();
         int ok = io.github.lingqiqi5211.ezhooktool.xposed.java.Hooks.sOk.get();
         int fail = io.github.lingqiqi5211.ezhooktool.xposed.java.Hooks.sFail.get();
@@ -211,6 +210,7 @@ public class XposedInit {
     private void invokeInit(XC_LoadPackage.LoadPackageParam lpparam) {
         String mPkgName = lpparam.packageName;
         if (mPkgName == null) return;
+        sCurrentPkg = mPkgName;
 
         if (ProjectApi.mAppModulePkg.equals(mPkgName)) {
             moduleActiveHook(lpparam);
