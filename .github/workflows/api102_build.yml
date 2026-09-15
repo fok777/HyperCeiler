@@ -67,6 +67,23 @@ jobs:
           git commit -m "build log for run ${{ github.run_number }}"
           git push -f https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git ci-logs
 
+      - name: Verify libxposed module declaration in APK
+        if: success()
+        shell: bash
+        run: |
+          APK=$(find app/build/outputs/apk/debug -name '*.apk' | head -n 1)
+          echo "APK: $APK"
+          echo "=== META-INF entries ==="
+          unzip -l "$APK" | grep -i "META-INF" || echo "(no META-INF)"
+          echo "=== module.prop ==="
+          unzip -p "$APK" META-INF/xposed/module.prop 2>/dev/null || echo "MISSING module.prop"
+          echo "=== java_init.list ==="
+          unzip -p "$APK" META-INF/xposed/java_init.list 2>/dev/null || echo "MISSING java_init.list"
+          echo "=== scope.list head ==="
+          unzip -p "$APK" META-INF/xposed/scope.list 2>/dev/null | head -n 5 || echo "MISSING scope.list"
+          echo "=== entry class in dex ==="
+          unzip -p "$APK" classes.dex | strings | grep -c "XposedInitEntry" || echo "0"
+
       - name: Locate APK
         if: success()
         shell: bash

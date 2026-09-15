@@ -1,5 +1,6 @@
 package com.sevtinge.hyperceiler;
 
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 
 import androidx.annotation.NonNull;
@@ -33,17 +34,37 @@ public class XposedInitEntry extends XposedModule {
     @Override
     public void onModuleLoaded(@NonNull XposedModuleInterface.ModuleLoadedParam param) {
         diag("boot", param.getProcessName());
-        EzXposed.initOnModuleLoaded(this, param);
-        HookRuntime.attach(this, EzXposed.getModulePath(), param.getProcessName());
+        try {
+            EzXposed.initOnModuleLoaded(this, param);
+            diag("ezinit", "ok");
+        } catch (Throwable t) {
+            diag("err_ezinit", String.valueOf(t));
+            android.util.Log.e(TAG, "XposedInitEntry: initOnModuleLoaded failed", t);
+        }
+        try {
+            HookRuntime.attach(this, EzXposed.getModulePath(), param.getProcessName());
+            diag("attach", "ok");
+        } catch (Throwable t) {
+            diag("err_attach", String.valueOf(t));
+            android.util.Log.e(TAG, "XposedInitEntry: attach failed", t);
+        }
 
         try {
             mXposedInit.initZygote(new StartupParam(EzXposed.getModulePath()));
+            diag("zygote", "ok");
         } catch (Throwable t) {
-            android.util.Log.e(TAG, "XposedInitEntry: initZygote failed: " + t);
+            diag("err_zygote", String.valueOf(t));
+            android.util.Log.e(TAG, "XposedInitEntry: initZygote failed", t);
         }
 
         // 所有包级 hook 统一注册到目标就绪回调，保证首次加载与热重载走同一条路径。
-        EzXposed.onTargetReady(this::installCurrentTargetHooks);
+        try {
+            EzXposed.onTargetReady(this::installCurrentTargetHooks);
+            diag("ready_reg", "ok");
+        } catch (Throwable t) {
+            diag("err_ready_reg", String.valueOf(t));
+            android.util.Log.e(TAG, "XposedInitEntry: onTargetReady failed", t);
+        }
     }
 
     @Override
@@ -102,9 +123,10 @@ public class XposedInitEntry extends XposedModule {
      */
     private void diag(String stage, String info) {
         try {
-            android.content.SharedPreferences remote =
-                com.sevtinge.hyperceiler.compat.HookRuntime.remotePreferences(
-                    com.sevtinge.hyperceiler.utils.prefs.PrefsUtils.mPrefsName);
+            // 必须用模块自身的 getRemotePreferences：HookRuntime.attach() 之前
+            // 无法通过该辅助类拿到 XposedInterface。
+            SharedPreferences remote =
+                getRemotePreferences(com.sevtinge.hyperceiler.utils.prefs.PrefsUtils.mPrefsName);
             if (remote != null) {
                 remote.edit()
                     .putString("__hc_boot_" + stage, info + "@" + System.currentTimeMillis())
