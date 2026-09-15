@@ -32,6 +32,7 @@ public class XposedInitEntry extends XposedModule {
 
     @Override
     public void onModuleLoaded(@NonNull XposedModuleInterface.ModuleLoadedParam param) {
+        diag("boot", param.getProcessName());
         EzXposed.initOnModuleLoaded(this, param);
         HookRuntime.attach(this, EzXposed.getModulePath(), param.getProcessName());
 
@@ -47,6 +48,7 @@ public class XposedInitEntry extends XposedModule {
 
     @Override
     public void onSystemServerStarting(@NonNull XposedModuleInterface.SystemServerStartingParam param) {
+        diag("syssrv", "android");
         EzXposed.initOnSystemServerStarting(param);
         HookRuntime.setSystemServer(true);
         dispatch("android", param.getClassLoader(), null, "android");
@@ -60,6 +62,7 @@ public class XposedInitEntry extends XposedModule {
 
     @Override
     public void onPackageReady(@NonNull XposedModuleInterface.PackageReadyParam param) {
+        diag("ready", param.getPackageName() + "|first=" + param.isFirstPackage());
         if (!param.isFirstPackage()) return;
         EzXposed.initOnPackageReady(param);
         dispatch(param.getPackageName(), param.getClassLoader(), null,
@@ -89,6 +92,27 @@ public class XposedInitEntry extends XposedModule {
         String packageName = EzXposed.getPackageName();
         if (packageName == null || packageName.isEmpty()) return;
         dispatch(packageName, EzXposed.getClassLoader(), null, EzXposed.getProcessName());
+    }
+
+    /**
+     * 早期探针：确认框架是否真的加载了模块并回调入口。
+     *
+     * <p>写入模块进程的远程偏好，可在“设置 -> 开发者 -> 调试信息”的 HookDiag 中看到。
+     * 若 HookDiag 始终为 none，说明框架从未加载本模块（LSPosed 未启用或作用域未勾选）。</p>
+     */
+    private void diag(String stage, String info) {
+        try {
+            android.content.SharedPreferences remote =
+                com.sevtinge.hyperceiler.compat.HookRuntime.remotePreferences(
+                    com.sevtinge.hyperceiler.utils.prefs.PrefsUtils.mPrefsName);
+            if (remote != null) {
+                remote.edit()
+                    .putString("__hc_boot_" + stage, info + "@" + System.currentTimeMillis())
+                    .commit();
+            }
+        } catch (Throwable ignored) {
+        }
+        android.util.Log.i(TAG, "HyperCeilerBoot[" + stage + "] " + info);
     }
 
     private void dispatch(String packageName, ClassLoader classLoader,

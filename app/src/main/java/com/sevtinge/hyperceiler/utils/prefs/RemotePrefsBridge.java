@@ -169,9 +169,9 @@ public final class RemotePrefsBridge {
         try {
             for (Map.Entry<String, ?> e : remote.getAll().entrySet()) {
                 String k = e.getKey();
-                if (k != null && (k.startsWith("__hc_diag_") || k.startsWith("__hc_seen_"))) {
+                if (k != null && (k.startsWith("__hc_diag_") || k.startsWith("__hc_seen_") || k.startsWith("__hc_boot_"))) {
                     if (sb.length() > 0) sb.append(" | ");
-                    sb.append(k.replace("__hc_diag_", "").replace("__hc_seen_", ""))
+                    sb.append(k.replace("__hc_diag_", "").replace("__hc_seen_", "").replace("__hc_boot_", ""))
                         .append("=").append(e.getValue());
                 }
             }
