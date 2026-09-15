@@ -10,6 +10,8 @@ import java.util.Set;
 
 import androidx.annotation.Nullable;
 
+import com.sevtinge.hyperceiler.utils.api.ProjectApi;
+
 /**
  * legacy XSharedPreferences 的 API 102 兼容实现。
  *
@@ -44,8 +46,11 @@ public class XSharedPreferences {
                 return;
             }
         }
+        // 仅在模块自身进程中回退读取本地文件；hook 进程里切不可读宿主的 SharedPreferences，
+        // 否则会拿到宿主同名的空配置，表现为所有开关失效。
         Context context = HookRuntime.appContext();
-        if (context != null && mGroupName != null) {
+        if (context != null && mGroupName != null
+            && ProjectApi.mAppModulePkg.equals(context.getPackageName())) {
             try {
                 mPrefs = context.getSharedPreferences(mGroupName, Context.MODE_PRIVATE);
             } catch (Throwable ignored) {

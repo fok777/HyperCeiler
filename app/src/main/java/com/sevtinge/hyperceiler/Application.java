@@ -28,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.sevtinge.hyperceiler.module.base.tool.AppsTool;
+import com.sevtinge.hyperceiler.utils.prefs.RemotePrefsBridge;
 import com.sevtinge.hyperceiler.utils.prefs.PrefsUtils;
 
 import java.io.File;
@@ -127,12 +128,20 @@ public class Application extends android.app.Application
         sService = service;
         setModuleActivated(true);
         Log.i(TAG, "XposedService connected, module activated.");
+        try {
+            RemotePrefsBridge.attach(
+                service.getRemotePreferences(PrefsUtils.mPrefsName),
+                PrefsUtils.mSharedPreferences);
+        } catch (Throwable t) {
+            Log.e(TAG, "attach remote prefs failed.", t);
+        }
     }
 
     @Override
     public void onServiceDied(@NonNull XposedService service) {
         if (sService == service) sService = null;
         setModuleActivated(false);
+        RemotePrefsBridge.detach();
         Log.e(TAG, "XposedService died, module deactivated.");
     }
 
