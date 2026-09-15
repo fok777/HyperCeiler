@@ -236,7 +236,12 @@ public class AppsTool {
     }
 
     public static void checkXposedActivateState(Context context) {
-        if (!isModuleActive) DialogHelper.showXposedActivateDialog(context);
+        if (isModuleActive) return;
+        // API 102 下激活状态依赖异步服务回调，等状态可判定后再决定是否提示，
+        // 避免服务尚未绑定时误报“模块未激活”。
+        com.sevtinge.hyperceiler.Application.whenActivationSettled(() -> {
+            if (!isModuleActive) DialogHelper.showXposedActivateDialog(context);
+        });
     }
 
     public static void doRestart(Context context, String[] packageName, boolean isRestartSystem) {
