@@ -152,7 +152,7 @@ public class Application extends android.app.Application
             "getFrameworkName", "getFrameworkVersion", "getFrameworkVersionCode", "getApiVersion"}) {
             sb.append("; ").append(name).append("=");
             try {
-                Method method = service.getClass().getMethod(name);
+                java.lang.reflect.Method method = service.getClass().getMethod(name);
                 sb.append(method.invoke(service));
             } catch (Throwable t) {
                 sb.append("err(").append(t.getClass().getSimpleName()).append(")");
