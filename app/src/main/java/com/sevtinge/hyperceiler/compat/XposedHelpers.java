@@ -316,8 +316,12 @@ public final class XposedHelpers {
 
     // ==================== Hook ====================
 
-    /** 直接 hook 已解析出的成员，用于参数类型未知的场景。 */
-    public static XC_MethodHook.Unhook hookMethod(java.lang.reflect.Member method, XC_MethodHook callback) {
+    /**
+     * 直接 hook 已解析出的成员，用于参数类型未知的场景。
+     *
+     * <p>不能命名为 hookMethod：KotlinXposedHelper 里已有同名扩展，会触发重载歧义。</p>
+     */
+    public static XC_MethodHook.Unhook hookMember(java.lang.reflect.Member method, XC_MethodHook callback) {
         if (callback instanceof XC_MethodReplacement) {
             return XC_MethodHook.Unhook.wrap(
                 Hooks.createHook(method, ((XC_MethodReplacement) callback).asReplaceHook()));

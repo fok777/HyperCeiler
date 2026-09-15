@@ -65,7 +65,7 @@ public class FuckXlDownload extends BaseHook {
                 if (!("setDebug".equals(name) || "setSoDebug".equals(name))) continue;
                 if (Modifier.isAbstract(method.getModifiers())) continue;
                 method.setAccessible(true);
-                XposedHelpers.hookMethod(method, XC_MethodReplacement.returnConstant(null));
+                XposedHelpers.hookMember(method, XC_MethodReplacement.returnConstant(null));
                 logI(TAG_XL, lpparam.packageName, "disabled " + name);
             }
         } catch (Throwable t) {
@@ -92,7 +92,7 @@ public class FuckXlDownload extends BaseHook {
                 return;
             }
             method.setAccessible(true);
-            XposedHelpers.hookMethod(method, new XC_MethodHook() {
+            XposedHelpers.hookMember(method, new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) {
                     Object arg = param.args != null && param.args.length > 0 ? param.args[0] : null;
