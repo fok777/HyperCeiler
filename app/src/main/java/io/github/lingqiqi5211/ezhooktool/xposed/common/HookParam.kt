@@ -48,11 +48,18 @@ open class HookParam internal constructor(
             skipped = true
         }
 
-    /** 当前异常，可读写。 */
+    /**
+     * 当前异常，可读写。
+     *
+     * <p>写入非 null 即视为短路：legacy XposedBridge 中 before 阶段设置 throwable
+     * 会跳过原方法并由框架抛出该异常。若不置 skipped，原方法仍会执行，
+     * 所有“靠抛异常阻止原行为”的 hook 都会静默失效。</p>
+     */
     var throwable: Throwable?
         get() = throwableValue
         set(value) {
             throwableValue = value
+            if (value != null) skipped = true
         }
 
     val hasThrowable: Boolean

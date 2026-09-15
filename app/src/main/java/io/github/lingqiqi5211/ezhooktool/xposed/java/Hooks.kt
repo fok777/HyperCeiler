@@ -32,6 +32,7 @@ object Hooks {
     ) : XposedInterface.Hooker {
 
         override fun intercept(chain: XposedInterface.Chain): Any? {
+            markHit(chain.executable)
             val param = HookParam(chain)
             val replace = replaceBlock
             if (replace != null) {
@@ -44,7 +45,11 @@ object Hooks {
                 runCatching { before.invoke(param) }
                     .onFailure { android.util.Log.e(TAG, "before hook failed", it) }
             }
-            if (param.isSkipped) return param.result
+            if (param.isSkipped) {
+                val pending = param.throwable
+                if (pending != null) throw pending
+                return param.result
+            }
 
             val result: Any?
             try {
@@ -64,6 +69,20 @@ object Hooks {
             }
             return param.result
         }
+    }
+
+    /**
+     * 记录 hook 被真实触发的成员，用于区分“hook 未安装”与“hook 生效但未达预期”。
+     * 每个成员只打印一次，避免刷屏。
+     */
+    private val sHits = java.util.Collections.newSetFromMap(
+        java.util.concurrent.ConcurrentHashMap<String, Boolean>())
+
+    private fun markHit(executable: Executable) {
+        if (!sHits.add(executable.toString())) return
+        val msg = "HyperCeiler: HOOKHIT " + executable
+        android.util.Log.i(TAG, msg)
+        com.sevtinge.hyperceiler.compat.XposedBridge.log(msg)
     }
 
     @JvmStatic
